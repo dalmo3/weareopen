@@ -12,6 +12,7 @@
     "@testing-library/user-event": "^7.2.1",
     "cypress": "^4.0.0",
     "eslint-plugin-cypress": "^2.10.3",
+    "lodash": "^4.17.15",
     "mongodb-stitch-browser-sdk": "^4.8.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

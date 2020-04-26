@@ -53,17 +53,19 @@ export const StitchProvider = ({ children, ...initOptions }) => {
     }
   };
 
-  // INITIALIZE DB anonymously
+  // INITIALIZE DB 
   const [stitchUser, setStitchUser] = useState({});
 
   useEffect(() => {
     const init = async () => {
-      //  stitchConnected ||
-      // Stitch.initializeDefaultAppClient(process.env.REACT_APP_STITCH_APP);
       stitchClient.auth
-        .loginWithCredential(new AnonymousCredential())
+        .loginWithCredential(
+          isAuthenticated 
+          ? new CustomCredential(await getTokenSilently()) 
+          : new AnonymousCredential()
+        )
         .then((user) => {
-          console.log(`logged in anonymously as user ${user.id}`);
+          console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
           const stitchDb = stitchClient.getServiceClient(
             RemoteMongoClient.factory,
             'mongodb-atlas'
@@ -72,7 +74,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         });
     };
     init();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <StitchContext.Provider value={{ stitchClient, stitchUser }}>
