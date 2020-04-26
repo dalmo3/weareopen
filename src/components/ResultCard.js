@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -8,11 +8,10 @@ import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import { red, green, grey } from '@material-ui/core/colors';
+import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((props) => ({
   root: {
     maxWidth: 345,
   },
@@ -23,44 +22,51 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     backgroundColor: red[500],
   },
+  openIcon: (props) =>
+    !props.info_available
+      ? props.open_now
+        ? { color: green[500] }
+        : { color: red[500] }
+      : { color: grey[300] },
 }));
 
-const ResultCard = props => {
-  const classes = useStyles()
+const ResultCard = (props) => {
   const {
-      // URL,
-      // _id,
-      // address,
-      // "address line 2": address_line_2,
-      title: name,
-      // outcode,
-      // postcode,
-      // rating,
-      title: type_of_food
-    } = props.result
+    title,
+    location: {
+      address: { city, region, suburb, street_address },
+    },
+    open_state: { info_available, open_alert_level, open_now },
+  } = props.result;
 
-    return(
-      <Card className={classes.root}>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="business" className={classes.avatar}>
-              {name.slice(0,2)}
-            </Avatar>
-          }
-          action={
-            <IconButton
-              aria-label="action"
-              onClick={e => props.handleClaim(e, props.result)}
-            >
-              <FavoriteIcon/>
-            </IconButton>
-          }
-          title={name}
-          subheader={type_of_food}
-          />
-      </Card>
-    )
+  const locationDisplay = suburb
+    ? suburb + (city ? ', ' + city : region ? ', ' + region : '')
+    : city || (street_address ? street_address + ', ' + region : region);
 
-}
+  const classes = useStyles({ info_available, open_now });
 
-export default ResultCard
+  return (
+    <Card className={classes.root}>
+      <CardHeader
+        avatar={
+          <Avatar aria-label="business" className={classes.avatar}>
+            {title.slice(0, 2)}
+          </Avatar>
+        }
+        action={
+          <IconButton
+            className={classes.openIcon}
+            aria-label="open state"
+            onClick={(e) => props.handleClaim(e, props.result)}
+          >
+            <BusinessCenterIcon />
+          </IconButton>
+        }
+        title={title}
+        subheader={locationDisplay}
+      />
+    </Card>
+  );
+};
+
+export default ResultCard;

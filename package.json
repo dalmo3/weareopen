@@ -18,7 +18,10 @@
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
     "react-helmet": "^6.0.0",
-    "react-scripts": "3.4.1"
+    "react-scripts": "3.4.1",
+    "source-sans-pro": "^3.6.0",
+    "typeface-roboto": "0.0.75",
+    "typeface-source-sans-pro": "^1.1.5"
   },
   "scripts": {
     "start": "react-scripts start",

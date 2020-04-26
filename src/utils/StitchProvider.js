@@ -13,7 +13,6 @@ import {
   CustomCredential,
 } from 'mongodb-stitch-browser-sdk';
 
-
 export const StitchContext = createContext();
 export const useStitch = () => useContext(StitchContext);
 
@@ -53,16 +52,17 @@ export const StitchProvider = ({ children, ...initOptions }) => {
     }
   };
 
-  // INITIALIZE DB 
+  // INITIALIZE DB
   const [stitchUser, setStitchUser] = useState({});
+  const [stitchReady, setStitchReady] = useState(false);
 
   useEffect(() => {
     const init = async () => {
       stitchClient.auth
         .loginWithCredential(
-          isAuthenticated 
-          ? new CustomCredential(await getTokenSilently()) 
-          : new AnonymousCredential()
+          isAuthenticated
+            ? new CustomCredential(await getTokenSilently())
+            : new AnonymousCredential()
         )
         .then((user) => {
           console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
@@ -71,13 +71,14 @@ export const StitchProvider = ({ children, ...initOptions }) => {
             'mongodb-atlas'
           );
           setStitchUser(user);
+          setStitchReady(true);
         });
     };
     init();
   }, [isAuthenticated]);
 
   return (
-    <StitchContext.Provider value={{ stitchClient, stitchUser }}>
+    <StitchContext.Provider value={{ stitchClient, stitchUser, stitchReady }}>
       {children}
     </StitchContext.Provider>
   );

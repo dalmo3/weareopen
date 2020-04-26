@@ -1,6 +1,9 @@
 import React from 'react';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
 import { orange } from '@material-ui/core/colors';
+import 'typeface-roboto';
+require('typeface-source-sans-pro')
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -15,12 +18,13 @@ const useStyles = makeStyles((theme) => ({
 const theme = createMuiTheme({
   typography: {
     fontFamily: [
+      'Roboto',
+      '"Source Sans Pro"',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
       'Arial',
+      '"Helvetica Neue"',
       'sans-serif',
       '"Apple Color Emoji"',
       '"Segoe UI Emoji"',
