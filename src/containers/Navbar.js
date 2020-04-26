@@ -36,11 +36,12 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
-    marginLeft: 0,
+    marginLeft: theme.spacing(2),
     width: '100%',
     [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
+      // marginLeft: theme.spacing(3),
+      // margin: 'auto',
+      width: '60%',
     },
   },
   searchIcon: {
@@ -62,7 +63,8 @@ const useStyles = makeStyles((theme) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('md')]: {
-      width: '20ch',
+      marginLeft: theme.spacing(3),
+      width: '50ch',
     },
   },
   sectionDesktop: {
@@ -163,7 +165,7 @@ export default function Navbar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="static">
+      <AppBar position="fixed">
         <Toolbar>
           <IconButton
             edge="start"
@@ -177,6 +179,7 @@ export default function Navbar(props) {
           <Typography className={classes.title} variant="h6" noWrap>
             We Are Open!
           </Typography>
+          <div className={classes.grow} />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -188,6 +191,8 @@ export default function Navbar(props) {
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
+              defaultValue={''} 
+              onChange={props.handleInputChange}
             />
           </div>
           <div className={classes.grow} />
@@ -226,6 +231,7 @@ export default function Navbar(props) {
           </div>
         </Toolbar>
       </AppBar>
+      <Toolbar />
       {renderMobileMenu}
       {renderMenu}
     </div>

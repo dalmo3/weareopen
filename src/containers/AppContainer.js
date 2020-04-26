@@ -17,7 +17,7 @@ import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
 export const AppContainer = (props) => {
-  const { stitchClient, stitchUser, stitchReady } = useStitch();
+  const { stitchClient, stitchUser, stitchReady, stitchSearch } = useStitch();
   const {
     loginWithPopup,
     logout,
@@ -41,7 +41,7 @@ export const AppContainer = (props) => {
   useEffect(() => {
     console.log('query term:', query);
     if (stitchReady)
-      stitchClient.callFunction('searchbeta', [debouncedQuery]).then((a) => {
+      stitchSearch(debouncedQuery).then((a) => {
         console.log('term2:', query);
         console.log(a);
         setResults(a);
@@ -71,10 +71,13 @@ export const AppContainer = (props) => {
       .then((a) => console.log('user is', a));
   };
 
-  const [sideBarOpen, setSideBarOpen] = useState(false)
-  
+  const [sideBarOpen, setSideBarOpen] = useState(false);
+
   const toggleSidebar = (open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
       return;
     }
 
@@ -83,8 +86,11 @@ export const AppContainer = (props) => {
 
   return (
     <AppTheme>
-      <Navbar toggleSidebar={toggleSidebar}/>
-      <Sidebar openState={sideBarOpen} toggleSidebar={toggleSidebar}/>
+      <Navbar
+        toggleSidebar={toggleSidebar}
+        handleInputChange={handleInputChange}
+      />
+      <Sidebar openState={sideBarOpen} toggleSidebar={toggleSidebar} />
       <Container maxWidth="sm">
         <Button
           id={'login'}
@@ -103,7 +109,6 @@ export const AppContainer = (props) => {
           Log out
         </Button>
         <Typography>You're logged {isAuthenticated ? `in` : `out`}</Typography>
-        <input defaultValue={''} onChange={handleInputChange}></input>
         <ResultList results={results} handleClaim={handleClaim} />
       </Container>
     </AppTheme>

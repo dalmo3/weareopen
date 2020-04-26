@@ -77,8 +77,9 @@ export const StitchProvider = ({ children, ...initOptions }) => {
     init();
   }, [isAuthenticated]);
 
+  const stitchSearch = (query) => stitchClient.callFunction('searchbeta', [query])
   return (
-    <StitchContext.Provider value={{ stitchClient, stitchUser, stitchReady }}>
+    <StitchContext.Provider value={{ stitchClient, stitchUser, stitchReady, stitchSearch }}>
       {children}
     </StitchContext.Provider>
   );

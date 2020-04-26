@@ -13,7 +13,7 @@ import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 
 const useStyles = makeStyles((props) => ({
   root: {
-    maxWidth: 345,
+    // maxWidth: 345,
   },
   media: {
     height: 0,
