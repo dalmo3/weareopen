@@ -69,6 +69,12 @@ export const Auth0Provider = ({
     setUser(user);
   };
   
+  const logout = (...p) => auth0Client.logout({
+    returnTo: process.env.PUBLIC_URL,
+    ...p
+  }
+  )
+  
   return (
     <Auth0Context.Provider
       value={{
@@ -82,7 +88,7 @@ export const Auth0Provider = ({
         loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
         getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
         getTokenWithPopup: (...p) => auth0Client.getTokenWithPopup(...p),
-        logout: (...p) => auth0Client.logout(...p)
+        logout
       }}
     >
       {children}
