@@ -1,26 +1,18 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { Auth0Wrapper } from './utils/Auth0Wrapper';
+import { StitchProvider } from './utils/StitchProvider';
+import { AppContainer } from './containers/AppContainer';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Auth0Wrapper>
+      <StitchProvider>
+        <AppContainer/>
+      </StitchProvider>
+    </Auth0Wrapper>
   );
-}
+};
 
 export default App;
