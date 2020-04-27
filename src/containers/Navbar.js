@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
+    backgroundColor: fade(theme.palette.primary.main, 0.05),
     '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
+      backgroundColor: fade(theme.palette.primary.main, 0.15),
     },
     marginRight: theme.spacing(2),
     marginLeft: theme.spacing(2),
@@ -115,7 +115,7 @@ export default function Navbar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" color='transparent'>
         <Toolbar>
           <IconButton
             edge="start"

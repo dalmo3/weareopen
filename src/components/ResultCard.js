@@ -17,16 +17,19 @@ const useStyles = makeStyles((props) => ({
   root: {
     // maxWidth: 345,
   },
+  header:{
+  },
   media: {
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  avatar: (props) =>
-    props.info_available
+  avatar: {
+    backgroundColor: props.info_available
       ? props.open_now
-        ? { backgroundColor: green[500] }
-        : { backgroundColor: red[500] }
-      : { backgroundColor: grey[500] },
+        ? green[500]
+        : red[500]
+      : grey[500],
+  },
   openIcon: (props) =>
     props.info_available
       ? props.open_now
@@ -59,6 +62,7 @@ const ResultCard = (props) => {
   return (
     <Card className={classes.root}>
       <CardHeader
+        className={classes.header}
         avatar={
           <Grid container direction="column" alignItems="center">
             <Grid item>
@@ -80,13 +84,13 @@ const ResultCard = (props) => {
           </Grid>
         }
         action={
-              <IconButton
-                className={classes.openIcon}
-                aria-label="open business page"
-                // onClick={(e) => props.handleClaim(e, props.result)}
-              >
-                <ChevronRightIcon />
-              </IconButton>
+          <IconButton
+            className={classes.openIcon}
+            aria-label="open business page"
+            // onClick={(e) => props.handleClaim(e, props.result)}
+          >
+            <ChevronRightIcon />
+          </IconButton>
         }
         title={title}
         subheader={locationDisplay}

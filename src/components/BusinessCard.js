@@ -30,7 +30,7 @@ const useStyles = makeStyles((props) => ({
       : { color: grey[300] },
 }));
 
-const ResultCard = (props) => {
+export const BusinessCard = (props) => {
   const {
     title,
     location: {
@@ -78,4 +78,3 @@ const ResultCard = (props) => {
   );
 };
 
-export default ResultCard;
