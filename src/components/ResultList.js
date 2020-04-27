@@ -8,8 +8,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 const ResultList = (props) => {
   const classes = useStyles();
+
+  // const list = 
   return (
     <Fragment>
       {props.results.map((r, i) => (
@@ -17,8 +20,8 @@ const ResultList = (props) => {
           <ResultCard result={r} handleClaim={props.handleClaim} />
         </div>
       ))}
-
-      <Button color="primary">Load More...</Button>
+      {/* {props.results.length > 10?  */}
+      {/* <Button color="primary">Load More...</Button> */}
     </Fragment>
   );
 };

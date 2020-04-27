@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import ResultList from '../components/ResultList';
 import { Typography, Container, Button } from '@material-ui/core';
 import { Link, Router } from '@reach/router';
-import { ProfilePage } from './ProfilePage';
+import { ProfilePage } from './pages/ProfilePage';
 import { BusinessCard } from '../components/BusinessCard';
 import { BusinessForm } from '../components/BusinessForm';
 import { useAppContext } from './AppController';
