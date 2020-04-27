@@ -37,7 +37,7 @@ export const BusinessCard = (props) => {
       address: { city, region, suburb, street_address },
     },
     open_state: { info_available, open_alert_level, open_now },
-  } = props.result;
+  } = props.location.state;
 
   const locationDisplay = suburb
     ? suburb + (city ? ', ' + city : region ? ', ' + region : '')
