@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     [theme.breakpoints.up('md')]: {
       marginLeft: theme.spacing(3),
-      width: '50ch',
+      // width: '50ch',
     },
   },
   sectionDesktop: {
@@ -136,7 +136,8 @@ export default function Navbar(props) {
               <SearchIcon />
             </div>
             <InputBase
-              placeholder="Search…"
+            fullWidth={true}
+              placeholder="try... indian restaurant wellington"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
