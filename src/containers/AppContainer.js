@@ -20,6 +20,7 @@ import { useAppContext } from './AppController';
 import { Link, Router } from '@reach/router';
 import { ProfilePage } from './ProfilePage';
 import { BusinessCard } from '../components/BusinessCard';
+import { BusinessForm } from '../components/BusinessForm';
 
 export const AppContainer = (props) => {
   const {
@@ -73,7 +74,10 @@ export const AppContainer = (props) => {
             Business
           </Button>
           <Button component={Link} to="parameter/abc">
-            Business
+            Parameters
+          </Button>
+          <Button component={Link} to="addnew">
+            Add New Parameter (navigate)
           </Button>
         </Typography>
 
@@ -85,6 +89,7 @@ export const AppContainer = (props) => {
           ></BusinessCard>
           <TestRouterPage default/>            
           <ProfilePage path="profile" />
+          <BusinessForm path="addnew"/>
         </Router>
         <ResultList results={results} handleClaim={handleClaim} />
       </Container>
