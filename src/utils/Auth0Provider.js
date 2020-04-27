@@ -13,6 +13,7 @@ export const Auth0Provider = ({
   ...initOptions
 }) => {
   const [isAuthenticated, setIsAuthenticated] = useState();
+  const [isVerified, setIsVerified] = useState();
   const [user, setUser] = useState();
   const [auth0Client, setAuth0] = useState();
   const [loading, setLoading] = useState(true);
@@ -38,6 +39,8 @@ export const Auth0Provider = ({
       if (isAuthenticated) {
         const user = await auth0FromHook.getUser();
         setUser(user);
+        console.log(user)
+        setIsVerified(user.email_verified)
       }
 
       setLoading(false);
@@ -67,6 +70,7 @@ export const Auth0Provider = ({
     setLoading(false);
     setIsAuthenticated(true);
     setUser(user);
+    setIsVerified(user.email_verified)
   };
   
   const logout = (...p) => auth0Client.logout({
@@ -79,6 +83,7 @@ export const Auth0Provider = ({
     <Auth0Context.Provider
       value={{
         isAuthenticated,
+        isVerified,
         user,
         loading,
         popupOpen,
