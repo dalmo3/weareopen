@@ -37,65 +37,70 @@ export const AppContainer = (props) => {
 
   const TestRouterPage = (props) => <div>TestRouterPage</div>;
   const TestParameterPage = (props) => <div>{props.testSlug}</div>;
+  const RouterTests = (props) => (
+    <Typography>
+      <Button component={Link} to="/">
+        Home
+      </Button>
+      <Button component={Link} to="profile">
+        Profile
+      </Button>
+      <Button component={Link} to="business/abc">
+        Business
+      </Button>
+      <Button component={Link} to="parameter/abc">
+        Parameters
+      </Button>
+      <Button component={Link} to="addnew">
+        Add New Parameter (navigate)
+      </Button>
+    </Typography>
+  );
+
+  const LogInOut = (props) => (
+    <Typography>
+      <Button
+        id={'login'}
+        variant="contained"
+        color="primary"
+        onClick={loginWithPopup}
+      >
+        Log in
+      </Button>
+      <Button id={'logout'} variant="outlined" color="primary" onClick={logout}>
+        Log out
+      </Button>
+    </Typography>
+  );
   return (
     <AppTheme>
-      <div id="app" style={{height:"100vh", backgroundColor: grey[50]}}>
-      <Navbar
-        toggleSidebar={toggleSidebar}
-        handleInputChange={handleSearchInputChange}
-      />
-      <Sidebar openState={sideBarOpen} toggleSidebar={toggleSidebar} />
-      <Container maxWidth="sm">
-      <Button
-              id={'login'}
-              variant="contained"
-              color="primary"
-              onClick={loginWithPopup}
-            >
-              Log in
-            </Button>
-            <Button
-              id={'logout'}
-              variant="outlined"
-              color="primary"
-              onClick={logout}
-            >
-              Log out
-            </Button>
-            <Typography>
-              You're logged {isAuthenticated ? `in` : `out`}
-            </Typography>
-        <Typography>
-          <Button component={Link} to="/">
-            Home
-          </Button>
-          <Button component={Link} to="profile">
-            Profile
-          </Button>
-          <Button component={Link} to="business/abc">
-            Business
-          </Button>
-          <Button component={Link} to="parameter/abc">
-            Parameters
-          </Button>
-          <Button component={Link} to="addnew">
-            Add New Parameter (navigate)
-          </Button>
-        </Typography>
-
-        <Router>
-          <TestParameterPage path='parameter/:testSlug'/>
-          <BusinessCard
-            path="business/:businessSlug"
-            result={results[0]}
-          ></BusinessCard>
-          <TestRouterPage default/>            
-          <ProfilePage path="profile" />
-          <BusinessForm path="addnew"/>
-        </Router>
-        <ResultList results={results} handleClaim={handleClaim} />
+      <Container
+        id="app"
+        style={{ height: '100vh', backgroundColor: grey[50] }}
+        disableGutters={true}
+        maxWidth={false}
+      >
+        <Navbar
+          toggleSidebar={toggleSidebar}
+          handleInputChange={handleSearchInputChange}
+        />
+        <Sidebar openState={sideBarOpen} toggleSidebar={toggleSidebar} />
+        <Container maxWidth="sm">
+          <LogInOut />
+          <RouterTests />
+          <Router>
+            <TestParameterPage path="parameter/:testSlug" />
+            <BusinessCard
+              path="business/:businessSlug"
+              result={results[0]}
+            ></BusinessCard>
+            <TestRouterPage default />
+            <ProfilePage path="profile" />
+            <BusinessForm path="addnew" />
+          </Router>
+          <ResultList results={results} handleClaim={handleClaim} />
+        </Container>
       </Container>
-      </div>
     </AppTheme>
   );
 };
