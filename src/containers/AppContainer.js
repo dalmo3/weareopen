@@ -49,7 +49,7 @@ export const AppContainer = (props) => {
         <Button
           id={'logout'}
           variant="outlined"
-          color="secondary"
+          color="primary"
           onClick={logout}
         >
           Log out

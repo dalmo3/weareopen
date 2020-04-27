@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
-import { orange } from '@material-ui/core/colors';
+import { orange, blue, amber } from '@material-ui/core/colors';
 import 'typeface-roboto';
 require('typeface-source-sans-pro')
 
@@ -30,6 +30,17 @@ const theme = createMuiTheme({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(','),
+  },
+  palette: {
+    primary: {
+      // light: will be calculated from palette.primary.main,
+      main: blue[900],
+      // dark: will be calculated from palette.primary.main,
+      // contrastText: will be calculated to contrast with palette.primary.main
+    },
+    secondary: {
+      main: amber[400]
+    }
   },
   status: {
     danger: orange[500],

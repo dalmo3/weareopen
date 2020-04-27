@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -10,6 +10,8 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red, green, grey } from '@material-ui/core/colors';
 import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import { Grid } from '@material-ui/core';
 
 const useStyles = makeStyles((props) => ({
   root: {
@@ -19,15 +21,19 @@ const useStyles = makeStyles((props) => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  avatar: {
-    backgroundColor: red[500],
-  },
+  avatar: (props) =>
+  props.info_available
+    ? props.open_now
+      ? { backgroundColor: green[500] }
+      : { backgroundColor: red[500] }
+    : { backgroundColor: grey[500] }
+,
   openIcon: (props) =>
-    !props.info_available
+    props.info_available
       ? props.open_now
         ? { color: green[500] }
         : { color: red[500] }
-      : { color: grey[300] },
+      : { color: grey[500] },
 }));
 
 const ResultCard = (props) => {
@@ -43,6 +49,12 @@ const ResultCard = (props) => {
     ? suburb + (city ? ', ' + city : region ? ', ' + region : '')
     : city || (street_address ? street_address + ', ' + region : region);
 
+  const openStateString = props.info_available
+    ? props.open_now
+      ? 'Open'
+      : 'Closed'
+    : 'No info';
+
   const classes = useStyles({ info_available, open_now });
 
   return (
@@ -54,13 +66,53 @@ const ResultCard = (props) => {
           </Avatar>
         }
         action={
-          <IconButton
-            className={classes.openIcon}
-            aria-label="open state"
-            onClick={(e) => props.handleClaim(e, props.result)}
+          <Grid
+            container
+            direction="row"
+            justify="flex-end"
+            alignItems="center"
           >
-            <BusinessCenterIcon />
-          </IconButton>
+            <Grid item>
+            <Grid
+              container
+              direction="column"
+              alignItems="center"
+            >
+              <Grid item>
+                  
+                <IconButton
+                  className={classes.openIcon}
+                  aria-label="open state"
+                  // onMouseOver={(e) => alert('a')}
+                  // onClick={(e) => props.handleClaim(e, props.result)}
+                >
+                  <BusinessCenterIcon />
+                </IconButton>
+              </Grid>
+              <Grid item>
+
+                <Typography
+                  className={classes.openIcon}
+                  style={{
+                    fontSize: '0.875rem',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {openStateString}
+                </Typography>
+              </Grid>
+          </Grid>
+          </Grid>
+            <Grid item>
+              <IconButton
+                className={classes.openIcon}
+                aria-label="open business page"
+                // onClick={(e) => props.handleClaim(e, props.result)}
+              >
+                <ChevronRightIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
         }
         title={title}
         subheader={locationDisplay}
