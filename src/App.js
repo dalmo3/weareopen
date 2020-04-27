@@ -4,12 +4,15 @@ import './App.css';
 import { Auth0Wrapper } from './utils/Auth0Wrapper';
 import { StitchProvider } from './utils/StitchProvider';
 import { AppContainer } from './containers/AppContainer';
+import { AppController } from './containers/AppController';
 
 const App = () => {
   return (
     <Auth0Wrapper>
       <StitchProvider>
-        <AppContainer/>
+        <AppController>
+          <AppContainer/>
+        </AppController>
       </StitchProvider>
     </Auth0Wrapper>
   );
