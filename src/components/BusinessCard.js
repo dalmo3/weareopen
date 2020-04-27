@@ -8,9 +8,11 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red, green, grey } from '@material-ui/core/colors';
-import BusinessCenterIcon from '@material-ui/icons/BusinessCenter';
 import Collapse from '@material-ui/core/Collapse';
 import { Button, Grid } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { navigate } from '@reach/router';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -103,22 +105,11 @@ export const BusinessCard = (props) => {
           </Grid>
         }
         action={
-          <Fragment>
-            <IconButton
-              className={classes.openIcon}
-              aria-label="open state"
-              onClick={(e) => props.handleClaim(e, props.result)}
-            >
-              <BusinessCenterIcon />
-            </IconButton>
-            <IconButton
-              className={classes.openIcon}
-              aria-label="open state"
-              onClick={(e) => props.handleClaim(e, props.result)}
-            >
-              <BusinessCenterIcon />
-            </IconButton>
-          </Fragment>
+          <Button
+            onClick={e => navigate(`/`)}
+          >
+            <ArrowBackIcon/> Back to Results
+          </Button>
         }
         title={title}
         subheader={locationDisplay}
