@@ -115,8 +115,9 @@ export default function Navbar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed" color='transparent'>
-        <Toolbar>
+      <AppBar position="fixed" color='transparent' 
+        style={{backgroundColor: 'white'}} >
+        <Toolbar >
           <IconButton
             edge="start"
             className={classes.menuButton}

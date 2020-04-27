@@ -21,6 +21,7 @@ import { Link, Router } from '@reach/router';
 import { ProfilePage } from './ProfilePage';
 import { BusinessCard } from '../components/BusinessCard';
 import { BusinessForm } from '../components/BusinessForm';
+import { grey } from '@material-ui/core/colors';
 
 export const AppContainer = (props) => {
   const {
@@ -38,6 +39,7 @@ export const AppContainer = (props) => {
   const TestParameterPage = (props) => <div>{props.testSlug}</div>;
   return (
     <AppTheme>
+      <div id="app" style={{height:"100vh", backgroundColor: grey[50]}}>
       <Navbar
         toggleSidebar={toggleSidebar}
         handleInputChange={handleSearchInputChange}
@@ -93,6 +95,7 @@ export const AppContainer = (props) => {
         </Router>
         <ResultList results={results} handleClaim={handleClaim} />
       </Container>
+      </div>
     </AppTheme>
   );
 };
