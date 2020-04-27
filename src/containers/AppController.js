@@ -19,6 +19,7 @@ export const AppController = ({ children, ...initOptions }) => {
     logout,
     isAuthenticated,
     user: auth0User,
+    isVerified,
   } = useAuth0();
 
   const [results, setResults] = useState([]);
@@ -90,6 +91,7 @@ export const AppController = ({ children, ...initOptions }) => {
         logout,
         isAuthenticated,
         loginWithPopup,
+        isVerified,
       }}
     >
       {children}

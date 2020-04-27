@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import { Auth0Wrapper } from './utils/Auth0Wrapper';
 import { StitchProvider } from './utils/StitchProvider';
-import { AppContainer } from './containers/AppContainer';
+import { AppView } from './containers/AppView';
 import { AppController } from './containers/AppController';
 
 const App = () => {
@@ -10,7 +10,7 @@ const App = () => {
     <Auth0Wrapper>
       <StitchProvider>
         <AppController>
-          <AppContainer/>
+          <AppView/>
         </AppController>
       </StitchProvider>
     </Auth0Wrapper>
