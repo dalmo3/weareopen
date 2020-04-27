@@ -19,7 +19,7 @@ import Sidebar from './Sidebar';
 export const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
 
-export const AppController = ({children, ...initOptions}) => {
+export const AppController = ({ children, ...initOptions }) => {
   const { stitchClient, stitchUser, stitchReady, stitchSearch } = useStitch();
   const {
     loginWithPopup,
@@ -37,19 +37,31 @@ export const AppController = ({children, ...initOptions}) => {
     []
   );
   const handleSearchInputChange = (e) => {
-    setQuery(e.target.value);
-    debounce(setDebouncedQuery, e.target.value, 500);
+    // setQuery(e.target.value);
+    debounce(setQuery, e.target.value, 500);
   };
 
   useEffect(() => {
     console.log('query term:', query);
     if (stitchReady)
-      stitchSearch(debouncedQuery).then((a) => {
-        console.log('term2:', query);
+      stitchSearch(query).then((a) => {
         console.log(a);
         setResults(a);
       });
-  }, [debouncedQuery]);
+  }, [query]);
+
+  const [sideBarOpen, setSideBarOpen] = useState(false);
+
+  const toggleSidebar = (open) => (event) => {
+    if (
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+
+    setSideBarOpen(open);
+  };
 
   const handleClaim = async (e, business) => {
     console.log('trying to claim property ', business);
@@ -74,19 +86,6 @@ export const AppController = ({children, ...initOptions}) => {
       .then((a) => console.log('user is', a));
   };
 
-  const [sideBarOpen, setSideBarOpen] = useState(false);
-
-  const toggleSidebar = (open) => (event) => {
-    if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    ) {
-      return;
-    }
-
-    setSideBarOpen(open);
-  };
-
   return (
     <AppContext.Provider
       value={{
@@ -98,7 +97,7 @@ export const AppController = ({children, ...initOptions}) => {
         toggleSidebar,
         logout,
         isAuthenticated,
-        loginWithPopup
+        loginWithPopup,
       }}
     >
       {children}
