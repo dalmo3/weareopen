@@ -22,12 +22,11 @@ const useStyles = makeStyles((props) => ({
     paddingTop: '56.25%', // 16:9
   },
   avatar: (props) =>
-  props.info_available
-    ? props.open_now
-      ? { backgroundColor: green[500] }
-      : { backgroundColor: red[500] }
-    : { backgroundColor: grey[500] }
-,
+    props.info_available
+      ? props.open_now
+        ? { backgroundColor: green[500] }
+        : { backgroundColor: red[500] }
+      : { backgroundColor: grey[500] },
   openIcon: (props) =>
     props.info_available
       ? props.open_now
@@ -61,49 +60,26 @@ const ResultCard = (props) => {
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="business" className={classes.avatar}>
-            {title.slice(0, 2)}
-          </Avatar>
+          <Grid container direction="column" alignItems="center">
+            <Grid item>
+              <Avatar aria-label="business" className={classes.avatar}>
+                {title.slice(0, 2)}
+              </Avatar>
+            </Grid>
+            <Grid item>
+              <Typography
+                className={classes.openIcon}
+                style={{
+                  fontSize: '0.875rem',
+                  fontWeight: 'bold',
+                }}
+              >
+                {openStateString}
+              </Typography>
+            </Grid>
+          </Grid>
         }
         action={
-          <Grid
-            container
-            direction="row"
-            justify="flex-end"
-            alignItems="center"
-          >
-            <Grid item>
-            <Grid
-              container
-              direction="column"
-              alignItems="center"
-            >
-              <Grid item>
-                  
-                <IconButton
-                  className={classes.openIcon}
-                  aria-label="open state"
-                  // onMouseOver={(e) => alert('a')}
-                  // onClick={(e) => props.handleClaim(e, props.result)}
-                >
-                  <BusinessCenterIcon />
-                </IconButton>
-              </Grid>
-              <Grid item>
-
-                <Typography
-                  className={classes.openIcon}
-                  style={{
-                    fontSize: '0.875rem',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {openStateString}
-                </Typography>
-              </Grid>
-          </Grid>
-          </Grid>
-            <Grid item>
               <IconButton
                 className={classes.openIcon}
                 aria-label="open business page"
@@ -111,8 +87,6 @@ const ResultCard = (props) => {
               >
                 <ChevronRightIcon />
               </IconButton>
-            </Grid>
-          </Grid>
         }
         title={title}
         subheader={locationDisplay}
