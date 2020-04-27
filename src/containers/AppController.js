@@ -1,20 +1,13 @@
 import React, {
   createContext,
   useContext,
-  Fragment,
   useEffect,
   useState,
   useCallback,
 } from 'react';
 import { useAuth0 } from '../utils/Auth0Provider';
 import { useStitch } from '../utils/StitchProvider';
-import Button from '@material-ui/core/Button';
-import { AppTheme } from './AppTheme';
-import { Typography, Container } from '@material-ui/core';
-import ResultList from '../components/ResultList';
 import _debounce from 'lodash/debounce';
-import Navbar from './Navbar';
-import Sidebar from './Sidebar';
 
 export const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
@@ -30,7 +23,6 @@ export const AppController = ({ children, ...initOptions }) => {
 
   const [results, setResults] = useState([]);
   const [query, setQuery] = useState('');
-  const [debouncedQuery, setDebouncedQuery] = useState('');
 
   const debounce = useCallback(
     _debounce((fn, arg) => fn(arg), 500),

@@ -4,17 +4,6 @@ import { orange, blue, amber } from '@material-ui/core/colors';
 import 'typeface-roboto';
 require('typeface-source-sans-pro')
 
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    color: theme.status.danger,
-    '&$checked': {
-      color: theme.status.danger,
-    },
-  },
-  checked: {},
-}));
-
 const theme = createMuiTheme({
   typography: {
     fontFamily: [

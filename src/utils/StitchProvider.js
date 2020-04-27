@@ -23,11 +23,9 @@ const stitchClient = Stitch.initializeDefaultAppClient(
 export const StitchProvider = ({ children, ...initOptions }) => {
   const {
     getTokenSilently,
-    getTokenWithPopup,
     loading,
     isAuthenticated,
     loginWithPopup,
-    loginWithRedirect,
     logout,
     user,
   } = useAuth0();
@@ -77,9 +75,12 @@ export const StitchProvider = ({ children, ...initOptions }) => {
     init();
   }, [isAuthenticated]);
 
-  const stitchSearch = (query) => stitchClient.callFunction('searchbeta', [query])
+  const stitchSearch = (query) =>
+    stitchClient.callFunction('searchbeta', [query]);
   return (
-    <StitchContext.Provider value={{ stitchClient, stitchUser, stitchReady, stitchSearch }}>
+    <StitchContext.Provider
+      value={{ stitchClient, stitchUser, stitchReady, stitchSearch }}
+    >
       {children}
     </StitchContext.Provider>
   );
