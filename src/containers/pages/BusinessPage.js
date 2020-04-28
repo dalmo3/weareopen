@@ -1,36 +1,49 @@
-import React, { Fragment, useEffect } from 'react'
-import { Typography, Button } from '@material-ui/core'
-import { useMatch, navigate } from '@reach/router'
+import React, { Fragment, useEffect } from 'react';
+import { Typography, Button } from '@material-ui/core';
+import { useMatch, navigate } from '@reach/router';
 import { BusinessCard } from '../../components/BusinessCard';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useAppContext } from '../AppController';
 
-const BusinessPage = props => {
-
-  const {activeBusiness, getBusinessByTitle} = useAppContext()
+const BusinessPage = (props) => {
+  const {
+    activeBusiness,
+    getBusinessByTitle,
+    results,
+    isVerified,
+  } = useAppContext();
   const routerMatch = useMatch('/business/:businessSlug');
-  
-  // const [businessData, setBusinessData] = useState({})
 
-  useEffect(()=>{
-    console.log('activeBusiness', activeBusiness)
-    if (!activeBusiness.title) getBusinessByTitle(routerMatch.businessSlug)
-  },[])
+  useEffect(() => {
+    console.log('activeBusiness', activeBusiness);
+    if (!activeBusiness.title) getBusinessByTitle(routerMatch.businessSlug);
+  }, []);
 
-  return (
-    <div id="business-page">
-      <Typography>BusinessPage page</Typography>
+  const ConditionalCard = (props) =>
+    activeBusiness.title ? (
+      <BusinessCard businessData={activeBusiness} />
+    ) : (
+      <Typography>This business does not exist</Typography>
+    );
+
+  const BackToResults = (props) =>
+    results.length ? (
       <Button onClick={(e) => navigate(`/search`)}>
         <ArrowBackIcon /> Back to Results
       </Button>
-      { activeBusiness.title ?
-        <BusinessCard
-        businessData={activeBusiness}
-        ></BusinessCard>
-        : 'This business does not exist'
-      }
-    </div>
-  )
-}
+    ) : null;
 
-export default BusinessPage
+  const AddNewBusiness = (props) =>
+    isVerified ? <Button>Add New Business</Button> : null;
+    
+  return (
+    <div id="business-page">
+      <Typography>BusinessPage page</Typography>
+      <BackToResults />
+      <ConditionalCard />
+      <AddNewBusiness />
+    </div>
+  );
+};
+
+export default BusinessPage;
