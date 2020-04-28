@@ -59,7 +59,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
 
   useEffect(() => {
     const init = async () => {
-      if (loading) return
+      // if (loading) return
       stitchAppClient.auth
         .loginWithCredential(
           isAuthenticated
@@ -82,28 +82,27 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         });
     };
     init();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, loading]);
 
   const stitchSearch = (query) =>
     stitchAppClient.callFunction('searchbeta', [query]);
 
-  const findBusinessByTitle = (title, cb) => {
-    setCurrentRequest(['findOne', { title }, cb]);
+  const useFindBusinessByTitle = (title) => {
+    const [business, setBusiness] = useState(false);
+
+    useEffect(() => {
+      const performRequest = async () => {
+        if (!title) return;
+        if (!stitchReady) return;
+        if (!stitchDb) return;
+        console.log(title)
+        setBusiness(await stitchDb.findOne({ title }));
+      };
+      performRequest();
+    }, [stitchReady, stitchDb]);
+
+    return business;
   };
-
-  const [currentRequest, setCurrentRequest] = useState(false);
-  const [requestPending, setRequestPending] = useState(false);
-
-  useEffect(() => {
-    const performRequest = async () => {
-      if (!currentRequest) return;
-      if (!stitchReady) return;
-      const [fn, args, cb] = currentRequest;
-      cb(await stitchDb[fn](args))
-      setCurrentRequest(false)
-    }
-    performRequest()
-  }, [currentRequest, requestPending, stitchReady]);
 
   return (
     <StitchContext.Provider
@@ -112,7 +111,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         stitchUser,
         stitchReady,
         stitchSearch,
-        findBusinessByTitle,
+        useFindBusinessByTitle,
       }}
     >
       {children}

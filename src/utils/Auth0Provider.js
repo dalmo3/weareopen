@@ -21,9 +21,9 @@ export const Auth0Provider = ({
 
   useEffect(() => {
     const initAuth0 = async () => {
-      console.log('initializing auth0client... ', initOptions)
+      console.log('initializing auth0client... ')
       const auth0FromHook = await createAuth0Client(initOptions);
-      console.log('initialized auth0client... ', auth0FromHook)
+      console.log('initialized auth0client... ')
       setAuth0(auth0FromHook);
 
       if (window.location.search.includes("code=") &&
@@ -39,7 +39,7 @@ export const Auth0Provider = ({
       if (isAuthenticated) {
         const user = await auth0FromHook.getUser();
         setUser(user);
-        console.log(user)
+        console.log('auth0entitcated...')
         setIsVerified(user.email_verified)
       }
 

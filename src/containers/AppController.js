@@ -19,7 +19,7 @@ export const AppController = ({ children, ...initOptions }) => {
     stitchUser,
     stitchReady,
     stitchSearch,
-    findBusinessByTitle,
+    useFindBusinessByTitle,
   } = useStitch();
   const {
     loginWithPopup,
@@ -44,12 +44,12 @@ export const AppController = ({ children, ...initOptions }) => {
   };
 
   useEffect(() => {
-    console.log('query term:', query);
+    // console.log('query term:', query);
     if (stitchReady && query) {
       setSearchStatus('Searching');
       stitchSearch(query)
         .then((arr) => {
-          console.log(arr);
+          console.log('results', arr);
           setResults(arr);
           setSearchStatus('Finished');
         })
@@ -64,41 +64,18 @@ export const AppController = ({ children, ...initOptions }) => {
     }
   }, [query]);
 
-  //SHOW BUSINESS LOGIG
+  //SHOW BUSINESS LOGIC
   const [activeBusiness, setActiveBusiness] = useState({});
-  const [singleSearchStatus, setSingleSearchStatus] = useState('');
 
-  const getSingleResult = (promisedResults) =>
-    promisedResults
-      
-  // const getBusinessByTitle = (title) => {
-  //   findBusinessByTitle(title).then((arr) => {
-  //     if (arr[0]) {
-  //       setActiveBusiness(arr[0]);
-  //       setSingleSearchStatus('Found');
-  //     } else setSingleSearchStatus('Not Found');
-  //   })
-  //   .catch((err) => setSingleSearchStatus('Error'));;
-  // };
   const getBusinessByTitle = (title) => {
-    setSingleSearchStatus('Started');
-    findBusinessByTitle(title, result => {
-      console.log('result', result)
-      result && setActiveBusiness(result)
-    })
-    };
-
-  useEffect(()=> {
-    switch (singleSearchStatus) {
-      case 'Started':
-        
-        break;
-    
-      default:
-        break;
-    }
-    setSingleSearchStatus('Started');
-  },[singleSearchStatus])
+    setTitle(title);
+  };
+  const [title, setTitle] = useState();
+  const businessFound = useFindBusinessByTitle(title);
+  useEffect(() => {
+    console.log('biz found?', businessFound);
+    if (businessFound) setActiveBusiness(businessFound);
+  }, [businessFound]);
 
   // APP VIEW
   const [sideBarOpen, setSideBarOpen] = useState(false);
