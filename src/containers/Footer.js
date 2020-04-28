@@ -31,11 +31,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Footer() {
+export default function Footer(props) {
   const classes = useStyles();
 
   return (
-      <footer className={classes.footer}>
+      <footer id={props.id} className={classes.footer}>
       <Container>
           <Typography variant="body1"></Typography>
           <Copyright />

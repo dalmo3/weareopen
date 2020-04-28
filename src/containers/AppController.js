@@ -8,6 +8,7 @@ import React, {
 import { useAuth0 } from '../utils/Auth0Provider';
 import { useStitch } from '../utils/StitchProvider';
 import _debounce from 'lodash/debounce';
+import { navigate } from '@reach/router';
 
 export const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
@@ -22,7 +23,11 @@ export const AppController = ({ children, ...initOptions }) => {
     isVerified,
   } = useAuth0();
 
+
+  
+  // SEARCH LOGIC
   const [results, setResults] = useState([]);
+  const [searchStatus, setSearchStatus] = useState('');
   const [query, setQuery] = useState('');
 
   const debounce = useCallback(
@@ -36,15 +41,24 @@ export const AppController = ({ children, ...initOptions }) => {
 
   useEffect(() => {
     console.log('query term:', query);
-    if (stitchReady)
-      stitchSearch(query).then((a) => {
-        console.log(a);
-        setResults(a);
+    if (stitchReady && query) {
+      setSearchStatus('Searching');
+      stitchSearch(query).then((arr) => {
+        console.log(arr);
+        setResults(arr);
+        setSearchStatus('Finished');
+      }).catch((err) => {
+        setSearchStatus('Error');
+      }).finally(()=>{
+        navigate('/search');
       });
+    } else {
+      setSearchStatus('');
+    }
   }, [query]);
 
-  const [sideBarOpen, setSideBarOpen] = useState(false);
 
+  const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleSidebar = (open) => (event) => {
     if (
       event.type === 'keydown' &&
@@ -56,6 +70,8 @@ export const AppController = ({ children, ...initOptions }) => {
     setSideBarOpen(open);
   };
 
+
+  // ADD-BUSINESS FLOW
   const handleClaim = async (e, business) => {
     console.log('trying to claim property ', business);
     if (!isAuthenticated) {
@@ -82,8 +98,9 @@ export const AppController = ({ children, ...initOptions }) => {
   return (
     <AppContext.Provider
       value={{
-        results,
         query,
+        searching: searchStatus,
+        results,
         handleSearchInputChange,
         handleClaim,
         sideBarOpen,

@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import ResultCard from './ResultCard';
 import { makeStyles, Button } from '@material-ui/core';
+import { useAppContext } from '../containers/AppController';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -8,18 +9,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-
 const ResultList = (props) => {
   const classes = useStyles();
+  const { query, searching: searchStatus } = useAppContext();
 
-  // const list = 
+  const searchMessage =
+    searchStatus === 'Finished' && !props.results?.length
+      ? 'Nothing found'
+      : searchStatus;
+
+  const resultList = props.results.map((r, i) => (
+    <div key={r.title} className={classes.card}>
+      <ResultCard result={r} handleClaim={props.handleClaim} />
+    </div>
+  ));
+
   return (
     <Fragment>
-      {props.results.map((r, i) => (
-        <div key={r.title} className={classes.card}>
-          <ResultCard result={r} handleClaim={props.handleClaim} />
-        </div>
-      ))}
+      {resultList.length ? resultList : searchMessage}
       {/* {props.results.length > 10?  */}
       {/* <Button color="primary">Load More...</Button> */}
     </Fragment>

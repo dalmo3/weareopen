@@ -6,6 +6,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { BusinessCard } from '../components/BusinessCard';
 import { BusinessForm } from '../components/BusinessForm';
 import { useAppContext } from './AppController';
+import HomePage from './pages/HomePage';
 
 export const AppRouter = (props) => {
 
@@ -19,6 +20,9 @@ export const AppRouter = (props) => {
     <Typography>
       <Button component={Link} to="/">
         Home
+      </Button>
+      <Button component={Link} to="search">
+        Search
       </Button>
       <Button component={Link} to="profile">
         Profile
@@ -38,13 +42,14 @@ export const AppRouter = (props) => {
   return (
     <Fragment>
       <RouterTests />
-      <Router>
+      <Router primary={false}>
+        <HomePage default />
+        <Search path="search" />
         <TestParameterPage path="parameter/:testSlug" />
         <BusinessCard
           path="business/:businessSlug"
-          result={results[0]}
+          businessData={results[0]}
         ></BusinessCard>
-        <Search default />
         <ProfilePage path="profile" />
         <BusinessForm path="addnew" />
       </Router>

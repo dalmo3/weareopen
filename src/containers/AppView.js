@@ -22,21 +22,6 @@ export const AppView = (props) => {
     loginWithPopup,
   } = useAppContext();
 
-  const LogInOut = (props) => (
-    <Typography>
-      <Button
-        id={'login'}
-        variant="contained"
-        color="primary"
-        onClick={loginWithPopup}
-      >
-        Log in
-      </Button>
-      <Button id={'logout'} variant="outlined" color="primary" onClick={logout}>
-        Log out
-      </Button>
-    </Typography>
-  );
   return (
     <AppTheme>
       <Container
@@ -52,7 +37,6 @@ export const AppView = (props) => {
         />
         <Sidebar openState={sideBarOpen} toggleSidebar={toggleSidebar} />
         <Container id="main" maxWidth="sm">
-          <LogInOut />
           <AppRouter />
         </Container>
         <Footer id="footer"/>
