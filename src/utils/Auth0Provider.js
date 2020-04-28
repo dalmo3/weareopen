@@ -74,7 +74,7 @@ export const Auth0Provider = ({
   };
   
   const logout = (...p) => auth0Client.logout({
-    returnTo: process.env.PUBLIC_URL,
+    returnTo: process.env.REACT_APP_AUTH0_CALLBACK_URL,
     ...p
   }
   )
