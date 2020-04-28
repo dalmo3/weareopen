@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
@@ -12,7 +11,6 @@ import Collapse from '@material-ui/core/Collapse';
 import { Button, Grid } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { navigate } from '@reach/router';
-
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,6 +46,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const BusinessCard = (props) => {
+
+  const businessData = props.location?.state || props.businessData;
+
   const {
     title,
     location: {
@@ -62,7 +63,7 @@ export const BusinessCard = (props) => {
     },
     description: { short, long },
     contact: { email, website, phone },
-  } = props.location.state;
+  } = businessData;
 
   const locationDisplay = suburb
     ? suburb + (city ? ', ' + city : region ? ', ' + region : '')
@@ -83,8 +84,19 @@ export const BusinessCard = (props) => {
 
   return (
     <Card className={classes.root}>
-      <CardHeader
-        avatar={
+      <Button onClick={(e) => navigate(`/`)}>
+        <ArrowBackIcon /> Back to Results
+      </Button>
+        <CardContent>
+      <Grid
+        container
+        direction="row"
+        justify="flex-start"
+        alignItems="flex-start"
+        spacing={2}
+      >
+          
+        <Grid item xs={3} sm={2}>
           <Grid container direction="column" alignItems="center">
             <Grid item>
               <Avatar aria-label="business" className={classes.avatar}>
@@ -103,17 +115,13 @@ export const BusinessCard = (props) => {
               </Typography>
             </Grid>
           </Grid>
-        }
-        action={
-          <Button
-            onClick={e => navigate(`/`)}
-          >
-            <ArrowBackIcon/> Back to Results
-          </Button>
-        }
-        title={title}
-        subheader={locationDisplay}
-      />
+        </Grid>
+        <Grid item xs={9} sm={10}>
+          <Typography variant="h5" component='h2'>{title}</Typography>
+          <Typography>{locationDisplay}</Typography>
+        </Grid>
+      </Grid>
+        </CardContent>
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
           {short || 'No description provided'}

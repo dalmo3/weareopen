@@ -8,6 +8,7 @@ import Sidebar from './Sidebar';
 import { useAppContext } from './AppController';
 import { grey } from '@material-ui/core/colors';
 import { AppRouter } from './AppRouter';
+import Footer from './Footer';
 
 export const AppView = (props) => {
   const {
@@ -45,14 +46,17 @@ export const AppView = (props) => {
         maxWidth={false}
       >
         <Navbar
+          id="nav"
           toggleSidebar={toggleSidebar}
           handleInputChange={handleSearchInputChange}
         />
         <Sidebar openState={sideBarOpen} toggleSidebar={toggleSidebar} />
-        <Container maxWidth="sm">
+        <Container id="main" maxWidth="sm">
           <LogInOut />
-          <AppRouter/>
+          <AppRouter />
         </Container>
+        <Footer id="footer"/>
+
       </Container>
     </AppTheme>
   );

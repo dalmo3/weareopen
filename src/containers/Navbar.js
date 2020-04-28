@@ -121,6 +121,7 @@ export default function Navbar(props) {
               <SearchIcon />
             </div>
             <InputBase
+            autoFocus={true}
             fullWidth={true}
               placeholder="try... indian restaurant wellington"
               classes={{
