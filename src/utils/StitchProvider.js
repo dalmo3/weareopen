@@ -59,6 +59,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
 
   useEffect(() => {
     const init = async () => {
+      if (loading) return
       stitchAppClient.auth
         .loginWithCredential(
           isAuthenticated
