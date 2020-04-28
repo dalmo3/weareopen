@@ -7,12 +7,10 @@ import { BusinessCard } from '../components/BusinessCard';
 import { BusinessForm } from '../components/BusinessForm';
 import { useAppContext } from './AppController';
 import HomePage from './pages/HomePage';
+import BusinessPage from './pages/BusinessPage';
 
 export const AppRouter = (props) => {
-
-  const {
-    results
-  } = useAppContext();
+  const { results } = useAppContext();
 
   const Search = (props) => <ResultList results={results} />;
   const TestParameterPage = (props) => <div>{props.testSlug}</div>;
@@ -42,14 +40,11 @@ export const AppRouter = (props) => {
   return (
     <Fragment>
       <RouterTests />
-      <Router primary={false}>
+      <Router primary={false} >
         <HomePage default />
         <Search path="search" />
         <TestParameterPage path="parameter/:testSlug" />
-        <BusinessCard
-          path="business/:businessSlug"
-          businessData={results[0]}
-        ></BusinessCard>
+        <BusinessPage path="business/:businessSlug" />
         <ProfilePage path="profile" />
         <BusinessForm path="addnew" />
       </Router>

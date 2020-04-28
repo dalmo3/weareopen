@@ -5,6 +5,15 @@
  */
 import React from 'react';
 import { Auth0Provider } from './Auth0Provider';
+// import { createHistory, createMemorySource } from  "@reach/router"
+
+// const onRedirectCallback = appState => {
+//   createHistory(createMemorySource(
+//     appState && appState.targetUrl
+//       ? appState.targetUrl
+//       : window.location.pathname
+//   ));
+// };
 
 export const Auth0Wrapper = ({children}) => (
   <Auth0Provider

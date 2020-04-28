@@ -9,6 +9,7 @@ import { red, green, grey } from '@material-ui/core/colors';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Grid } from '@material-ui/core';
 import { navigate } from '@reach/router';
+import { useAppContext } from '../containers/AppController';
 
 const useStyles = makeStyles((props) => ({
   root: {
@@ -52,6 +53,8 @@ const ResultCard = (props) => {
       : 'Closed'
     : 'No info';
 
+  const {openBusinessPage} = useAppContext()
+
   const classes = useStyles({ info_available, open_now });
 
   return (
@@ -82,11 +85,7 @@ const ResultCard = (props) => {
           <IconButton
             className={classes.openIcon}
             aria-label="open business page"
-            onClick={(e) => {
-              // props.handleClaim(e, props.result)
-              // setActiveResult(props.result)
-              navigate(`/business/${title}`, { state: props.result });
-            }}
+            onClick={(e) => {openBusinessPage(e, props.result)}}
           >
             <ChevronRightIcon />
           </IconButton>

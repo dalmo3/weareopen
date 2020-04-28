@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ResultList = (props) => {
   const classes = useStyles();
-  const { query, searching: searchStatus } = useAppContext();
+  const { query, searchStatus } = useAppContext();
 
   const searchMessage =
     searchStatus === 'Finished' && !props.results?.length

@@ -9,8 +9,6 @@ import Typography from '@material-ui/core/Typography';
 import { red, green, grey } from '@material-ui/core/colors';
 import Collapse from '@material-ui/core/Collapse';
 import { Button, Grid } from '@material-ui/core';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { navigate } from '@reach/router';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,9 +82,6 @@ export const BusinessCard = (props) => {
 
   return (
     <Card className={classes.root}>
-      <Button onClick={(e) => navigate(`/`)}>
-        <ArrowBackIcon /> Back to Results
-      </Button>
         <CardContent>
       <Grid
         container

@@ -14,7 +14,13 @@ export const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
 
 export const AppController = ({ children, ...initOptions }) => {
-  const { stitchClient, stitchUser, stitchReady, stitchSearch } = useStitch();
+  const {
+    stitchClient,
+    stitchUser,
+    stitchReady,
+    stitchSearch,
+    findBusinessByTitle,
+  } = useStitch();
   const {
     loginWithPopup,
     logout,
@@ -23,8 +29,6 @@ export const AppController = ({ children, ...initOptions }) => {
     isVerified,
   } = useAuth0();
 
-
-  
   // SEARCH LOGIC
   const [results, setResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState('');
@@ -43,21 +47,60 @@ export const AppController = ({ children, ...initOptions }) => {
     console.log('query term:', query);
     if (stitchReady && query) {
       setSearchStatus('Searching');
-      stitchSearch(query).then((arr) => {
-        console.log(arr);
-        setResults(arr);
-        setSearchStatus('Finished');
-      }).catch((err) => {
-        setSearchStatus('Error');
-      }).finally(()=>{
-        navigate('/search');
-      });
+      stitchSearch(query)
+        .then((arr) => {
+          console.log(arr);
+          setResults(arr);
+          setSearchStatus('Finished');
+        })
+        .catch((err) => {
+          setSearchStatus('Error');
+        })
+        .finally(() => {
+          navigate('/search');
+        });
     } else {
       setSearchStatus('');
     }
   }, [query]);
 
+  //SHOW BUSINESS LOGIG
+  const [activeBusiness, setActiveBusiness] = useState({});
+  const [singleSearchStatus, setSingleSearchStatus] = useState('');
 
+  const getSingleResult = (promisedResults) =>
+    promisedResults
+      
+  // const getBusinessByTitle = (title) => {
+  //   findBusinessByTitle(title).then((arr) => {
+  //     if (arr[0]) {
+  //       setActiveBusiness(arr[0]);
+  //       setSingleSearchStatus('Found');
+  //     } else setSingleSearchStatus('Not Found');
+  //   })
+  //   .catch((err) => setSingleSearchStatus('Error'));;
+  // };
+  const getBusinessByTitle = (title) => {
+    setSingleSearchStatus('Started');
+    findBusinessByTitle(title, result => {
+      console.log('result', result)
+      result && setActiveBusiness(result)
+    })
+    };
+
+  useEffect(()=> {
+    switch (singleSearchStatus) {
+      case 'Started':
+        
+        break;
+    
+      default:
+        break;
+    }
+    setSingleSearchStatus('Started');
+  },[singleSearchStatus])
+
+  // APP VIEW
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleSidebar = (open) => (event) => {
     if (
@@ -69,7 +112,6 @@ export const AppController = ({ children, ...initOptions }) => {
 
     setSideBarOpen(open);
   };
-
 
   // ADD-BUSINESS FLOW
   const handleClaim = async (e, business) => {
@@ -95,13 +137,21 @@ export const AppController = ({ children, ...initOptions }) => {
       .then((a) => console.log('user is', a));
   };
 
+  const openBusinessPage = (e, businessData) => {
+    setActiveBusiness(businessData);
+    navigate(`/business/${businessData.title}`);
+  };
+
   return (
     <AppContext.Provider
       value={{
         query,
-        searching: searchStatus,
+        searchStatus,
         results,
         handleSearchInputChange,
+        activeBusiness,
+        getBusinessByTitle,
+        openBusinessPage,
         handleClaim,
         sideBarOpen,
         toggleSidebar,
