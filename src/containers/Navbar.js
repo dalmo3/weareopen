@@ -10,6 +10,9 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import { useAppContext } from './AppController';
+import { navigate } from '@reach/router';
+import { Badge } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -64,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       marginLeft: theme.spacing(3),
       // width: '50ch',
-    }
+    },
   },
   sectionDesktop: {
     display: 'flex',
@@ -72,6 +75,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Navbar(props) {
+  const { isAuthenticated, isVerified, logout } = useAppContext();
+
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -89,24 +94,59 @@ export default function Navbar(props) {
   const renderProfileMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       id={menuId}
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMenuOpen}
       onClose={handleProfileMenuClose}
     >
-      <MenuItem onClick={handleProfileMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleProfileMenuClose}>My account</MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          handleProfileMenuClose();
+          navigate('/profile');
+        }}
+      >
+        Profile
+      </MenuItem>
+      <MenuItem
+        onClick={(e) => {
+          handleProfileMenuClose();
+          logout();
+        }}
+      >
+        Log out
+      </MenuItem>
     </Menu>
   );
 
+  const profileIcon = (
+    <IconButton
+      edge="end"
+      aria-label="account of current user"
+      aria-controls={menuId}
+      aria-haspopup="true"
+      onClick={handleProfileMenuOpen}
+      color="inherit"
+    >
+      <AccountCircle />
+    </IconButton>
+  );
+
+  const renderProfileIcon = isAuthenticated ? (
+    <Badge color="error" badgeContent=' ' overlap="circle"  variant='dot' invisible={isVerified}>
+      {profileIcon}
+    </Badge>
+  ) : null;
+
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed" color='primary' 
-        // style={{backgroundColor: 'white'}} 
-        >
-        <Toolbar >
+      <AppBar
+        position="fixed"
+        color="primary"
+        // style={{backgroundColor: 'white'}}
+      >
+        <Toolbar>
           <IconButton
             edge="start"
             className={classes.menuButton}
@@ -125,31 +165,21 @@ export default function Navbar(props) {
               <SearchIcon />
             </div>
             <InputBase
-            autoFocus={true}
-            fullWidth={true}
+              autoFocus={true}
+              fullWidth={true}
               placeholder="try... indian restaurant wellington"
               classes={{
                 root: classes.inputRoot,
                 input: classes.inputInput,
               }}
               inputProps={{ 'aria-label': 'search' }}
-              defaultValue={''} 
+              defaultValue={''}
               onChange={props.handleInputChange}
             />
           </div>
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-          </div>
+          <div className={classes.sectionDesktop}></div>
+          {renderProfileIcon}
         </Toolbar>
       </AppBar>
       <Toolbar />
