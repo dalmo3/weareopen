@@ -22,6 +22,7 @@ export const AppController = ({ children, ...initOptions }) => {
     stitchSearch,
     useFindBusinessByTitle,
     findBusinessByTitle,
+    findOneAndUpdate
   } = useStitch();
   const {
     loginWithPopup,
@@ -73,7 +74,14 @@ export const AppController = ({ children, ...initOptions }) => {
   // DISPLAY BUSINESS LOGIC
   //
   const [activeBusiness, setActiveBusiness] = useState({});
-  
+
+  // opening from results, no need for api call
+  const openBusinessPage = (e, businessData) => {
+    setActiveBusiness(businessData);
+    navigate(`/business/${businessData.title}`);
+  };
+
+  // opening from url
   // find business by exact title match
   const findOne = (title) =>
   findBusinessByTitle(title).then((doc) => {
@@ -130,7 +138,7 @@ export const AppController = ({ children, ...initOptions }) => {
   //
   // ADD BUSINESS FLOW
   //
-  
+
   const handleClaim = async (e) => {
     console.log('trying to claim property ', activeBusiness.title);
     if (!isAuthenticated) {
@@ -138,7 +146,7 @@ export const AppController = ({ children, ...initOptions }) => {
       return;
     }
     console.log('authenticated into Auth0', auth0User);
-    if (false && !auth0User.email_verified) {
+    if (!auth0User.email_verified) {
       console.log('Please verify your email');
       return;
     }
@@ -158,16 +166,38 @@ export const AppController = ({ children, ...initOptions }) => {
       .catch((err) => console.error(err));
   };
 
-  const openBusinessPage = (e, businessData) => {
-    setActiveBusiness(businessData);
-    navigate(`/business/${businessData.title}`);
-  };
 
+  //
+  // EDIT FLOW
+  //
+
+  const [isEditing, setIsEditing] = useState(false);
   const handleEdit = (e) => {
     console.log('trying to edit', activeBusiness);
   };
 
-  const [isEditing, setIsEditing] = useState(false);
+  const submitEdit = (businessData) => {
+    if (!isAuthenticated) {
+      alert('Please log in');
+      return;
+    }
+    if (!auth0User.email_verified) {
+      alert('Please verify your email');
+      return;
+    }
+    if (!userMeta.ownsActiveBusiness) {
+      alert('Please verify your email');
+      return;
+    }
+    console.log(businessData)
+    findOneAndUpdate(businessData)
+    .then(updated => {
+      console.log(updated)
+      setActiveBusiness(updated)
+      navigate(`/business/${updated.title}`)
+    })
+    .catch(console.error)
+  }
 
   return (
     <AppContext.Provider
@@ -181,6 +211,7 @@ export const AppController = ({ children, ...initOptions }) => {
         openBusinessPage,
         handleClaim,
         handleEdit,
+        submitEdit,
         userMeta,
         sideBarOpen,
         toggleSidebar,

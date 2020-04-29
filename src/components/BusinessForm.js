@@ -4,6 +4,7 @@ import { Form } from 'react-final-form';
 import { TextField, makeValidate, makeRequired } from 'mui-rff';
 import * as Yup from 'yup';
 import { Paper, Grid, Button, Typography } from '@material-ui/core';
+import { useAppContext } from '../containers/AppController';
 
 const schema = Yup.object().shape({
   title: Yup.string().ensure().trim().min(3, 'Too short').max(50, 'Too long'),
@@ -12,7 +13,7 @@ const schema = Yup.object().shape({
       suburb: Yup.string().trim(),
       city: Yup.string().ensure().trim(),
       region: Yup.string().trim(),
-      region: Yup.string().trim(),
+      postcode: Yup.number().min(1000).lessThan(10000),
       street_address: Yup.string().trim(),
     }),
   }),
@@ -54,6 +55,10 @@ const formFields = [
     field: <TextField label="Region" name="location.address.region" />,
   },
   {
+    size: 6,
+    field: <TextField label="Postcode" name="location.address.postcode" />,
+  },
+  {
     size: 12,
     field: (
       <TextField
@@ -77,10 +82,11 @@ const formFields = [
 
 const BusinessForm = (props) => {
   const { businessData } = props;
+  const { submitEdit } = useAppContext()
 
   return (
     <Form
-      onSubmit={(e) => alert}
+      onSubmit={submitEdit}
       initialValues={businessData}
       validate={validate}
       render={({ handleSubmit, reset, submitting, pristine, values }) => (

@@ -5,6 +5,7 @@ import {
   AnonymousCredential,
   RemoteMongoClient,
   CustomCredential,
+  findOneAndUpdate,
 } from 'mongodb-stitch-browser-sdk';
 
 export const StitchContext = createContext();
@@ -79,7 +80,13 @@ export const StitchProvider = ({ children, ...initOptions }) => {
   const stitchSearch = (query) =>
     stitchAppClient.callFunction('searchbeta', [query]);
 
-  const findBusinessByTitle = (title) => stitchDb.findOne({ title })
+  const findBusinessByTitle = (title) => stitchDb.findOne({ title });
+  const findOneAndUpdate = (business) =>
+    stitchDb.findOneAndUpdate(
+      { _id: business._id },
+      { $set: business },
+      { returnNewDocument: true }
+    );
 
   return (
     <StitchContext.Provider
