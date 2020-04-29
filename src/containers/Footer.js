@@ -1,11 +1,11 @@
-  
 import React from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Link from '@material-ui/core/Link';
-
+import { Grid } from '@material-ui/core';
+import { Link as RouterLink } from '@reach/router';
 
 function Copyright() {
   return (
@@ -27,7 +27,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     margin: '0',
     backgroundColor:
-      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[800],
+      theme.palette.type === 'light'
+        ? theme.palette.grey[200]
+        : theme.palette.grey[800],
   },
 }));
 
@@ -35,11 +37,21 @@ export default function Footer(props) {
   const classes = useStyles();
 
   return (
-      <footer id={props.id} className={classes.footer}>
+    <footer id={props.id} className={classes.footer}>
       <Container>
-          <Typography variant="body1"></Typography>
-          <Copyright />
-        </Container>
-      </footer>
-    );
+        <Grid container justify="space-between">
+          <Grid item>
+            <Copyright />
+          </Grid>
+          <Grid item>
+            <Typography variant="body2" color="textSecondary">
+              <Link component={RouterLink} to="/privacy-policy" color="inherit">
+                Privacy policy
+              </Link>
+            </Typography>
+          </Grid>
+        </Grid>
+      </Container>
+    </footer>
+  );
 }
