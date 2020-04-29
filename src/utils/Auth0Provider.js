@@ -61,6 +61,8 @@ export const Auth0Provider = ({
     const user = await auth0Client.getUser();
     setUser(user);
     setIsAuthenticated(true);
+    setIsVerified(user?.email_verified);
+    console.log('auth0 logged in as', user)
   };
 
   const handleRedirectCallback = async () => {
@@ -70,7 +72,8 @@ export const Auth0Provider = ({
     setLoading(false);
     setIsAuthenticated(true);
     setUser(user);
-    setIsVerified(user.email_verified)
+    setIsVerified(user?.email_verified);
+    console.log('auth0 logged in as', user)
   };
   
   const logout = (...p) => auth0Client.logout({
