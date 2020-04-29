@@ -162,7 +162,7 @@ export default function Navbar(props) {
           <div className={classes.grow} />
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon />
+              <SearchIcon/>
             </div>
             <InputBase
               autoFocus={true}
@@ -175,6 +175,7 @@ export default function Navbar(props) {
               inputProps={{ 'aria-label': 'search' }}
               defaultValue={''}
               onChange={props.handleInputChange}
+              onClick={e=> navigate('/search')}
             />
           </div>
           <div className={classes.grow} />
