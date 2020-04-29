@@ -30,8 +30,11 @@ export const AppController = ({ children, ...initOptions }) => {
     user: auth0User,
     isVerified,
   } = useAuth0();
-
+  
+  //
   // SEARCH LOGIC
+  //
+
   const [results, setResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState('');
   const [query, setQuery] = useState('');
@@ -65,37 +68,36 @@ export const AppController = ({ children, ...initOptions }) => {
       setSearchStatus('');
     }
   }, [query, stitchReady, stitchSearch]);
-
-  //SHOW BUSINESS LOGIC
+  
+  //
+  // DISPLAY BUSINESS LOGIC
+  //
   const [activeBusiness, setActiveBusiness] = useState({});
-
-  const [fetchTitle, setFetchTitle] = useState();
-
+  
+  // find business by exact title match
+  const findOne = (title) =>
+  findBusinessByTitle(title).then((doc) => {
+    setActiveBusiness(doc);
+    setFetchTitle('');
+    // console.log('got1', doc);
+  });
+  
+  // if db is ready make the call
   const fetchBusiness = (title) => {
-    // if (stitchReady) {
-    //   console.log('will fetch', title);
-    //   findBusinessByTitle(fetchTitle).then((doc) => {
-    //     console.log('got11', doc);
-    //     setActiveBusiness(doc);
-    //   });
-    // } else {
-    //   console.log('set', title);
-      setFetchTitle(title);
-    }
-  // };
-
+    if (stitchReady) {
+      findOne(title);
+    } else setFetchTitle(title);
+  };
+  
+  // else setup effect to wait for db ready to make the call
+  const [fetchTitle, setFetchTitle] = useState();
   useEffect(() => {
-    if (fetchTitle && stitchReady) {
-      console.log('will fetch', fetchTitle);
-      findBusinessByTitle(fetchTitle).then((doc) => {
-        console.log('got22', doc);
-        setActiveBusiness(doc);
-        setFetchTitle('');
-      });
-    }
+    if (fetchTitle && stitchReady) findOne(fetchTitle);
   }, [fetchTitle, stitchReady]);
 
-  //USER LOGIC
+  //
+  // USER LOGIC
+  //
 
   const [userMeta, setUserMeta] = useState({});
   useEffect(() => {
@@ -125,7 +127,10 @@ export const AppController = ({ children, ...initOptions }) => {
     setSideBarOpen(open);
   };
 
-  // ADD-BUSINESS FLOW
+  //
+  // ADD BUSINESS FLOW
+  //
+  
   const handleClaim = async (e) => {
     console.log('trying to claim property ', activeBusiness.title);
     if (!isAuthenticated) {
