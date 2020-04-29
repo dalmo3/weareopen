@@ -96,6 +96,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         stitchReady,
         stitchSearch,
         findBusinessByTitle,
+        findOneAndUpdate
       }}
     >
       {children}
