@@ -9,6 +9,7 @@ import { useAuth0 } from '../utils/Auth0Provider';
 import { useStitch } from '../utils/StitchProvider';
 import _debounce from 'lodash/debounce';
 import { navigate } from '@reach/router';
+import { act } from '@testing-library/react';
 
 export const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
@@ -67,24 +68,46 @@ export const AppController = ({ children, ...initOptions }) => {
   //SHOW BUSINESS LOGIC
   const [activeBusiness, setActiveBusiness] = useState({});
 
-  const useActiveBusiness = (title) => useDecider(title)(title)
+  const useActiveBusiness = (title) => useDecider(title)(title);
 
   // prevent calling mongo for a business that is already loaded
   // the decider returns the correct hook to use from the component
   // this is necessary because you cant call a hook conditionally
   const useDecider = (title) =>
-    activeBusiness?.title === title ? useActiveBusinessLocal : useActiveBusinessRemote;
+    activeBusiness?.title === title
+      ? useActiveBusinessLocal
+      : useActiveBusinessRemote;
   const useActiveBusinessLocal = (title) => activeBusiness;
-  
+
   // the remote hook is necessary to listen to the stitch connection
   const useActiveBusinessRemote = (title) => {
     const businessFound = useFindBusinessByTitle(title);
     useEffect(() => {
-      console.log('biz found?', businessFound?.title);
+      console.log('biz found?', businessFound);
       if (businessFound) setActiveBusiness(businessFound);
     }, [businessFound, title]);
     return activeBusiness;
   };
+
+  //USER LOGIC
+
+  const [userMeta, setUserMeta] = useState({});
+  useEffect(() => {
+    console.log(stitchUser)
+    setUserMeta({
+      ...userMeta,
+      ownsActiveBusiness:
+        stitchReady && (stitchUser?.id === activeBusiness?.admin?.admin_id),
+      canClaimBusiness:
+        stitchReady && isVerified && !activeBusiness?.admin?.has_admin
+    });
+    console.log(stitchUser?.id, activeBusiness?.admin?.admin_id)
+  }, [stitchUser, activeBusiness]);
+
+  useEffect(()=> console.log(userMeta), [userMeta])
+
+
+
   // APP VIEW
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleSidebar = (open) => (event) => {
@@ -99,8 +122,8 @@ export const AppController = ({ children, ...initOptions }) => {
   };
 
   // ADD-BUSINESS FLOW
-  const handleClaim = async (e, business) => {
-    console.log('trying to claim property ', business);
+  const handleClaim = async (e) => {
+    console.log('trying to claim property ', activeBusiness.title);
     if (!isAuthenticated) {
       console.log('Please log in');
       return;
@@ -118,14 +141,22 @@ export const AppController = ({ children, ...initOptions }) => {
     // if (!dbReady) return;
     console.log('db is ready');
     stitchClient
-      .callFunction('claimBusiness', [business._id])
-      .then((a) => console.log('user is', a));
+      .callFunction('claimBusiness', [activeBusiness._id])
+      .then((accepted, doc) => {
+        console.log('claim accepted?', accepted)
+        setActiveBusiness(doc)
+      })
+      .catch(err => console.error(err));
   };
 
   const openBusinessPage = (e, businessData) => {
     setActiveBusiness(businessData);
     navigate(`/business/${businessData.title}`);
   };
+
+  const handleEdit = (e) => {
+    console.log('trying to edit', activeBusiness)
+  }
 
   return (
     <AppContext.Provider
@@ -139,6 +170,8 @@ export const AppController = ({ children, ...initOptions }) => {
         // getBusinessByTitle,
         openBusinessPage,
         handleClaim,
+        handleEdit,
+        userMeta,
         sideBarOpen,
         toggleSidebar,
         logout,

@@ -12,13 +12,17 @@ const BusinessPage = (props) => {
     results,
     isVerified,
     useActiveBusiness,
+    handleClaim,
+    userMeta,
+    handleEdit
   } = useAppContext();
   const routerMatch = useMatch('/business/:businessSlug');
   // console.log('route', routerMatch.businessSlug)
-  const activeBusiness = useActiveBusiness(routerMatch.businessSlug)
+  const activeBusiness = useActiveBusiness(routerMatch.businessSlug);
 
+  const hasBusiness = Boolean(activeBusiness && activeBusiness.title);
   const ConditionalCard = (props) =>
-    activeBusiness.title ? (
+    hasBusiness ? (
       <BusinessCard businessData={activeBusiness} />
     ) : (
       <Typography>This business does not exist</Typography>
@@ -33,13 +37,29 @@ const BusinessPage = (props) => {
 
   const AddNewBusiness = (props) =>
     isVerified ? <Button>Add New Business</Button> : null;
-    
+
+  const ClaimBusiness = (props) =>{
+    return userMeta.canClaimBusiness ? (
+      <Button
+      onClick={handleClaim}
+      >Claim Business</Button>
+      ) : null;
+    }
+  const EditBusiness = (props) =>{
+    return userMeta.ownsActiveBusiness ? (
+      <Button
+      onClick={handleEdit}
+      >EditBusiness</Button>
+      ) : null;
+    }
   return (
     <div id="business-page">
       <Typography>BusinessPage page</Typography>
       <BackToResults />
       <ConditionalCard />
       <AddNewBusiness />
+      <ClaimBusiness />
+      <EditBusiness />
     </div>
   );
 };
