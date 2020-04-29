@@ -58,17 +58,16 @@ export const StitchProvider = ({ children, ...initOptions }) => {
   const [stitchDb, setStitchDb] = useState({});
 
   useEffect(() => {
-    const init = async () => {
+    const init = async (auth) => {
+      const credentials = 
+        auth?new CustomCredential(await getTokenSilently())
+        :new AnonymousCredential()
       // if (loading) return
       stitchAppClient.auth
-        .loginWithCredential(
-          isAuthenticated
-            ? new CustomCredential(await getTokenSilently())
-            : new AnonymousCredential()
-        )
+        .loginWithCredential(credentials)
         .then((user) => {
           console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
-          console.log(user);
+          // console.log(user);
           setStitchUser(user);
           setStitchDb(
             stitchAppClient
@@ -82,8 +81,11 @@ export const StitchProvider = ({ children, ...initOptions }) => {
           setStitchReady(true);
         });
     };
-    init();
-  }, [isAuthenticated, loading]);
+
+    if (loading) init()
+    if (isAuthenticated) init(true)    
+      
+  }, [loading]);
 
   const stitchSearch = (query) =>
     stitchAppClient.callFunction('searchbeta', [query]);
