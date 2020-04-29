@@ -16,37 +16,19 @@ const BusinessPage = (props) => {
     handleClaim,
     userMeta,
     handleEdit,
-    activeBusiness: globalActiveBusiness,
+    activeBusiness,
+    // activeBusiness: globalActiveBusiness,
     fetchBusiness,
   } = useAppContext();
   const routerMatch = useMatch('/business/:businessSlug/**');
-  console.log(routerMatch)
-  console.log(props)
-  // console.log('route', routerMatch.businessSlug)
-  // const activeBusiness = useActiveBusiness(routerMatch.businessSlug);
+  console.log('route', routerMatch.businessSlug);
 
-  
-  const [activeBusiness, setActiveBusiness] = useState({});
   const hasActiveBusiness = Boolean(activeBusiness && activeBusiness.title);
-  const hasActiveGlobalBusiness = Boolean(globalActiveBusiness && globalActiveBusiness.title);
-  
-  useEffect(() => {
-    console.log('ab:', new Date().getTime(), activeBusiness)
-    console.log('gab:', new Date().getTime(), globalActiveBusiness)
-    if (hasActiveGlobalBusiness && (globalActiveBusiness.title === routerMatch.businessSlug)){
-      console.log('gab exists', new Date().getTime())
-      setActiveBusiness(globalActiveBusiness);
-    }
-    else {
-      console.log('gab doesnt exist', new Date().getTime(), globalActiveBusiness)
-      fetchBusiness(routerMatch.businessSlug);
-    
-    }
-  }, [globalActiveBusiness,activeBusiness,routerMatch.businessSlug]);
 
-  useEffect(()=>{
-    console.log('ab own hook:', activeBusiness)
-  },[activeBusiness])
+  useEffect(() => {
+    if (!hasActiveBusiness || activeBusiness.title !== routerMatch.businessSlug)
+      fetchBusiness(routerMatch.businessSlug);
+  }, [hasActiveBusiness, routerMatch.businessSlug]);
 
   const ConditionalCard = (props) =>
     hasActiveBusiness ? (
@@ -84,9 +66,9 @@ const BusinessPage = (props) => {
     // setIsEditing(true)
   };
 
-  useEffect(()=>{
-    setIsEditing(userMeta.ownsActiveBusiness && tryEditing)
-  },[userMeta.ownsActiveBusiness, tryEditing])
+  useEffect(() => {
+    setIsEditing(userMeta.ownsActiveBusiness && tryEditing);
+  }, [userMeta.ownsActiveBusiness, tryEditing]);
   const ConditionalForm = (props) =>
     isEditing ? <BusinessForm businessData={activeBusiness} /> : null;
   const PreviewCard = (props) => {};
