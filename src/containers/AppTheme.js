@@ -1,14 +1,36 @@
 import React from 'react';
-import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core/styles';
+import {
+  createMuiTheme,
+  makeStyles,
+  ThemeProvider,
+  fade,
+  MuiThemeProvider,
+} from '@material-ui/core/styles';
 import { orange, blue, amber } from '@material-ui/core/colors';
 import 'typeface-roboto';
-require('typeface-source-sans-pro')
+import createMixins from '@material-ui/core/styles/createMixins';
+require('typeface-source-sans-pro');
+
+const darkBlue = '#363a50';
+
+const darkButtonMixin = {
+  MuiIconButton: {
+    '&:hover': {
+      backgroundColor: fade('#fff', 0.15),
+    },
+  },
+  MuiButton: {
+    '&:hover': {
+      backgroundColor: fade(darkBlue, 0.85),
+    },
+  },
+};
 
 const theme = createMuiTheme({
   typography: {
     fontFamily: [
-      'Roboto',
       '"Source Sans Pro"',
+      'Roboto',
       '-apple-system',
       'BlinkMacSystemFont',
       '"Segoe UI"',
@@ -23,22 +45,28 @@ const theme = createMuiTheme({
   palette: {
     primary: {
       // light: will be calculated from palette.primary.main,
-      main: blue[900],
+      main: darkBlue,
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
-      main: amber[400]
-    }
+      main: amber[500],
+    },
   },
-  status: {
-    danger: orange[500],
-    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  overrides: {
+    MuiButton: {
+      root: {
+        fontWeight: '600',
+      },
+      containedPrimary: darkButtonMixin.MuiButton,
+    },
+    MuiIconButton: {
+      colorInherit: darkButtonMixin.MuiIconButton,
+      colorPrimary: darkButtonMixin.MuiIconButton,
+    },
   },
 });
 
-export const AppTheme = React.memo(({children}) => (
-    <ThemeProvider theme={theme}>
-      {children}
-    </ThemeProvider>
-  ));
+export const AppTheme = React.memo(({ children }) => (
+  <ThemeProvider theme={theme}>{children}</ThemeProvider>
+));

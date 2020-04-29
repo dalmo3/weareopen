@@ -17,6 +17,9 @@ const useStyles = makeStyles((theme) => ({
   },
   menuButton: {
     marginRight: theme.spacing(2),
+    // '&:hover': {
+    //   backgroundColor: fade('#fff', 0.15),
+    // },
   },
   title: {
     display: 'none',
@@ -27,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.primary.main, 0.05),
+    backgroundColor: fade(theme.palette.common.white, 0.15),
     '&:hover': {
-      backgroundColor: fade(theme.palette.primary.main, 0.15),
+      backgroundColor: fade(theme.palette.common.white, 0.25),
     },
     marginRight: theme.spacing(2),
     marginLeft: theme.spacing(2),
@@ -61,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up('md')]: {
       marginLeft: theme.spacing(3),
       // width: '50ch',
-    },
+    }
   },
   sectionDesktop: {
     display: 'flex',
@@ -100,8 +103,9 @@ export default function Navbar(props) {
 
   return (
     <div className={classes.grow}>
-      <AppBar position="fixed" color='transparent' 
-        style={{backgroundColor: 'white'}} >
+      <AppBar position="fixed" color='primary' 
+        // style={{backgroundColor: 'white'}} 
+        >
         <Toolbar >
           <IconButton
             edge="start"

@@ -68,6 +68,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         )
         .then((user) => {
           console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
+          console.log(user);
           setStitchUser(user);
           setStitchDb(
             stitchAppClient

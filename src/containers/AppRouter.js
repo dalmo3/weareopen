@@ -16,22 +16,22 @@ export const AppRouter = (props) => {
   const TestParameterPage = (props) => <div>{props.testSlug}</div>;
   const RouterTests = (props) => (
     <Typography>
-      <Button component={Link} to="/">
+      <Button color='primary' component={Link} to="/">
         Home
       </Button>
-      <Button component={Link} to="search">
+      <Button color='secondary' component={Link} to="search">
         Search
       </Button>
       <Button component={Link} to="profile">
         Profile
       </Button>
-      <Button component={Link} to="business/abc">
+      <Button variant='outlined' component={Link} to="business/abc">
         Business
       </Button>
-      <Button component={Link} to="parameter/abc">
+      <Button variant='text' component={Link} to="parameter/abc">
         Parameters
       </Button>
-      <Button component={Link} to="addnew">
+      <Button variant='outlined' color='primary' component={Link} to="addnew">
         Add New Parameter (navigate)
       </Button>
     </Typography>
