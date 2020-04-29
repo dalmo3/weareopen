@@ -11,18 +11,22 @@ const BusinessPage = (props) => {
     getBusinessByTitle,
     results,
     isVerified,
-    useActiveBusiness,
     handleClaim,
     userMeta,
-    handleEdit
+    handleEdit,
+    activeBusiness,
+    fetchBusiness
   } = useAppContext();
   const routerMatch = useMatch('/business/:businessSlug');
   // console.log('route', routerMatch.businessSlug)
-  const activeBusiness = useActiveBusiness(routerMatch.businessSlug);
+  // const activeBusiness = useActiveBusiness(routerMatch.businessSlug);
 
-  const hasBusiness = Boolean(activeBusiness && activeBusiness.title);
+  const hasActiveBusiness = Boolean(activeBusiness && activeBusiness.title);
+
+  if (!hasActiveBusiness || activeBusiness.title !== routerMatch.businessSlug) fetchBusiness(routerMatch.businessSlug)
+
   const ConditionalCard = (props) =>
-    hasBusiness ? (
+    hasActiveBusiness ? (
       <BusinessCard businessData={activeBusiness} />
     ) : (
       <Typography>This business does not exist</Typography>

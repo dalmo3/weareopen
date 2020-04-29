@@ -79,25 +79,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
   const stitchSearch = (query) =>
     stitchAppClient.callFunction('searchbeta', [query]);
 
-  const useFindBusinessByTitle = (title) => {
-    const [business, setBusiness] = useState(false);
-
-    useEffect(() => {
-      const performRequest = async () => {
-        console.log('findOne ', title);
-        if (!title) return;
-        if (!stitchReady) return;
-        if (!stitchDb) return;
-        setBusiness(await stitchDb.findOne({ title }));
-      };
-      performRequest();
-      // lint whines that stitchReady is an outer scope var
-      // but it is needed in order to trigger the effect again
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [stitchReady, title]);
-
-    return business;
-  };
+  const findBusinessByTitle = (title) => stitchDb.findOne({ title })
 
   return (
     <StitchContext.Provider
@@ -106,7 +88,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         stitchUser,
         stitchReady,
         stitchSearch,
-        useFindBusinessByTitle,
+        findBusinessByTitle,
       }}
     >
       {children}

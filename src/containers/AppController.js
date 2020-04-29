@@ -21,6 +21,7 @@ export const AppController = ({ children, ...initOptions }) => {
     stitchReady,
     stitchSearch,
     useFindBusinessByTitle,
+    findBusinessByTitle,
   } = useStitch();
   const {
     loginWithPopup,
@@ -67,27 +68,22 @@ export const AppController = ({ children, ...initOptions }) => {
 
   //SHOW BUSINESS LOGIC
   const [activeBusiness, setActiveBusiness] = useState({});
+    
+  const [ fetchTitle, setFetchTitle ] = useState()
 
-  const useActiveBusiness = (title) => useDecider(title)(title);
+  const fetchBusiness = (title) => {
+    setFetchTitle(title)
+  }
 
-  // prevent calling mongo for a business that is already loaded
-  // the decider returns the correct hook to use from the component
-  // this is necessary because you cant call a hook conditionally
-  const useDecider = (title) =>
-    activeBusiness?.title === title
-      ? useActiveBusinessLocal
-      : useActiveBusinessRemote;
-  const useActiveBusinessLocal = (title) => activeBusiness;
+  useEffect(()=>{
+    if (fetchTitle && stitchReady)
+      findBusinessByTitle(fetchTitle)
+      .then(doc => {
+        setActiveBusiness(doc)
+        setFetchTitle('')
+      })
+  },[fetchTitle, stitchReady])
 
-  // the remote hook is necessary to listen to the stitch connection
-  const useActiveBusinessRemote = (title) => {
-    const businessFound = useFindBusinessByTitle(title);
-    useEffect(() => {
-      console.log('biz found?', businessFound);
-      if (businessFound) setActiveBusiness(businessFound);
-    }, [businessFound, title]);
-    return activeBusiness;
-  };
 
   //USER LOGIC
 
@@ -158,6 +154,7 @@ export const AppController = ({ children, ...initOptions }) => {
     console.log('trying to edit', activeBusiness)
   }
 
+
   return (
     <AppContext.Provider
       value={{
@@ -166,8 +163,7 @@ export const AppController = ({ children, ...initOptions }) => {
         results,
         handleSearchInputChange,
         activeBusiness,
-        useActiveBusiness,
-        // getBusinessByTitle,
+        fetchBusiness,
         openBusinessPage,
         handleClaim,
         handleEdit,
