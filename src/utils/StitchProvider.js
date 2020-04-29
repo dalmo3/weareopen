@@ -95,6 +95,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
 
     useEffect(() => {
       const performRequest = async () => {
+        console.log('findOne ', title)
         if (!title) return;
         if (!stitchReady) return;
         if (!stitchDb) return;

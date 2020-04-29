@@ -67,7 +67,7 @@ export const AppController = ({ children, ...initOptions }) => {
   //SHOW BUSINESS LOGIC
   const [activeBusiness, setActiveBusiness] = useState({});
 
-  const useActiveBusiness = (title) => useDecider(title)
+  const useActiveBusiness = (title) => useDecider(title)(title)
 
   // prevent calling mongo for a business that is already loaded
   // the decider returns the correct hook to use from the component
