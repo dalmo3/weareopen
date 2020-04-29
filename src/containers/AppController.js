@@ -68,41 +68,49 @@ export const AppController = ({ children, ...initOptions }) => {
 
   //SHOW BUSINESS LOGIC
   const [activeBusiness, setActiveBusiness] = useState({});
-    
-  const [ fetchTitle, setFetchTitle ] = useState()
+
+  const [fetchTitle, setFetchTitle] = useState();
 
   const fetchBusiness = (title) => {
-    setFetchTitle(title)
-  }
+    // if (stitchReady) {
+    //   console.log('will fetch', title);
+    //   findBusinessByTitle(fetchTitle).then((doc) => {
+    //     console.log('got11', doc);
+    //     setActiveBusiness(doc);
+    //   });
+    // } else {
+    //   console.log('set', title);
+      setFetchTitle(title);
+    }
+  // };
 
-  useEffect(()=>{
-    if (fetchTitle && stitchReady)
-      findBusinessByTitle(fetchTitle)
-      .then(doc => {
-        setActiveBusiness(doc)
-        setFetchTitle('')
-      })
-  },[fetchTitle, stitchReady])
-
+  useEffect(() => {
+    if (fetchTitle && stitchReady) {
+      console.log('will fetch', fetchTitle);
+      findBusinessByTitle(fetchTitle).then((doc) => {
+        console.log('got22', doc);
+        setActiveBusiness(doc);
+        setFetchTitle('');
+      });
+    }
+  }, [fetchTitle, stitchReady]);
 
   //USER LOGIC
 
   const [userMeta, setUserMeta] = useState({});
   useEffect(() => {
-    console.log(stitchUser)
+    // console.log(stitchUser)
     setUserMeta({
       ...userMeta,
       ownsActiveBusiness:
-        stitchReady && (stitchUser?.id === activeBusiness?.admin?.admin_id),
+        stitchReady && stitchUser?.id === activeBusiness?.admin?.admin_id,
       canClaimBusiness:
-        stitchReady && isVerified && !activeBusiness?.admin?.has_admin
+        stitchReady && isVerified && !activeBusiness?.admin?.has_admin,
     });
-    console.log(stitchUser?.id, activeBusiness?.admin?.admin_id)
+    // console.log(stitchUser?.id, activeBusiness?.admin?.admin_id)
   }, [stitchUser, activeBusiness]);
 
-  useEffect(()=> console.log(userMeta), [userMeta])
-
-
+  // useEffect(()=> console.log(userMeta), [userMeta])
 
   // APP VIEW
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -139,10 +147,10 @@ export const AppController = ({ children, ...initOptions }) => {
     stitchClient
       .callFunction('claimBusiness', [activeBusiness._id])
       .then((accepted, doc) => {
-        console.log('claim accepted?', accepted)
-        setActiveBusiness(doc)
+        console.log('claim accepted?', accepted);
+        setActiveBusiness(doc);
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   };
 
   const openBusinessPage = (e, businessData) => {
@@ -151,9 +159,10 @@ export const AppController = ({ children, ...initOptions }) => {
   };
 
   const handleEdit = (e) => {
-    console.log('trying to edit', activeBusiness)
-  }
+    console.log('trying to edit', activeBusiness);
+  };
 
+  const [isEditing, setIsEditing] = useState(false);
 
   return (
     <AppContext.Provider

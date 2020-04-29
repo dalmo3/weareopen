@@ -1,10 +1,8 @@
 import React, { Fragment } from 'react';
 import ResultList from '../components/ResultList';
-import { Typography, Container, Button } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import { Link, Router } from '@reach/router';
 import { ProfilePage } from './pages/ProfilePage';
-import { BusinessCard } from '../components/BusinessCard';
-import { BusinessForm } from '../components/BusinessForm';
 import { useAppContext } from './AppController';
 import HomePage from './pages/HomePage';
 import BusinessPage from './pages/BusinessPage';
@@ -25,9 +23,6 @@ export const AppRouter = (props) => {
       <Button variant='outlined' component={Link} to="business/Onehunga%20Medical%20(2012)%20Ltd">
         Business
       </Button>
-      <Button variant='outlined' color='primary' component={Link} to="addnew">
-        Add New Parameter (navigate)
-      </Button>
     </Typography>
   );
 
@@ -37,10 +32,9 @@ export const AppRouter = (props) => {
       <Router primary={false} >
         <HomePage default />
         <Search path="search" />
-        <TestParameterPage path="parameter/:testSlug" />
+        <BusinessPage path="business/:businessSlug/edit" edit={true}/>
         <BusinessPage path="business/:businessSlug" />
         <ProfilePage path="profile" />
-        <BusinessForm path="addnew" />
       </Router>
     </Fragment>
   );
