@@ -7,17 +7,15 @@ import { useAppContext } from '../AppController';
 
 const BusinessPage = (props) => {
   const {
-    activeBusiness,
+    // activeBusiness,
     getBusinessByTitle,
     results,
     isVerified,
+    useActiveBusiness,
   } = useAppContext();
   const routerMatch = useMatch('/business/:businessSlug');
-
-  useEffect(() => {
-    console.log('activeBusiness', activeBusiness);
-    if (!activeBusiness.title) getBusinessByTitle(routerMatch.businessSlug);
-  }, []);
+  // console.log('route', routerMatch.businessSlug)
+  const activeBusiness = useActiveBusiness(routerMatch.businessSlug)
 
   const ConditionalCard = (props) =>
     activeBusiness.title ? (

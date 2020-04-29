@@ -62,21 +62,29 @@ export const AppController = ({ children, ...initOptions }) => {
     } else {
       setSearchStatus('');
     }
-  }, [query]);
+  }, [query, stitchReady, stitchSearch]);
 
   //SHOW BUSINESS LOGIC
   const [activeBusiness, setActiveBusiness] = useState({});
 
-  const getBusinessByTitle = (title) => {
-    setTitle(title);
-  };
-  const [title, setTitle] = useState();
-  const businessFound = useFindBusinessByTitle(title);
-  useEffect(() => {
-    console.log('biz found?', businessFound);
-    if (businessFound) setActiveBusiness(businessFound);
-  }, [businessFound]);
+  const useActiveBusiness = (title) => useDecider(title)
 
+  // prevent calling mongo for a business that is already loaded
+  // the decider returns the correct hook to use from the component
+  // this is necessary because you cant call a hook conditionally
+  const useDecider = (title) =>
+    activeBusiness?.title === title ? useActiveBusinessLocal : useActiveBusinessRemote;
+  const useActiveBusinessLocal = (title) => activeBusiness;
+  
+  // the remote hook is necessary to listen to the stitch connection
+  const useActiveBusinessRemote = (title) => {
+    const businessFound = useFindBusinessByTitle(title);
+    useEffect(() => {
+      console.log('biz found?', businessFound?.title);
+      if (businessFound) setActiveBusiness(businessFound);
+    }, [businessFound, title]);
+    return activeBusiness;
+  };
   // APP VIEW
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleSidebar = (open) => (event) => {
@@ -127,7 +135,8 @@ export const AppController = ({ children, ...initOptions }) => {
         results,
         handleSearchInputChange,
         activeBusiness,
-        getBusinessByTitle,
+        useActiveBusiness,
+        // getBusinessByTitle,
         openBusinessPage,
         handleClaim,
         sideBarOpen,

@@ -28,7 +28,7 @@ const LogInOut = (props) => {
       >
         Add New Business
       </Button>
-      <Typography variant="body2">
+      <Typography variant="body2" component="span">
       {!isVerified ? 'Please verify your email first' : null}
       </Typography>
     </Typography>

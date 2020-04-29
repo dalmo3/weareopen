@@ -98,11 +98,10 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         if (!title) return;
         if (!stitchReady) return;
         if (!stitchDb) return;
-        console.log(title)
         setBusiness(await stitchDb.findOne({ title }));
       };
       performRequest();
-    }, [stitchReady, stitchDb]);
+    }, [stitchReady, title, stitchReady]);
 
     return business;
   };
