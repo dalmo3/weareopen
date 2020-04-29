@@ -22,7 +22,8 @@ export const AppController = ({ children, ...initOptions }) => {
     stitchSearch,
     useFindBusinessByTitle,
     findBusinessByTitle,
-    findOneAndUpdate
+    findOneAndUpdate,
+    stitchLogout
   } = useStitch();
   const {
     loginWithPopup,
@@ -215,7 +216,7 @@ export const AppController = ({ children, ...initOptions }) => {
         userMeta,
         sideBarOpen,
         toggleSidebar,
-        logout,
+        logout: stitchLogout,
         isAuthenticated,
         loginWithPopup,
         isVerified,

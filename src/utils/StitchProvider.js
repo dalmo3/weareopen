@@ -34,10 +34,10 @@ export const StitchProvider = ({ children, ...initOptions }) => {
     }
   };
 
-  const handleLogOut = async (e) => {
+  const stitchLogout = async (e) => {
     if (isAuthenticated) {
-      // console.log("loggin out out Stitch ...")
-      // await client.current.auth?.logout()
+      console.log("loggin out out Stitch ...")
+      await stitchAppClient.auth.removeUser()
       console.log('loggin out of Auth0 ...');
       logout();
     } else {
@@ -56,6 +56,9 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         ? new CustomCredential(await getTokenSilently())
         : new AnonymousCredential();
       // if (loading) return
+
+      
+      console.log(stitchAppClient.auth.listUsers())
       stitchAppClient.auth.loginWithCredential(credentials).then((user) => {
         console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
         // console.log(user);
@@ -70,12 +73,13 @@ export const StitchProvider = ({ children, ...initOptions }) => {
             .collection(process.env.REACT_APP_STITCH_COLLECTION)
         );
         setStitchReady(true);
-      });
+      })
+      .catch(console.error);
     };
 
     if (loading) init();
     if (!loading && isAuthenticated) init(true);
-  }, [loading, isAuthenticated, getTokenSilently]);
+  }, [loading, isAuthenticated]);
 
   const stitchSearch = (query) =>
     stitchAppClient.callFunction('searchbeta', [query]);
@@ -96,7 +100,8 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         stitchReady,
         stitchSearch,
         findBusinessByTitle,
-        findOneAndUpdate
+        findOneAndUpdate,
+        stitchLogout
       }}
     >
       {children}
