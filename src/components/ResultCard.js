@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 import { red, green, grey } from '@material-ui/core/colors';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Grid } from '@material-ui/core';
-import { navigate } from '@reach/router';
 import { useAppContext } from '../containers/AppController';
 
 const useStyles = makeStyles((props) => ({

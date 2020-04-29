@@ -1,8 +1,6 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import { AppTheme } from './AppTheme';
-import { Typography, Container } from '@material-ui/core';
-import _debounce from 'lodash/debounce';
+import {  Container } from '@material-ui/core';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import { useAppContext } from './AppController';
@@ -15,11 +13,6 @@ export const AppView = (props) => {
     toggleSidebar,
     handleSearchInputChange,
     sideBarOpen,
-    logout,
-    isAuthenticated,
-    results,
-    handleClaim,
-    loginWithPopup,
   } = useAppContext();
 
   return (

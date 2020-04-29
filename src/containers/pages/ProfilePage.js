@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Typography, Button, Tooltip } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import { useAppContext } from '../AppController';
 import { navigate } from '@reach/router';
 

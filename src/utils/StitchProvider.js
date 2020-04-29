@@ -1,12 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAuth0 } from './Auth0Provider';
 import {
   Stitch,
@@ -59,33 +51,30 @@ export const StitchProvider = ({ children, ...initOptions }) => {
 
   useEffect(() => {
     const init = async (auth) => {
-      const credentials = 
-        auth?new CustomCredential(await getTokenSilently())
-        :new AnonymousCredential()
+      const credentials = auth
+        ? new CustomCredential(await getTokenSilently())
+        : new AnonymousCredential();
       // if (loading) return
-      stitchAppClient.auth
-        .loginWithCredential(credentials)
-        .then((user) => {
-          console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
-          // console.log(user);
-          setStitchUser(user);
-          setStitchDb(
-            stitchAppClient
-              .getServiceClient(
-                RemoteMongoClient.factory,
-                process.env.REACT_APP_STITCH_CLUSTER
-              )
-              .db(process.env.REACT_APP_STITCH_DB)
-              .collection(process.env.REACT_APP_STITCH_COLLECTION)
-          );
-          setStitchReady(true);
-        });
+      stitchAppClient.auth.loginWithCredential(credentials).then((user) => {
+        console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
+        // console.log(user);
+        setStitchUser(user);
+        setStitchDb(
+          stitchAppClient
+            .getServiceClient(
+              RemoteMongoClient.factory,
+              process.env.REACT_APP_STITCH_CLUSTER
+            )
+            .db(process.env.REACT_APP_STITCH_DB)
+            .collection(process.env.REACT_APP_STITCH_COLLECTION)
+        );
+        setStitchReady(true);
+      });
     };
 
-    if (loading) init()
-    if (isAuthenticated) init(true)    
-      
-  }, [loading]);
+    if (loading) init();
+    if (!loading && isAuthenticated) init(true);
+  }, [loading, isAuthenticated, getTokenSilently]);
 
   const stitchSearch = (query) =>
     stitchAppClient.callFunction('searchbeta', [query]);
@@ -95,14 +84,17 @@ export const StitchProvider = ({ children, ...initOptions }) => {
 
     useEffect(() => {
       const performRequest = async () => {
-        console.log('findOne ', title)
+        console.log('findOne ', title);
         if (!title) return;
         if (!stitchReady) return;
         if (!stitchDb) return;
         setBusiness(await stitchDb.findOne({ title }));
       };
       performRequest();
-    }, [stitchReady, title, stitchReady]);
+      // lint whines that stitchReady is an outer scope var
+      // but it is needed in order to trigger the effect again
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [stitchReady, title]);
 
     return business;
   };

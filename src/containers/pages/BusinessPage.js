@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React from 'react';
 import { Typography, Button } from '@material-ui/core';
 import { useMatch, navigate } from '@reach/router';
 import { BusinessCard } from '../../components/BusinessCard';

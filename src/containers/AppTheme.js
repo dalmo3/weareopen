@@ -1,14 +1,11 @@
 import React from 'react';
 import {
   createMuiTheme,
-  makeStyles,
   ThemeProvider,
   fade,
-  MuiThemeProvider,
 } from '@material-ui/core/styles';
-import { orange, blue, amber } from '@material-ui/core/colors';
+import { amber } from '@material-ui/core/colors';
 import 'typeface-roboto';
-import createMixins from '@material-ui/core/styles/createMixins';
 require('typeface-source-sans-pro');
 
 const darkBlue = '#363a50';
