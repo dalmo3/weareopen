@@ -19,17 +19,11 @@ export const AppRouter = (props) => {
       <Button color='primary' component={Link} to="/">
         Home
       </Button>
-      <Button color='secondary' component={Link} to="search">
-        Search
-      </Button>
       <Button component={Link} to="profile">
         Profile
       </Button>
-      <Button variant='outlined' component={Link} to="business/abc">
+      <Button variant='outlined' component={Link} to="business/Onehunga%20Medical%20(2012)%20Ltd">
         Business
-      </Button>
-      <Button variant='text' component={Link} to="parameter/abc">
-        Parameters
       </Button>
       <Button variant='outlined' color='primary' component={Link} to="addnew">
         Add New Parameter (navigate)
