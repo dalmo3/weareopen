@@ -12,8 +12,8 @@ export const Auth0Provider = ({
   onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
   ...initOptions
 }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState();
-  const [isVerified, setIsVerified] = useState();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
   const [user, setUser] = useState();
   const [auth0Client, setAuth0] = useState();
   const [loading, setLoading] = useState(true);
@@ -69,10 +69,10 @@ export const Auth0Provider = ({
     setLoading(true);
     await auth0Client.handleRedirectCallback();
     const user = await auth0Client.getUser();
-    setLoading(false);
     setIsAuthenticated(true);
     setUser(user);
     setIsVerified(user?.email_verified);
+    setLoading(false);
     console.log('auth0 logged in as', user)
   };
   
