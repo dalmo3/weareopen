@@ -1,17 +1,15 @@
 import React, { Fragment } from 'react';
-import ResultList from '../components/ResultList';
 import { Typography, Button } from '@material-ui/core';
 import { Link, Router } from '@reach/router';
-import { ProfilePage } from './pages/ProfilePage';
 import { useAppContext } from './AppController';
+import ProfilePage from './pages/ProfilePage';
 import HomePage from './pages/HomePage';
 import BusinessPage from './pages/BusinessPage';
+import SearchPage from './pages/SearchPage';
 
 export const AppRouter = (props) => {
   const { results } = useAppContext();
 
-  const Search = (props) => <ResultList results={results} />;
-  const TestParameterPage = (props) => <div>{props.testSlug}</div>;
   const RouterTests = (props) => (
     <Typography>
       <Button color='primary' component={Link} to="/">
@@ -31,7 +29,7 @@ export const AppRouter = (props) => {
       <RouterTests />
       <Router primary={false} >
         <HomePage default />
-        <Search path="search" />
+        <SearchPage path="search" />
         <BusinessPage path="business/:businessSlug/edit" edit={true}/>
         <BusinessPage path="business/:businessSlug" />
         <ProfilePage path="profile" />
