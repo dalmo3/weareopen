@@ -53,16 +53,16 @@ export const Auth0Provider = ({
     setPopupOpen(true);
     try {
       await auth0Client.loginWithPopup(params);
+      const user = await auth0Client.getUser();
+      setUser(user);
+      setIsAuthenticated(true);
+      setIsVerified(user?.email_verified);
+      console.log('auth0 logged in as', user)
     } catch (error) {
       console.error(error);
     } finally {
       setPopupOpen(false);
     }
-    const user = await auth0Client.getUser();
-    setUser(user);
-    setIsAuthenticated(true);
-    setIsVerified(user?.email_verified);
-    console.log('auth0 logged in as', user)
   };
 
   const handleRedirectCallback = async () => {
