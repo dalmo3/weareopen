@@ -1,0 +1,40 @@
+{
+  "title": "",
+  "description": {
+    "short": "",
+    "long": ""
+  },
+  "contact": {
+    "email": "",
+    "website": ""
+  },
+  "location": {
+    "address": {
+      "street_address": "",
+      "city": "",
+      "suburb": "",
+      "region": ""
+    },
+    "coordinates": {
+      "lon": 0.0,
+      "lat": 0.0
+    }
+  },
+  "category": {
+    "industry": "",
+    "category": "",
+    "tags": []
+  },
+  "open_state": {
+    "info_available": false,
+    "open_now": false,
+    "open_date": "",
+    "open_alert_level": 0,
+    "open_hours": "",
+    "tags": []
+  },
+  "admin": {
+    "admin_id": "",
+    "has_admin": false
+  }
+}
