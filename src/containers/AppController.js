@@ -16,23 +16,21 @@ export const useAppContext = () => useContext(AppContext);
 
 export const AppController = ({ children, ...initOptions }) => {
   const {
-    stitchClient,
     stitchUser,
     stitchReady,
     stitchSearch,
-    useFindBusinessByTitle,
     findBusinessByTitle,
     findOneAndUpdate,
-    stitchLogout
+    stitchLogout,
+    stitchClaim,
   } = useStitch();
   const {
     loginWithPopup,
-    logout,
     isAuthenticated,
     user: auth0User,
     isVerified,
   } = useAuth0();
-  
+
   //
   // SEARCH LOGIC
   //
@@ -70,7 +68,7 @@ export const AppController = ({ children, ...initOptions }) => {
       setSearchStatus('');
     }
   }, [query, stitchReady, stitchSearch]);
-  
+
   //
   // DISPLAY BUSINESS LOGIC
   //
@@ -85,19 +83,19 @@ export const AppController = ({ children, ...initOptions }) => {
   // opening from url
   // find business by exact title match
   const findOne = (title) =>
-  findBusinessByTitle(title).then((doc) => {
-    setActiveBusiness(doc);
-    setFetchTitle('');
-    // console.log('got1', doc);
-  });
-  
+    findBusinessByTitle(title).then((doc) => {
+      setActiveBusiness(doc);
+      setFetchTitle('');
+      // console.log('got1', doc);
+    });
+
   // if db is ready make the call
   const fetchBusiness = (title) => {
     if (stitchReady) {
       findOne(title);
     } else setFetchTitle(title);
   };
-  
+
   // else setup effect to wait for db ready to make the call
   const [fetchTitle, setFetchTitle] = useState();
   useEffect(() => {
@@ -158,15 +156,13 @@ export const AppController = ({ children, ...initOptions }) => {
     console.log('authenticated into Stitch', stitchUser);
     // if (!dbReady) return;
     console.log('db is ready');
-    stitchClient
-      .callFunction('claimBusiness', [activeBusiness._id])
+    stitchClaim(activeBusiness._id)
       .then((accepted, doc) => {
         console.log('claim accepted?', accepted);
         setActiveBusiness(doc);
       })
       .catch((err) => console.error(err));
   };
-
 
   //
   // EDIT FLOW
@@ -190,15 +186,15 @@ export const AppController = ({ children, ...initOptions }) => {
       alert('Please verify your email');
       return;
     }
-    console.log(businessData)
+    console.log(businessData);
     findOneAndUpdate(businessData)
-    .then(updated => {
-      console.log(updated)
-      setActiveBusiness(updated)
-      navigate(`/business/${updated.title}`)
-    })
-    .catch(console.error)
-  }
+      .then((updated) => {
+        console.log(updated);
+        setActiveBusiness(updated);
+        navigate(`/business/${updated.title}`);
+      })
+      .catch(console.error);
+  };
 
   return (
     <AppContext.Provider

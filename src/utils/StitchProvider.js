@@ -57,8 +57,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         : new AnonymousCredential();
       // if (loading) return
 
-      
-      console.log(stitchAppClient.auth.listUsers())
+      // console.log(stitchAppClient.auth.listUsers())
       stitchAppClient.auth.loginWithCredential(credentials).then((user) => {
         console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
         // console.log(user);
@@ -77,12 +76,15 @@ export const StitchProvider = ({ children, ...initOptions }) => {
       .catch(console.error);
     };
 
-    if (loading) init();
+    if (loading && !isAuthenticated) init();
     if (!loading && isAuthenticated) init(true);
   }, [loading, isAuthenticated]);
 
   const stitchSearch = (query) =>
     stitchAppClient.callFunction('searchbeta', [query]);
+    
+    const stitchClaim = (id) => 
+    stitchAppClient.callFunction('claimBusiness', [id]);
 
   const findBusinessByTitle = (title) => stitchDb.findOne({ title });
   const findOneAndUpdate = (business) =>
@@ -92,6 +94,8 @@ export const StitchProvider = ({ children, ...initOptions }) => {
       { returnNewDocument: true }
     );
 
+  
+
   return (
     <StitchContext.Provider
       value={{
@@ -99,6 +103,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         stitchUser,
         stitchReady,
         stitchSearch,
+        stitchClaim,
         findBusinessByTitle,
         findOneAndUpdate,
         stitchLogout
