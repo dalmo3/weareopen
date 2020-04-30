@@ -31,7 +31,7 @@ const BusinessPage = (props) => {
   }, [hasActiveBusiness, routerMatch.businessSlug]);
 
   const ConditionalCard = (props) =>
-    hasActiveBusiness ? (
+    hasActiveBusiness && !isEditing ? (
       <BusinessCard businessData={activeBusiness} />
     ) : (
       <Typography>This business does not exist</Typography>
@@ -57,6 +57,7 @@ const BusinessPage = (props) => {
       <Button onClick={handleEditLocal}>EditBusiness</Button>
     ) : null;
   };
+  useEffect(()=>{console.log('editing...', isEditing)})
 
   const [tryEditing, setTryEditing] = useState(props.edit);
   const [isEditing, setIsEditing] = useState(false);
@@ -66,11 +67,14 @@ const BusinessPage = (props) => {
     // setIsEditing(true)
   };
 
+  const canEdit = (userMeta.canClaimBusiness || userMeta.ownsActiveBusiness) 
+
   useEffect(() => {
-    setIsEditing(userMeta.ownsActiveBusiness && tryEditing);
-  }, [userMeta.ownsActiveBusiness, tryEditing]);
+    setIsEditing(canEdit && tryEditing);
+  }, [canEdit, tryEditing]);
   const ConditionalForm = (props) =>
     isEditing ? <BusinessForm businessData={activeBusiness} /> : null;
+
   const PreviewCard = (props) => {};
 
   return (

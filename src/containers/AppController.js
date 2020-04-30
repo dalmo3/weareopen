@@ -23,6 +23,7 @@ export const AppController = ({ children, ...initOptions }) => {
     findOneAndUpdate,
     stitchLogout,
     stitchClaim,
+    insertOne,
   } = useStitch();
   const {
     loginWithPopup,
@@ -138,14 +139,34 @@ export const AppController = ({ children, ...initOptions }) => {
   //
   // ADD BUSINESS FLOW
   //
-  const [addIntent, setAddIntent] = useState(false)
-  const handleAddIntent = e => {
-    setAddIntent(true)
-    setResults([])
-    setQuery('')
-    setDebouncedQuery('')
-    navigate('/search')
-  }
+  const [addIntent, setAddIntent] = useState(false);
+  const handleAddIntent = (e) => {
+    setAddIntent(true);
+    resetSearchState();
+    navigate('/search');
+  };
+
+  const resetSearchState = () => {
+    setResults([]);
+    setQuery('');
+    setDebouncedQuery('');
+  };
+
+  const handleAddNew = (e) => {
+    const emptyBusiness = require('../utils/businessObject.json');
+    console.log('empty', emptyBusiness)
+    const newBusiness = {
+      ...emptyBusiness,
+      title: debouncedQuery,
+      admin: {
+        admin_id: stitchUser.id,
+        has_admin: true,
+      },
+    };
+    setActiveBusiness(newBusiness);
+    navigate(`/business/${debouncedQuery}/edit`);
+    resetSearchState();
+  };
 
   const handleClaim = async (e) => {
     console.log('trying to claim property ', activeBusiness.title);
@@ -195,10 +216,11 @@ export const AppController = ({ children, ...initOptions }) => {
       alert('Please verify your email');
       return;
     }
-    console.log(businessData);
-    findOneAndUpdate(businessData)
+    console.log('inserting',businessData);
+    insertOne(businessData)
+    // findOneAndUpdate(businessData)
       .then((updated) => {
-        console.log(updated);
+        console.log('inserted', updated);
         setActiveBusiness(updated);
         navigate(`/business/${updated.title}`);
       })
@@ -227,6 +249,8 @@ export const AppController = ({ children, ...initOptions }) => {
         loginWithPopup,
         isVerified,
         handleAddIntent,
+        addIntent,
+        handleAddNew,
       }}
     >
       {children}

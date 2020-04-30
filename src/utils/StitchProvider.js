@@ -5,7 +5,6 @@ import {
   AnonymousCredential,
   RemoteMongoClient,
   CustomCredential,
-  findOneAndUpdate,
 } from 'mongodb-stitch-browser-sdk';
 
 export const StitchContext = createContext();
@@ -36,8 +35,8 @@ export const StitchProvider = ({ children, ...initOptions }) => {
 
   const stitchLogout = async (e) => {
     if (isAuthenticated) {
-      console.log("loggin out out Stitch ...")
-      await stitchAppClient.auth.removeUser()
+      console.log('loggin out out Stitch ...');
+      await stitchAppClient.auth.removeUser();
       console.log('loggin out of Auth0 ...');
       logout();
     } else {
@@ -48,7 +47,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
   // INITIALIZE DB
   const [stitchUser, setStitchUser] = useState({});
   const [stitchReady, setStitchReady] = useState(false);
-  const [stitchDb, setStitchDb] = useState({});
+  const [remoteMongoCollection, setRemoteMongoCollection] = useState({});
 
   useEffect(() => {
     const init = async (auth) => {
@@ -58,22 +57,24 @@ export const StitchProvider = ({ children, ...initOptions }) => {
       // if (loading) return
 
       // console.log(stitchAppClient.auth.listUsers())
-      stitchAppClient.auth.loginWithCredential(credentials).then((user) => {
-        console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
-        // console.log(user);
-        setStitchUser(user);
-        setStitchDb(
-          stitchAppClient
-            .getServiceClient(
-              RemoteMongoClient.factory,
-              process.env.REACT_APP_STITCH_CLUSTER
-            )
-            .db(process.env.REACT_APP_STITCH_DB)
-            .collection(process.env.REACT_APP_STITCH_COLLECTION)
-        );
-        setStitchReady(true);
-      })
-      .catch(console.error);
+      stitchAppClient.auth
+        .loginWithCredential(credentials)
+        .then((user) => {
+          console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
+          // console.log(user);
+          setStitchUser(user);
+          setRemoteMongoCollection(
+            stitchAppClient
+              .getServiceClient(
+                RemoteMongoClient.factory,
+                process.env.REACT_APP_STITCH_CLUSTER
+              )
+              .db(process.env.REACT_APP_STITCH_DB)
+              .collection(process.env.REACT_APP_STITCH_COLLECTION)
+          );
+          setStitchReady(true);
+        })
+        .catch(console.error);
     };
 
     if (loading && !isAuthenticated) init();
@@ -82,19 +83,25 @@ export const StitchProvider = ({ children, ...initOptions }) => {
 
   const stitchSearch = (query) =>
     stitchAppClient.callFunction('searchbeta', [query]);
-    
-    const stitchClaim = (id) => 
+
+  const stitchClaim = (id) =>
     stitchAppClient.callFunction('claimBusiness', [id]);
 
-  const findBusinessByTitle = (title) => stitchDb.findOne({ title });
+  const findBusinessByTitle = (title) =>
+    remoteMongoCollection.findOne({ title });
   const findOneAndUpdate = (business) =>
-    stitchDb.findOneAndUpdate(
+    remoteMongoCollection.findOneAndUpdate(
       { _id: business._id },
       { $set: business },
-      { returnNewDocument: true }
+      { returnNewDocument: true, upsert: true }
     );
 
-  
+  const insertOne = (business) =>
+    remoteMongoCollection.findOneAndUpdate(
+      business._id ? { _id: business._id } : { title: business.title },
+      { $set: business },
+      { returnNewDocument: true, upsert: true }
+    );
 
   return (
     <StitchContext.Provider
@@ -106,7 +113,8 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         stitchClaim,
         findBusinessByTitle,
         findOneAndUpdate,
-        stitchLogout
+        stitchLogout,
+        insertOne,
       }}
     >
       {children}

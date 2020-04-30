@@ -120,7 +120,6 @@ const BusinessForm = (props) => {
               </Grid>
             </Grid>
           </Paper>
-          <pre>{JSON.stringify(values)}</pre>
         </form>
       )}
     />

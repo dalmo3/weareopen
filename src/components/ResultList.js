@@ -11,23 +11,18 @@ const useStyles = makeStyles((theme) => ({
 
 const ResultList = (props) => {
   const classes = useStyles();
-  const { debouncedQuery, searchStatus } = useAppContext();
 
-  const searchMessage =
-    searchStatus === 'Finished' && !props.results?.length
-      ? 'Nothing found'
-      : searchStatus;
+  const { results } = useAppContext()
 
-  const resultList = props.results.map((r, i) => (
+  const resultList = results.map((r, i) => (
     <div key={r.title} className={classes.card}>
-      <ResultCard result={r} handleClaim={props.handleClaim} />
+      <ResultCard result={r} />
     </div>
   ));
 
   return (
     <Fragment>
-      {resultList.length ? resultList : searchMessage}
-      {/* {props.results.length > 10?  */}
+      {resultList}
       {/* <Button color="primary">Load More...</Button> */}
     </Fragment>
   );
