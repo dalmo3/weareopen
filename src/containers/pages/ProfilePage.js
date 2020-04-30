@@ -4,7 +4,12 @@ import { useAppContext } from '../AppController';
 import { navigate } from '@reach/router';
 
 const LogInOut = (props) => {
-  const { logout, loginWithPopup, isVerified } = useAppContext();
+  const {
+    logout,
+    loginWithPopup,
+    isVerified,
+    handleAddIntent,
+  } = useAppContext();
 
   return (
     <Typography>
@@ -24,20 +29,22 @@ const LogInOut = (props) => {
         variant="contained"
         color="secondary"
         disabled={!isVerified}
-        onClick={(e) => navigate('/search')}
+        onClick={handleAddIntent}
       >
         Add New Business
       </Button>
       <Typography variant="body2" component="span">
-      {!isVerified ? 'Please verify your email first' : null}
+        {!isVerified ? 'Please verify your email first' : null}
       </Typography>
     </Typography>
   );
 };
 
-export const ProfilePage = (props) => (
+const ProfilePage = (props) => (
   <Fragment>
     <Typography>Profile page</Typography>
     <LogInOut />
   </Fragment>
 );
+
+export default ProfilePage

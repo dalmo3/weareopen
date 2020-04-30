@@ -38,6 +38,7 @@ export const AppController = ({ children, ...initOptions }) => {
   const [results, setResults] = useState([]);
   const [searchStatus, setSearchStatus] = useState('');
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
 
   const debounce = useCallback(
     _debounce((fn, arg) => fn(arg), 500),
@@ -45,14 +46,14 @@ export const AppController = ({ children, ...initOptions }) => {
   );
   const handleSearchInputChange = (e) => {
     // setQuery(e.target.value);
-    debounce(setQuery, e.target.value, 500);
+    debounce(setDebouncedQuery, e.target.value, 500);
   };
 
   useEffect(() => {
     // console.log('query term:', query);
-    if (stitchReady && query) {
+    if (stitchReady && debouncedQuery) {
       setSearchStatus('Searching');
-      stitchSearch(query)
+      stitchSearch(debouncedQuery)
         .then((arr) => {
           console.log('results', arr);
           setResults(arr);
@@ -67,7 +68,7 @@ export const AppController = ({ children, ...initOptions }) => {
     } else {
       setSearchStatus('');
     }
-  }, [query, stitchReady, stitchSearch]);
+  }, [debouncedQuery, stitchReady, stitchSearch]);
 
   //
   // DISPLAY BUSINESS LOGIC
@@ -137,6 +138,14 @@ export const AppController = ({ children, ...initOptions }) => {
   //
   // ADD BUSINESS FLOW
   //
+  const [addIntent, setAddIntent] = useState(false)
+  const handleAddIntent = e => {
+    setAddIntent(true)
+    setResults([])
+    setQuery('')
+    setDebouncedQuery('')
+    navigate('/search')
+  }
 
   const handleClaim = async (e) => {
     console.log('trying to claim property ', activeBusiness.title);
@@ -200,6 +209,7 @@ export const AppController = ({ children, ...initOptions }) => {
     <AppContext.Provider
       value={{
         query,
+        debouncedQuery,
         searchStatus,
         results,
         handleSearchInputChange,
@@ -216,6 +226,7 @@ export const AppController = ({ children, ...initOptions }) => {
         isAuthenticated,
         loginWithPopup,
         isVerified,
+        handleAddIntent,
       }}
     >
       {children}
