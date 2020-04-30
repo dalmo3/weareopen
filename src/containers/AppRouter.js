@@ -8,7 +8,6 @@ import BusinessPage from './pages/BusinessPage';
 import SearchPage from './pages/SearchPage';
 
 export const AppRouter = (props) => {
-  const { results } = useAppContext();
 
   const RouterTests = (props) => (
     <Typography>
