@@ -15,16 +15,26 @@ import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HelpIcon from '@material-ui/icons/Help';
 import InfoIcon from '@material-ui/icons/Info';
+import waoLogoSquare from '../assets/img/wao-rect-amber-darkblue-padded-sm.png';
 
-
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
+  logoArea: {
+    backgroundColor: theme.palette.primary.main,
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '150px',
+    margin: 0,
+    padding: 0,
+    zIndex: 1201,
+  },
   list: {
     width: 250,
   },
   fullList: {
     width: 'auto',
   },
-});
+}));
 
 const Sidebar = (props) => {
   const classes = useStyles();
@@ -40,7 +50,7 @@ const Sidebar = (props) => {
     >
       <List>
         <ListItem button onClick={(e) => navigate('/home')}>
-          <ListItemIcon >
+          <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary={'Home'} />
@@ -79,6 +89,9 @@ const Sidebar = (props) => {
 
   return (
     <Drawer open={props.openState} onClose={props.toggleSidebar(false)}>
+      <div className={classes.logoArea}>
+        <img height="100%" width="250px" src={waoLogoSquare} alt="we are open logo" />
+      </div>
       {list}
     </Drawer>
   );

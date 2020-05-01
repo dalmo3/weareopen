@@ -14,7 +14,7 @@ import { useAppContext } from './AppController';
 import { navigate } from '@reach/router';
 import { Badge, useMediaQuery } from '@material-ui/core';
 import waoIcon from '../assets/img/wao-icon-amber-darkblue.svg';
-import waoLogoSquare from '../assets/img/wao-rect-amber-trans.svg';
+import waoLogoSquare from '../assets/img/wao-rect-amber-darkblue-unpadded.png';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -149,11 +149,18 @@ export default function Navbar(props) {
     const sm = useMediaQuery((theme) => theme.breakpoints.up('sm'));
     return (
       <div className={classes.grow}>
-        {sm ? (
-          <img height="50" width="91px" src={waoLogoSquare} alt="Logo" />
+        {/* {sm ? (
+          <img height="50px" width="91px" src={waoLogoSquare} alt="Logo" />
         ) : (
-          <img height="40px" width="40px" src={waoIcon} alt="Logo" />
-        )}
+          <img height="50px" width="91px" src={waoIcon} alt="Logo" />
+        )} */}
+        <img
+          height="50px"
+          width="91px"
+          src={waoIcon}
+          srcSet={`${waoIcon} 300w, ${waoLogoSquare} 600w`}
+        />
+        {/* <img height="50px" */}
       </div>
     );
   };
@@ -176,7 +183,22 @@ export default function Navbar(props) {
             <MenuIcon />
           </IconButton>
           <div className={classes.grow} />
-          <Logo />
+          {/* <Logo />
+           */}
+          <div className={classes.grow}>
+            <picture>
+              <source
+                srcSet={`${waoIcon} 90w, ${waoLogoSquare} 600w`}
+                sizes={`(max-width: 599px) 50px, 91px`}
+              />
+              <img
+                // width="91px"
+                height="50px"
+                src={waoLogoSquare}
+                alt='we are open logo'
+              />
+            </picture>
+          </div>
           {/* <div className={classes.grow} /> */}
           <div className={classes.search}>
             <div className={classes.searchIcon}>
