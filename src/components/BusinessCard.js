@@ -44,8 +44,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const BusinessCard = (props) => {
-
-  const businessData = props.location?.state || props.businessData;
+  const businessData =
+    props.location?.state ||
+    props.businessData ||
+    require('../utils/businessObject.json'); // guaranteed it doesn't break
 
   const {
     title,
@@ -58,6 +60,11 @@ export const BusinessCard = (props) => {
       open_now,
       open_date,
       open_hours,
+    },
+    category: {
+      category,
+      industry,
+      tags
     },
     description: { short, long },
     contact: { email, website, phone },
@@ -82,41 +89,42 @@ export const BusinessCard = (props) => {
 
   return (
     <Card className={classes.root}>
-        <CardContent>
-      <Grid
-        container
-        direction="row"
-        justify="flex-start"
-        alignItems="flex-start"
-        spacing={2}
-      >
-          
-        <Grid item xs={3} sm={2}>
-          <Grid container direction="column" alignItems="center">
-            <Grid item>
-              <Avatar aria-label="business" className={classes.avatar}>
-                {title.slice(0, 2)}
-              </Avatar>
-            </Grid>
-            <Grid item>
-              <Typography
-                className={classes.openIcon}
-                style={{
-                  fontSize: '0.875rem',
-                  fontWeight: 'bold',
-                }}
-              >
-                {openStateString}
-              </Typography>
+      <CardContent>
+        <Grid
+          container
+          direction="row"
+          justify="flex-start"
+          alignItems="flex-start"
+          spacing={2}
+        >
+          <Grid item xs={3} sm={2}>
+            <Grid container direction="column" alignItems="center">
+              <Grid item>
+                <Avatar aria-label="business" className={classes.avatar}>
+                  {title.slice(0, 2)}
+                </Avatar>
+              </Grid>
+              <Grid item>
+                <Typography
+                  className={classes.openIcon}
+                  style={{
+                    fontSize: '0.875rem',
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {openStateString}
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
+          <Grid item xs={9} sm={10}>
+            <Typography variant="h5" component="h2">
+              {title}
+            </Typography>
+            <Typography>{locationDisplay}</Typography>
+          </Grid>
         </Grid>
-        <Grid item xs={9} sm={10}>
-          <Typography variant="h5" component='h2'>{title}</Typography>
-          <Typography>{locationDisplay}</Typography>
-        </Grid>
-      </Grid>
-        </CardContent>
+      </CardContent>
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
           {short || 'No description provided'}
