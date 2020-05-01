@@ -86,20 +86,23 @@ export const AppController = ({ children, ...initOptions }) => {
   // find business by exact title match
   const findOne = (title) =>
     findBusinessByTitle(title).then((doc) => {
-      setActiveBusiness(doc);
+      setActiveBusiness(doc || {});
       setFetchTitle('');
+      setIsFetching(false)
       // console.log('got1', doc);
     });
 
   // if db is ready make the call
   const fetchBusiness = (title) => {
+    setIsFetching(true)
     if (stitchReady) {
       findOne(title);
-    } else setFetchTitle(title);
+    } else setFetchTitle(title)
   };
 
   // else setup effect to wait for db ready to make the call
-  const [fetchTitle, setFetchTitle] = useState();
+  const [fetchTitle, setFetchTitle ] = useState();
+  const [isFetching, setIsFetching ] = useState();
   useEffect(() => {
     if (fetchTitle && stitchReady) findOne(fetchTitle);
   }, [fetchTitle, stitchReady]);
@@ -117,6 +120,8 @@ export const AppController = ({ children, ...initOptions }) => {
         stitchReady && stitchUser?.id === activeBusiness?.admin?.admin_id,
       canClaimBusiness:
         stitchReady && isVerified && !activeBusiness?.admin?.has_admin,
+      canReport:
+        stitchReady && stitchUser?.id !== activeBusiness?.admin?.admin_id,
     });
     // console.log(stitchUser?.id, activeBusiness?.admin?.admin_id)
   }, [stitchUser, activeBusiness]);
@@ -222,6 +227,7 @@ export const AppController = ({ children, ...initOptions }) => {
       .then((updated) => {
         console.log('inserted', updated);
         setActiveBusiness(updated);
+        setIsEditing(false)
         navigate(`/business/${updated.title}`);
       })
       .catch(console.error);
