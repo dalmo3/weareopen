@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -145,25 +145,15 @@ export default function Navbar(props) {
     </Badge>
   ) : null;
 
-  const Logo = (props) => {
-    const sm = useMediaQuery((theme) => theme.breakpoints.up('sm'));
-    return (
-      <div className={classes.grow}>
-        {/* {sm ? (
-          <img height="50px" width="91px" src={waoLogoSquare} alt="Logo" />
-        ) : (
-          <img height="50px" width="91px" src={waoIcon} alt="Logo" />
-        )} */}
-        <img
-          height="50px"
-          width="91px"
-          src={waoIcon}
-          srcSet={`${waoIcon} 300w, ${waoLogoSquare} 600w`}
-        />
-        {/* <img height="50px" */}
-      </div>
+  const sm = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+
+  const Logo = props => useMemo(() => {
+    return sm ? (
+      <img height="50px" width="91px" src={waoLogoSquare} alt="Logo" />
+    ) : (
+      <img height="50px" width="50px" src={waoIcon} alt="Logo" />
     );
-  };
+  }, [sm]);
 
   return (
     <div className={classes.grow}>
@@ -186,18 +176,7 @@ export default function Navbar(props) {
           {/* <Logo />
            */}
           <div className={classes.grow}>
-            <picture>
-              <source
-                srcSet={`${waoIcon} 90w, ${waoLogoSquare} 600w`}
-                sizes={`(max-width: 599px) 50px, 91px`}
-              />
-              <img
-                // width="91px"
-                height="50px"
-                src={waoLogoSquare}
-                alt='we are open logo'
-              />
-            </picture>
+            <Logo/>
           </div>
           {/* <div className={classes.grow} /> */}
           <div className={classes.search}>
