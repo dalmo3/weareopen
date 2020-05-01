@@ -122,7 +122,6 @@ export const AppController = ({ children, ...initOptions }) => {
   useEffect(() => {
     // console.log(stitchUser)
 
-    if (!stitchReady) return;
     if (!stitchUser) return;
     if (!hasActiveBusiness) return;
 
@@ -133,7 +132,7 @@ export const AppController = ({ children, ...initOptions }) => {
       canReport: stitchUser?.id !== activeBusiness?.admin?.admin_id,
     });
     // console.log(stitchUser?.id, activeBusiness?.admin?.admin_id)
-  }, [stitchUser, hasActiveBusiness]);
+  }, [stitchUser, isVerified, activeBusiness]);
 
   // useEffect(()=> console.log(userMeta), [userMeta])
 
