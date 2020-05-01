@@ -76,6 +76,12 @@ export const AppController = ({ children, ...initOptions }) => {
   //
   const [activeBusiness, setActiveBusiness] = useState({});
 
+  const [hasActiveBusiness, setHasActiveBusiness] = useState(false);
+  useEffect(
+    () => setHasActiveBusiness(Boolean(activeBusiness && activeBusiness.title)),
+    [activeBusiness]
+  );
+
   // opening from results, no need for api call
   const openBusinessPage = (e, businessData) => {
     setActiveBusiness(businessData);
@@ -84,25 +90,26 @@ export const AppController = ({ children, ...initOptions }) => {
 
   // opening from url
   // find business by exact title match
+  const fetchBusiness = (title) => {
+    setIsFetching(true);
+    if (stitchReady) {
+      findOne(title);
+    } else setFetchTitle(title);
+  };
+
+  // if db is ready make the call
   const findOne = (title) =>
     findBusinessByTitle(title).then((doc) => {
       setActiveBusiness(doc || {});
       setFetchTitle('');
-      setIsFetching(false)
+      setIsFetching(false);
       // console.log('got1', doc);
     });
 
-  // if db is ready make the call
-  const fetchBusiness = (title) => {
-    setIsFetching(true)
-    if (stitchReady) {
-      findOne(title);
-    } else setFetchTitle(title)
-  };
-
   // else setup effect to wait for db ready to make the call
-  const [fetchTitle, setFetchTitle ] = useState();
-  const [isFetching, setIsFetching ] = useState();
+  const [fetchTitle, setFetchTitle] = useState('');
+  const [isFetching, setIsFetching] = useState(false);
+    
   useEffect(() => {
     if (fetchTitle && stitchReady) findOne(fetchTitle);
   }, [fetchTitle, stitchReady]);
@@ -114,17 +121,19 @@ export const AppController = ({ children, ...initOptions }) => {
   const [userMeta, setUserMeta] = useState({});
   useEffect(() => {
     // console.log(stitchUser)
+
+    if (!stitchReady) return;
+    if (!stitchUser) return;
+    if (!hasActiveBusiness) return;
+
     setUserMeta({
-      ...userMeta,
-      ownsActiveBusiness:
-        stitchReady && stitchUser?.id === activeBusiness?.admin?.admin_id,
-      canClaimBusiness:
-        stitchReady && isVerified && !activeBusiness?.admin?.has_admin,
-      canReport:
-        stitchReady && stitchUser?.id !== activeBusiness?.admin?.admin_id,
+      isVerified,
+      ownsActiveBusiness: stitchUser?.id === activeBusiness?.admin?.admin_id,
+      canClaimBusiness: isVerified && !activeBusiness?.admin?.has_admin,
+      canReport: stitchUser?.id !== activeBusiness?.admin?.admin_id,
     });
     // console.log(stitchUser?.id, activeBusiness?.admin?.admin_id)
-  }, [stitchUser, activeBusiness]);
+  }, [stitchUser, hasActiveBusiness]);
 
   // useEffect(()=> console.log(userMeta), [userMeta])
 
@@ -159,7 +168,7 @@ export const AppController = ({ children, ...initOptions }) => {
 
   const handleAddNew = (e) => {
     const emptyBusiness = require('../utils/businessObject.json');
-    console.log('empty', emptyBusiness)
+    console.log('empty', emptyBusiness);
     const newBusiness = {
       ...emptyBusiness,
       title: debouncedQuery,
@@ -221,13 +230,13 @@ export const AppController = ({ children, ...initOptions }) => {
       alert('Please verify your email');
       return;
     }
-    console.log('inserting',businessData);
+    console.log('inserting', businessData);
     insertOne(businessData)
-    // findOneAndUpdate(businessData)
+      // findOneAndUpdate(businessData)
       .then((updated) => {
         console.log('inserted', updated);
         setActiveBusiness(updated);
-        setIsEditing(false)
+        setIsEditing(false);
         navigate(`/business/${updated.title}`);
       })
       .catch(console.error);
@@ -242,7 +251,8 @@ export const AppController = ({ children, ...initOptions }) => {
         results,
         handleSearchInputChange,
         activeBusiness,
-        fetchBusiness,
+        hasActiveBusiness,
+        fetchBusiness,isFetching,
         openBusinessPage,
         handleClaim,
         handleEdit,

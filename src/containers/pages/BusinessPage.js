@@ -14,31 +14,40 @@ const BusinessPage = (props) => {
     userMeta,
     activeBusiness,
     fetchBusiness,
+    hasActiveBusiness,
+    isFetching,
   } = useAppContext();
 
   // check if globally active business exists and is the same as requested
   // otherwise trigger db call
-  const hasActiveBusiness = Boolean(activeBusiness && activeBusiness.title);
-
   useEffect(() => {
-    if (!hasActiveBusiness || activeBusiness.title !== props.businessSlug)
+    if (!hasActiveBusiness || activeBusiness.title !== props.businessSlug) {
+      setNotFound(false);
+      setFetchstate('Started');
       fetchBusiness(props.businessSlug);
+    } 
   }, [hasActiveBusiness, props.businessSlug]);
 
-  const [ isFetching, setIsFetching ] = useState(false)
-  useEffect(()=> {
-    setIsFetching(false)
-  },[hasActiveBusiness])
+  const [fetchState, setFetchstate] = useState('Idle');
+  const [notFound, setNotFound] = useState(false);
+  useEffect(() => {
+    if (fetchState === 'Started' && !isFetching) {
+      setFetchstate('Finished')
+    }
+    if (fetchState === 'Finished' && !isFetching && !hasActiveBusiness) {
+      setNotFound(true);
+    } 
+  }, [fetchState, isFetching, hasActiveBusiness]);
+
+  // const Searching = 
+  const NotFound = props => notFound ? (
+    <Typography>This business does not exist</Typography>
+  ) : null;
 
   const ConditionalCard = (props) =>
-    hasActiveBusiness ? (
-      !isEditing ? (
-        <BusinessCard businessData={activeBusiness} />
-      ) : null
-    ) : (
-      isFetching ? null : 
-      <Typography>This business does not exist</Typography>
-    );
+    hasActiveBusiness && !isEditing ? (
+      <BusinessCard businessData={activeBusiness} />
+    ) : null;
 
   const BackToResults = (props) =>
     results.length && !isEditing ? (
@@ -48,18 +57,18 @@ const BusinessPage = (props) => {
     ) : null;
 
   const ClaimBusiness = (props) =>
-    hasActiveBusiness && userMeta.canClaimBusiness ? (
+    userMeta.canClaimBusiness ? (
       <Button variant="contained" onClick={handleClaim}>
         Claim Business
       </Button>
-    ) : userMeta.ownsActiveBusiness ? null : (
+    ) : userMeta.canReport ? (
       <Typography variant="body2" color="textSecondary">
-        {'Something wrong with this listing? '} 
+        {'Something wrong with this listing? '}
         <Link component={RouterLink} to="/contact" color="inherit">
           {'Report.'}
         </Link>
       </Typography>
-    );
+    ) : null;
 
   // const ReportText =
   //   userMeta.ownsActiveBusiness
@@ -101,6 +110,7 @@ const BusinessPage = (props) => {
 
   return (
     <div id="business-page">
+      <NotFound/>
       <BackToResults />
       <ConditionalCard />
       <ConditionalForm />
