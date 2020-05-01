@@ -50,7 +50,7 @@ export const AppView = (props) => {
         <Sidebar openState={sideBarOpen} toggleSidebar={toggleSidebar} />
         <Container id="main" maxWidth="sm">
           <RouterTests />
-          <AppRouter />
+          {props.children}
         </Container>
         <Footer id="footer" />
       </Container>
