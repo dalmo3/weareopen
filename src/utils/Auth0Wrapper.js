@@ -25,6 +25,7 @@ export const Auth0Wrapper = ({children}) => (
     responseType={'token'}
     redirect_uri={window.location.origin}
     // onRedirectCallback={onRedirectCallback}
+    cacheLocation='localstorage'
   >
     {children}
   </Auth0Provider>
