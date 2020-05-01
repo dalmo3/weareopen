@@ -43,6 +43,11 @@ export default function Footer(props) {
             <Copyright />
           </Grid>
           <Grid item>
+            <Typography variant="body2" color="inherit">
+              <Link component={RouterLink} to="/privacy-policy" color="inherit">
+                Privacy policy
+              </Link>
+            </Typography>
           </Grid>
         </Grid>
       </Container>

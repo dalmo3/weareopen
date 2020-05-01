@@ -5,6 +5,8 @@ import HomePage from './pages/HomePage';
 import BusinessPage from './pages/BusinessPage';
 import SearchPage from './pages/SearchPage';
 import { AppView } from './AppView';
+import TestPage from './pages/TestPage';
+import ContactPage from './pages/ContactPage';
 
 export const AppRouter = (props) => {
   return (
@@ -14,6 +16,8 @@ export const AppRouter = (props) => {
         <SearchPage path="search" />
         <BusinessPage path="business/:businessSlug/*edit" />
         <ProfilePage path="profile" />
+        <TestPage path="tests" />
+        <ContactPage path="contact" />
       </AppView>
     </Router>
   );

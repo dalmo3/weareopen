@@ -17,12 +17,22 @@ const RouterTests = (props) => (
     <Button component={Link} to="profile">
       Profile
     </Button>
+    <Button component={Link} to="tests">
+      Tests
+    </Button>
     <Button
       variant="outlined"
       component={Link}
       to="business/Onehunga%20Medical%20(2012)%20Ltd"
     >
-      Business
+      Business owned
+    </Button>
+    <Button
+      variant="outlined"
+      component={Link}
+      to="business/Zirco%20Abrasive%20Products%20Ltd"
+    >
+      Business not owned
     </Button>
   </Typography>
 );
