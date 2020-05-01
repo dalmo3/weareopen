@@ -13,7 +13,7 @@ const TestPage = (props) => {
         <Button
           id={'login'}
           variant="contained"
-          color="primary"
+          color="secondary"
           onClick={loginWithPopup}
         >
           Log in
