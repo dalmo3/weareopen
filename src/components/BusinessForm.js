@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react';
-import { navigate } from '@reach/router';
+import React from 'react';
 import { Form } from 'react-final-form';
 import * as Yup from 'yup';
 import {
@@ -32,6 +31,9 @@ const SELECTION_REQUIRED = 'Please pick one';
 const yupStringMax = (max) =>
   Yup.string().ensure().trim().max(max, MESSAGE_STRING_TOO_LONG);
 
+const yupStringMin = (min) =>  
+  Yup.string().ensure().trim().min(min, MESSAGE_STRING_TOO_LONG);
+
 const schema = Yup.object().shape({
   title: yupStringMax(TITLE_CHAR_MAX).min(
     TITLE_CHAR_MIN,
@@ -40,7 +42,7 @@ const schema = Yup.object().shape({
   location: Yup.object().shape({
     address: Yup.object().shape({
       suburb: Yup.string().trim(),
-      city: Yup.string().ensure().trim().required(),
+      city: yupStringMin(3),
       region: Yup.string().trim(),
       postcode: Yup.number().min(1000).lessThan(10000),
       street_address: Yup.string().trim(),
@@ -48,13 +50,13 @@ const schema = Yup.object().shape({
   }),
   category: Yup.object().shape({
     tags: Yup.array().max(3, 'Max ${max} tags'),
-    category: Yup.string().required(SELECTION_REQUIRED),
-    indostry: Yup.string().required(SELECTION_REQUIRED)
+    category: Yup.string().ensure().required(SELECTION_REQUIRED),
+    industry: Yup.string().ensure().required(SELECTION_REQUIRED)
   }),
   open_state: Yup.object().shape({
     info_available: Yup.string().trim(),
     open_alert_level: Yup.string().trim(),
-    open_now: Yup.boolean().required(),
+    open_now: Yup.boolean(),
     open_date: Yup.string().trim(),
     open_hours: yupStringMax(15),
   }),
@@ -88,18 +90,24 @@ const recursiveMakeRequired = schema => {
 }
 
 const BusinessForm = (props) => {
-  const { businessData } = props;
-  const { submitEdit } = useAppContext();
+  const formData = props.businessData || require('../utils/businessObject.json');
+  const { submitEdit, activeBusiness } = useAppContext();
+
+  // const [formData, setFormData] = useState(require('../utils/businessObject.json'))
+
+  // useEffect(()=> {
+  //   if (activeBusiness?.title) setFormData(activeBusiness)
+  // },[activeBusiness, setFormData])
+
 
   const validate = makeValidate(schema);
-  // const required = makeRequired(schema);
   const required = recursiveMakeRequired(schema);
 
 
 
-  console.log(schema);
-  console.log(validate);
-  console.log(required);
+  // console.log(schema);
+  // console.log(active);
+  // console.log(required);
 
   const formFields = [
     {
@@ -236,9 +244,9 @@ const BusinessForm = (props) => {
   return (
     <Form
       onSubmit={submitEdit}
-      initialValues={businessData}
-      validate={validate}s
-      render={({ handleSubmit, reset, submitting, pristine, values }) => (
+      initialValues={formData}
+      validate={validate}
+      render={({ handleSubmit, submitting, pristine, values }) => (
         <form onSubmit={handleSubmit} noValidate>
           <Paper style={{ padding: 16 }}>
             <Grid container alignItems="flex-start" spacing={2}>
@@ -251,7 +259,7 @@ const BusinessForm = (props) => {
                 <Button
                   type="button"
                   variant="contained"
-                  onClick={reset}
+                  // onClick={reset}
                   disabled={submitting || pristine}
                 >
                   Reset

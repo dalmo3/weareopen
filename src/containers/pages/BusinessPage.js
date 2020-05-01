@@ -9,26 +9,21 @@ import { act } from 'react-dom/test-utils';
 
 const BusinessPage = (props) => {
   const {
-    // activeBusiness,
-    getBusinessByTitle,
     results,
     isVerified,
     handleClaim,
     userMeta,
-    handleEdit,
     activeBusiness,
-    // activeBusiness: globalActiveBusiness,
     fetchBusiness,
   } = useAppContext();
-  const routerMatch = useMatch('/business/:businessSlug/**');
-  console.log('route', routerMatch.businessSlug);
+  console.log('route', props.businessSlug);
 
   const hasActiveBusiness = Boolean(activeBusiness && activeBusiness.title);
 
   useEffect(() => {
-    if (!hasActiveBusiness || activeBusiness.title !== routerMatch.businessSlug)
-      fetchBusiness(routerMatch.businessSlug);
-  }, [hasActiveBusiness, routerMatch.businessSlug]);
+    if (!hasActiveBusiness || activeBusiness.title !== props.businessSlug)
+      fetchBusiness(props.businessSlug);
+  }, [hasActiveBusiness, props.businessSlug]);
 
   const ConditionalCard = (props) =>
     hasActiveBusiness ? (
@@ -63,7 +58,7 @@ const BusinessPage = (props) => {
     console.log('editing...', isEditing);
   });
 
-  const [tryEditing, setTryEditing] = useState(props.edit);
+  const [editIntent, setEditIntent] = useState(props.edit === 'edit');
   const [isEditing, setIsEditing] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const handleEditLocal = (e) => {
@@ -71,11 +66,18 @@ const BusinessPage = (props) => {
     // setIsEditing(true)
   };
 
-  const canEdit = userMeta.canClaimBusiness || userMeta.ownsActiveBusiness;
+  const [canEdit, setCanEdit] = useState(false);
+  useEffect(() => {
+    setCanEdit(userMeta.canClaimBusiness || userMeta.ownsActiveBusiness);
+  }, [userMeta.canClaimBusiness, userMeta.ownsActiveBusiness]);
+
+  // const canEdit = userMeta.canClaimBusiness || userMeta.ownsActiveBusiness;
 
   useEffect(() => {
-    setIsEditing(canEdit && tryEditing);
-  }, [canEdit, tryEditing]);
+    setIsEditing(canEdit && editIntent);
+  }, [canEdit, editIntent]);
+
+  console.log('can edit', canEdit);
   const ConditionalForm = (props) =>
     isEditing ? <BusinessForm businessData={activeBusiness} /> : null;
 
