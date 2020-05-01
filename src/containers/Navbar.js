@@ -1,5 +1,5 @@
 import React from 'react';
-import { fade, makeStyles } from '@material-ui/core/styles';
+import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -12,14 +12,16 @@ import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { useAppContext } from './AppController';
 import { navigate } from '@reach/router';
-import { Badge } from '@material-ui/core';
+import { Badge, useMediaQuery } from '@material-ui/core';
+import waoIcon from '../assets/img/wao-icon-amber-darkblue.svg';
+import waoLogoSquare from '../assets/img/wao-rect-amber-trans.svg';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: theme.spacing(2),
+    // marginRight: theme.spacing(2),
     // '&:hover': {
     //   backgroundColor: fade('#fff', 0.15),
     // },
@@ -132,10 +134,29 @@ export default function Navbar(props) {
   );
 
   const renderProfileIcon = isAuthenticated ? (
-    <Badge color="error" badgeContent=' ' overlap="circle"  variant='dot' invisible={isVerified}>
+    <Badge
+      color="error"
+      badgeContent=" "
+      overlap="circle"
+      variant="dot"
+      invisible={isVerified}
+    >
       {profileIcon}
     </Badge>
   ) : null;
+
+  const Logo = (props) => {
+    const sm = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+    return (
+      <div className={classes.grow}>
+        {sm ? (
+          <img height="50" width="91px" src={waoLogoSquare} alt="Logo" />
+        ) : (
+          <img height="40px" width="40px" src={waoIcon} alt="Logo" />
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className={classes.grow}>
@@ -154,13 +175,12 @@ export default function Navbar(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography className={classes.title} variant="h6" noWrap>
-            We Are Open!
-          </Typography>
           <div className={classes.grow} />
+          <Logo />
+          {/* <div className={classes.grow} /> */}
           <div className={classes.search}>
             <div className={classes.searchIcon}>
-              <SearchIcon/>
+              <SearchIcon />
             </div>
             <InputBase
               autoFocus={true}
@@ -173,7 +193,7 @@ export default function Navbar(props) {
               inputProps={{ 'aria-label': 'search' }}
               defaultValue={''}
               onChange={props.handleInputChange}
-              onClick={e=> navigate('/search')}
+              onClick={(e) => navigate('/search')}
             />
           </div>
           <div className={classes.grow} />
