@@ -7,6 +7,7 @@ import SearchPage from './pages/SearchPage';
 import { AppView } from './AppView';
 import TestPage from './pages/TestPage';
 import ContactPage from './pages/ContactPage';
+import PrivacyPage from './pages/PrivacyPage'
 
 export const AppRouter = (props) => {
   return (
@@ -17,6 +18,7 @@ export const AppRouter = (props) => {
         <BusinessPage path="business/:businessSlug/*edit" />
         <ProfilePage path="profile" />
         <TestPage path="tests" />
+        <PrivacyPage path="privacy-policy"/>
         <ContactPage path="contact" />
       </AppView>
     </Router>
