@@ -58,7 +58,7 @@ const schema = Yup.object().shape({
     open_alert_level: Yup.string().trim(),
     open_now: Yup.boolean(),
     open_date: Yup.string().trim(),
-    open_hours: yupStringMax(15),
+    open_hours: yupStringMax(30),
   }),
   description: Yup.object().shape({
     short: yupStringMax(SHORT_DESCRIPTION_CHAR_MAX),

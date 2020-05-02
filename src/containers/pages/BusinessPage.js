@@ -101,8 +101,6 @@ const BusinessPage = (props) => {
     setIsEditing(canEdit && editIntent);
   }, [canEdit, editIntent]);
 
-  console.log('can edit', canEdit);
-
   const ConditionalForm = (props) =>
     isEditing ? <BusinessForm businessData={activeBusiness} /> : null;
 

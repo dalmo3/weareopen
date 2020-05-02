@@ -84,7 +84,7 @@ export const AppController = ({ children, ...initOptions }) => {
 
   // opening from results, no need for api call
   const openBusinessPage = (e, businessData) => {
-    setActiveBusiness(businessData);
+    updateActiveBusiness(businessData);
     navigate(`/business/${businessData.title}`);
   };
 
@@ -100,7 +100,7 @@ export const AppController = ({ children, ...initOptions }) => {
   // if db is ready make the call
   const findOne = (title) =>
     findBusinessByTitle(title).then((doc) => {
-      setActiveBusiness(doc || {});
+      updateActiveBusiness(doc || {});
       setFetchTitle('');
       setIsFetching(false);
       // console.log('got1', doc);
@@ -109,7 +109,7 @@ export const AppController = ({ children, ...initOptions }) => {
   // else setup effect to wait for db ready to make the call
   const [fetchTitle, setFetchTitle] = useState('');
   const [isFetching, setIsFetching] = useState(false);
-    
+
   useEffect(() => {
     if (fetchTitle && stitchReady) findOne(fetchTitle);
   }, [fetchTitle, stitchReady]);
@@ -119,6 +119,7 @@ export const AppController = ({ children, ...initOptions }) => {
   //
 
   const [userMeta, setUserMeta] = useState({});
+  const [isClaiming, setIsClaiming] = useState(false);
   useEffect(() => {
     // console.log(stitchUser)
 
@@ -132,7 +133,7 @@ export const AppController = ({ children, ...initOptions }) => {
       canReport: stitchUser?.id !== activeBusiness?.admin?.admin_id,
     });
     // console.log(stitchUser?.id, activeBusiness?.admin?.admin_id)
-  }, [stitchUser, isVerified, activeBusiness]);
+  }, [stitchUser, isVerified, activeBusiness, isClaiming]);
 
   // useEffect(()=> console.log(userMeta), [userMeta])
 
@@ -176,12 +177,26 @@ export const AppController = ({ children, ...initOptions }) => {
         has_admin: true,
       },
     };
-    setActiveBusiness(newBusiness);
+    updateActiveBusiness(newBusiness);
     navigate(`/business/${debouncedQuery}/edit`);
     resetSearchState();
   };
 
+  const updateActiveBusiness = (business) => {
+    setActiveBusiness(business);
+    console.log('updating', business);
+    console.log('results', results);
+    if (business._id && results.length) {
+      const updatedResults = results.map((result) =>
+        JSON.stringify(result._id.id) === JSON.stringify(business._id.id) ? business : result
+      );
+      console.log('updresults', updatedResults);
+      setResults(updatedResults);
+    }
+  };
+
   const handleClaim = async (e) => {
+    setIsClaiming(true);
     console.log('trying to claim property ', activeBusiness.title);
     if (!isAuthenticated) {
       console.log('Please log in');
@@ -200,11 +215,12 @@ export const AppController = ({ children, ...initOptions }) => {
     // if (!dbReady) return;
     console.log('db is ready');
     stitchClaim(activeBusiness._id)
-      .then((accepted, doc) => {
-        console.log('claim accepted?', accepted);
-        setActiveBusiness(doc);
+      .then(({ accepted, doc }) => {
+        console.log('claim accepted?', accepted, doc);
+        updateActiveBusiness(doc);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally((e) => setIsClaiming(false));
   };
 
   //
@@ -234,7 +250,7 @@ export const AppController = ({ children, ...initOptions }) => {
       // findOneAndUpdate(businessData)
       .then((updated) => {
         console.log('inserted', updated);
-        setActiveBusiness(updated);
+        updateActiveBusiness(updated);
         setIsEditing(false);
         navigate(`/business/${updated.title}`);
       })
@@ -251,7 +267,8 @@ export const AppController = ({ children, ...initOptions }) => {
         handleSearchInputChange,
         activeBusiness,
         hasActiveBusiness,
-        fetchBusiness,isFetching,
+        fetchBusiness,
+        isFetching,
         openBusinessPage,
         handleClaim,
         handleEdit,
