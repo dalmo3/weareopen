@@ -77,11 +77,11 @@ const Sidebar = (props) => {
       <Divider />
 
       <List>
-        <ListItem button onClick={loginWithPopup}>
+        <ListItem button onClick={e=>navigate('/profile')}>
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
-          <ListItemText primary={'Login'} />
+          <ListItemText primary={'Business Owners'} />
         </ListItem>
       </List>
     </div>

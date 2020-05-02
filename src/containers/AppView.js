@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppTheme } from './AppTheme';
-import { Container, Typography, Button } from '@material-ui/core';
+import { Container, Typography, Button, makeStyles } from '@material-ui/core';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import { useAppContext } from './AppController';
@@ -11,9 +11,6 @@ import { Link } from '@reach/router';
 
 const RouterTests = (props) => (
   <Typography>
-    <Button color="primary" component={Link} to="/">
-      Home
-    </Button>
     <Button component={Link} to="profile">
       Profile
     </Button>
@@ -37,12 +34,20 @@ const RouterTests = (props) => (
   </Typography>
 );
 
+const useStyles = makeStyles((theme) => ({
+
+
+}))
+
 export const AppView = (props) => {
+  const classes = useStyles();
+
   const {
     toggleSidebar,
     handleSearchInputChange,
     sideBarOpen,
   } = useAppContext();
+  
 
   return (
     <AppTheme>

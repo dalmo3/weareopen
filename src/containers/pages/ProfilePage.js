@@ -32,7 +32,8 @@ const LogInOut = (props) => {
 
 const ProfilePage = (props) => (
   <Fragment>
-    <Typography>Profile page</Typography>
+    <Typography variant='h3'>My businesses</Typography>
+    {/* <Typography>My businesses</Typography> */}
     <LogInOut />
   </Fragment>
 );

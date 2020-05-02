@@ -10,11 +10,15 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary">
       {'Copyright © '}
-      <Link color="inherit" href="/">
+      <Link
+        color="inherit"
+        href="https://virtua.nz"
+        rel="noopener noferrer"
+        target="_blank"
+      >
         Dalmo Mendonça
       </Link>{' '}
       {new Date().getFullYear()}
-      {'.'}
     </Typography>
   );
 }
