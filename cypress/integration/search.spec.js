@@ -3,8 +3,9 @@
 
 describe('Search', () => {
   it('Search', () => {
-    
     cy.visit('/');
+
+    //click search goes to /search
     cy.get('.MuiInputBase-fullWidth')
       .click()
       .url()
@@ -13,23 +14,33 @@ describe('Search', () => {
     cy.get('.MuiInputBase-fullWidth')
       .should('have.class', 'Mui-focused')
       .type('food')
-      // .should('contain.text', 'food');
+      .get('input')
+      .should('have.value', 'food');
+    // .should('contain.text', 'food'); //how to read this?
 
-    cy.get('.makeStyles-card-316')
-      .should('contain', 'Food')
-    
+    cy.get('[class*=makeStyles-card]')
+      .first()
+      .contains(/.*food.*/i);
+
     cy.get('[aria-label="open business page"]')
       .first()
       .click()
       .url()
-      .should('contain', '/business')
+      .should('contain', '/business');
 
-    cy.get('div#business-page button.MuiButtonBase-root.MuiButton-root.MuiButton-text span.MuiButton-label')
-      .should('include.text', 'Back to Results')
+    cy.get(
+      'div#business-page button.MuiButtonBase-root.MuiButton-root.MuiButton-text'
+    )
+      .contains('Back to Results')
+      .get(
+        'div#business-page button.MuiButtonBase-root.MuiButton-root.MuiButton-text'
+      )
       .click()
       .url()
       .should('include', '/search');
 
+    cy.get('[class*=makeStyles-card]')
+      .first()
+      .contains(/.*food.*/i);
   });
-
 });
