@@ -52,7 +52,7 @@ const BusinessPage = (props) => {
   const BackToResults = (props) =>
     results.length && !isEditing ? (
       <Button onClick={(e) => navigate(`/search`)}>
-        <ArrowBackIcon /> Back to Results
+        <ArrowBackIcon />Back to Results
       </Button>
     ) : null;
 
