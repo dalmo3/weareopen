@@ -55,7 +55,15 @@ const BusinessPage = (props) => {
         <ArrowBackIcon />Back to Results
       </Button>
     ) : null;
-
+    
+    const referrer = props.location.state.referrer;
+    const BackToProfile = (props) =>
+      referrer === '/profile' && !isEditing ? (
+        <Button onClick={(e) => navigate(`/profile`)}>
+          <ArrowBackIcon />Back to Profile
+        </Button>
+      ) : null;
+    
   const ClaimBusiness = (props) =>
     userMeta.canClaimBusiness ? (
       <Button variant="contained" onClick={handleClaim}>
@@ -110,6 +118,7 @@ const BusinessPage = (props) => {
     <div id="business-page">
       <NotFound/>
       <BackToResults />
+      <BackToProfile />
       <ConditionalCard />
       <ConditionalForm />
       <ClaimBusiness />

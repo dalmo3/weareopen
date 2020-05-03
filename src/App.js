@@ -10,9 +10,9 @@ const App = () => {
   return (
     <Auth0Wrapper>
       <StitchProvider>
-        <AppController>
+        {/* <AppController> */}
           <AppRouter/>
-        </AppController>
+        {/* </AppController> */}
       </StitchProvider>
     </Auth0Wrapper>
   );

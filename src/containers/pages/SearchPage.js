@@ -35,11 +35,11 @@ const SearchPage = (props) => {
   return (
     // <div >
     <Grid id="search-page" container direction="column" spacing={2}>
-      <Grid item size="xs">
+      <Grid item >
         <ConditionalIntent />
       </Grid>
-      <Grid item size="xs">
-        {results.length ? <ResultList /> : searchMessage}
+      <Grid item >
+        {results.length ? <ResultList results={results}/> : searchMessage}
       </Grid>
     </Grid>
     // </div>

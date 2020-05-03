@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import ResultCard from './ResultCard';
-import { makeStyles, Button } from '@material-ui/core';
-import { useAppContext } from '../containers/AppController';
+import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -12,9 +11,7 @@ const useStyles = makeStyles((theme) => ({
 const ResultList = (props) => {
   const classes = useStyles();
 
-  const { results } = useAppContext()
-
-  const resultList = results.map((r, i) => (
+  const resultList = props.results?.map((r, i) => (
     <div key={r.title} className={classes.card}>
       <ResultCard result={r} />
     </div>

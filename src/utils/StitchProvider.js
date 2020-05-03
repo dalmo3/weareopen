@@ -103,6 +103,10 @@ export const StitchProvider = ({ children, ...initOptions }) => {
       { returnNewDocument: true, upsert: true }
     );
 
+  const findUserBusinesses = () => 
+    remoteMongoCollection.find({"admin.admin_id": stitchUser.id}).toArray()
+  
+
   return (
     <StitchContext.Provider
       value={{
@@ -113,6 +117,7 @@ export const StitchProvider = ({ children, ...initOptions }) => {
         stitchClaim,
         findBusinessByTitle,
         findOneAndUpdate,
+        findUserBusinesses,
         stitchLogout,
         insertOne,
       }}
