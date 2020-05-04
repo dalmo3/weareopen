@@ -7,6 +7,7 @@ import {
   Button,
   Typography,
   Checkbox as MuiCheckbox,
+  Checkbox,
 } from '@material-ui/core';
 import {
   TextField,
@@ -14,9 +15,10 @@ import {
   Switches,
   Autocomplete,
   Debug,
+  Checkboxes,
 } from 'mui-rff';
 import { useAppContext } from '../containers/AppController';
-import {regions} from '../assets/data/geo'
+import { regions } from '../assets/data/geo';
 
 const TITLE_CHAR_MAX = 50;
 const TITLE_CHAR_MIN = 3;
@@ -32,19 +34,18 @@ const SELECTION_REQUIRED = 'Please pick one';
 const yupStringMax = (max) =>
   Yup.string().ensure().trim().max(max, MESSAGE_STRING_TOO_LONG);
 
-const yupStringMin = (min) =>  
+const yupStringMin = (min) =>
   Yup.string().ensure().trim().min(min, MESSAGE_STRING_TOO_LONG);
 
 const schema = Yup.object().shape({
-  title: yupStringMax(TITLE_CHAR_MAX).min(
-    TITLE_CHAR_MIN,
-    MESSAGE_STRING_TOO_SHORT
-  ).required(),
+  title: yupStringMax(TITLE_CHAR_MAX)
+    .min(TITLE_CHAR_MIN, MESSAGE_STRING_TOO_SHORT)
+    .required(),
   location: Yup.object().shape({
     address: Yup.object().shape({
       suburb: Yup.string().trim(),
-      city: yupStringMin(3),
-      region: Yup.string().trim(),
+      city: yupStringMin(3).required(),
+      region: Yup.string().trim().required(),
       postcode: Yup.number().min(1000).lessThan(10000),
       street_address: Yup.string().trim(),
     }),
@@ -52,7 +53,7 @@ const schema = Yup.object().shape({
   category: Yup.object().shape({
     tags: Yup.array().max(3, 'Max ${max} tags'),
     category: Yup.string().ensure().required(SELECTION_REQUIRED),
-    industry: Yup.string().ensure().required(SELECTION_REQUIRED)
+    industry: Yup.string().ensure().required(SELECTION_REQUIRED),
   }),
   open_state: Yup.object().shape({
     info_available: Yup.string().trim(),
@@ -79,19 +80,19 @@ const autocompleteData = [
   { label: 'Brown Dwarf Glese 229B', value: '229B' },
 ];
 
-const recursiveMakeRequired = schema => {
+const recursiveMakeRequired = (schema) => {
   const fields = schema.fields;
   return Object.keys(fields).reduce((accu, field) => {
-    accu[field] = 
-      fields[field].fields
+    accu[field] = fields[field].fields
       ? recursiveMakeRequired(fields[field])
       : fields[field]._exclusive.required;
     return accu;
-  },{})
-}
+  }, {});
+};
 
 const BusinessForm = (props) => {
-  const formData = props.businessData || require('../utils/businessObject.json');
+  const formData =
+    props.businessData || require('../utils/businessObject.json');
   const { submitEdit, activeBusiness } = useAppContext();
 
   // const [formData, setFormData] = useState(require('../utils/businessObject.json'))
@@ -100,36 +101,32 @@ const BusinessForm = (props) => {
   //   if (activeBusiness?.title) setFormData(activeBusiness)
   // },[activeBusiness, setFormData])
 
-
   const validate = makeValidate(schema);
   const required = recursiveMakeRequired(schema);
-
-
 
   // console.log(schema);
   // console.log(active);
   // console.log(required);
 
-  const formFields = [
+  const formFields = ({values}) => [
     {
       size: 12,
-      field: <TextField label="Business Name" name="title"/>,
+      field: <TextField label="Business Name" name="title" />,
     },
     {
       size: 6,
       field: (
-        <Switches
-          label="Open during the current alert level?"
+        <Checkboxes
+          // label="Open during the current alert level?"
           name="open_state.open_now"
           required={required.open_state.open_now}
-          size="small"
-          data={{ label: 'Open', value: 'available' }}
+          data={{ label: 'Open during the current alert level?', value: 'open' }}
         />
       ),
     },
     {
       size: 6,
-      field: <TextField label="Open Hours" name="open_state.open_hours" />,
+      field: <TextField label="Open Hours" disabled={!values.open_state.open_now} name="open_state.open_hours" />,
     },
     {
       size: 6,
@@ -137,7 +134,9 @@ const BusinessForm = (props) => {
     },
     {
       size: 6,
-      field: <TextField label="City" name="location.address.city"/>,
+      field: (
+        <TextField label="City" name="location.address.city" required={required.location.address.city} />
+      ),
     },
     {
       size: 6,
@@ -147,10 +146,11 @@ const BusinessForm = (props) => {
           name="location.address.region"
           size="small"
           options={regions}
+          required={required.location.address.region} 
           // getOptionValue={(option) => option.value}
           // getOptionLabel={(option) => option.label}
           // disableCloseOnSelect
-          />
+        />
       ),
     },
     {
@@ -173,6 +173,7 @@ const BusinessForm = (props) => {
           name="category.industry"
           size="small"
           options={regions}
+          required={required.category.industry} 
           // getOptionValue={(option) => option.value}
           // getOptionLabel={(option) => option.label}
           disableCloseOnSelect
@@ -193,6 +194,7 @@ const BusinessForm = (props) => {
           name="category.category"
           size="small"
           options={autocompleteData}
+          required={required.category.category} 
           getOptionValue={(option) => option.value}
           getOptionLabel={(option) => option.label}
           disableCloseOnSelect
@@ -261,7 +263,7 @@ const BusinessForm = (props) => {
         <form onSubmit={handleSubmit} noValidate>
           <Paper style={{ padding: 16 }}>
             <Grid container alignItems="flex-start" spacing={2}>
-              {formFields.map((item, i) => (
+              {formFields({values}).map((item, i) => (
                 <Grid item xs={item.size} key={i}>
                   {item.field}
                 </Grid>
