@@ -36,12 +36,6 @@ const ProfilePage = (props) => {
       {/* <Typography>My businesses</Typography> */}
       <ResultList results={userMeta.businesses} />
       <LogInOut />
-      
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success">
-          This is a success message!
-        </Alert>
-      </Snackbar>
     </>
   );
 };
