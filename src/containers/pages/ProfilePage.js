@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Typography, Button, Grid } from '@material-ui/core';
 import { useAppContext } from '../AppController';
 import ResultList from '../../components/ResultList';
@@ -31,12 +31,18 @@ const LogInOut = (props) => {
 const ProfilePage = (props) => {
   const { userMeta } = useAppContext();
   return (
-    <Fragment>
+    <>
       <Typography variant="h3">My businesses</Typography>
       {/* <Typography>My businesses</Typography> */}
       <ResultList results={userMeta.businesses} />
       <LogInOut />
-    </Fragment>
+      
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          This is a success message!
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

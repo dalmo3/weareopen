@@ -8,6 +8,7 @@ import { grey } from '@material-ui/core/colors';
 import { AppRouter } from './AppRouter';
 import Footer from './Footer';
 import { Link } from '@reach/router';
+import AlertBar from '../components/AlertBar';
 
 const RouterTests = (props) => (
   <Typography>
@@ -69,6 +70,7 @@ export const AppView = (props) => {
         </Container>
         <Footer id="footer" />
       </Container>
+      <AlertBar/>
     </AppTheme>
   );
 };

@@ -14,6 +14,9 @@ import { AppView } from './AppView';
 export const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
 
+export const SnackbarContext = createContext();
+export const useSnackbarContext = () => useContext(SnackbarContext);
+
 export const AppController = ({ children, ...initOptions }) => {
   const {
     stitchUser,
@@ -31,6 +34,8 @@ export const AppController = ({ children, ...initOptions }) => {
     isAuthenticated,
     user: auth0User,
     isVerified,
+    loginTimedOut,
+    loginUnauthorized,
   } = useAuth0();
 
   //
@@ -85,11 +90,11 @@ export const AppController = ({ children, ...initOptions }) => {
 
   const location = useLocation();
   // console.log(location)
-  
+
   // opening from results, no need for api call
   const openBusinessPage = (e, businessData) => {
     updateActiveBusiness(businessData);
-    console.log(location)
+    console.log(location);
     navigate(`/business/${businessData.title}`, {
       state: { referrer: location.pathname },
     });
@@ -152,6 +157,27 @@ export const AppController = ({ children, ...initOptions }) => {
   }, [stitchUser, isVerified]);
   // useEffect(()=> console.log(userMeta), [userMeta])
 
+  // const [ loginTimedOut, setLoginTimedOut ] = useState(false)
+  // const [ loginUnauthorized, setLoginUnauthorized ] = useState(false)
+  
+  // const loginWithPopup = () => {
+  //   auth0LoginWithPopup().catch((error) => {
+  //     switch (error.error) {
+  //       case 'timeout':
+  //         alert('Session expired, please log in again.');
+  //         setLoginTimedOut(true);
+  //         break;
+  //       case 'unauthorized':
+  //         alert(
+  //           'Please check for verification email and follow link before logging in.'
+  //         );
+  //         break;
+  //     }
+  //     console.error('loginWithPopup error');
+  //     console.error(error);
+  //   });
+  // };
+
   // APP VIEW
   const [sideBarOpen, setSideBarOpen] = useState(false);
   const toggleSidebar = (open) => (event) => {
@@ -164,6 +190,42 @@ export const AppController = ({ children, ...initOptions }) => {
 
     setSideBarOpen(open);
   };
+
+  const [snackBarState, setSnackbarState] = useState({
+    open: false,
+    autoHideduration: 10000,
+    severity: 'error',
+    message: 'Error message',
+  });
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarState({
+      ...snackBarState,
+      open: false,
+    });
+  };
+
+  useEffect(()=>{
+    if (loginTimedOut) {
+      setSnackbarState({
+        open: true,
+        autoHideduration: 10000,
+        severity: 'error',
+        message: 'Session expired, please log in again.',
+      })
+    } else if (loginUnauthorized) {
+      setSnackbarState({
+        open: true,
+        autoHideduration: 10000,
+        severity: 'error',
+        message: 'Please check for verification email and follow link before logging in.',
+      })
+    }
+  },[loginTimedOut,loginUnauthorized])
 
   //
   // ADD BUSINESS FLOW
@@ -274,6 +336,7 @@ export const AppController = ({ children, ...initOptions }) => {
       .catch(console.error);
   };
 
+
   return (
     <AppContext.Provider
       value={{
@@ -296,13 +359,22 @@ export const AppController = ({ children, ...initOptions }) => {
         userMeta,
         isAuthenticated,
         isVerified,
+        loginTimedOut,
+        loginUnauthorized,
         loginWithPopup,
         logout: stitchLogout,
         sideBarOpen,
         toggleSidebar,
       }}
     >
-      <AppView>{children}</AppView>
+      <SnackbarContext.Provider
+        value={{
+          snackBarState,
+          handleSnackbarClose,
+        }}
+      >
+        <AppView>{children}</AppView>
+      </SnackbarContext.Provider>
     </AppContext.Provider>
   );
 };

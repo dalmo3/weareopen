@@ -56,7 +56,7 @@ const BusinessPage = (props) => {
       </Button>
     ) : null;
     
-    const referrer = props.location.state.referrer;
+    const referrer = props.location.state?.referrer;
     const BackToProfile = (props) =>
       referrer === '/profile' && !isEditing ? (
         <Button onClick={(e) => navigate(`/profile`)}>
