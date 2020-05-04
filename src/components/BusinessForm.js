@@ -16,6 +16,7 @@ import {
   Debug,
 } from 'mui-rff';
 import { useAppContext } from '../containers/AppController';
+import {regions} from '../assets/data/geo'
 
 const TITLE_CHAR_MAX = 50;
 const TITLE_CHAR_MIN = 3;
@@ -140,7 +141,17 @@ const BusinessForm = (props) => {
     },
     {
       size: 6,
-      field: <TextField label="Region" name="location.address.region" />,
+      field: (
+        <Autocomplete
+          label="Region"
+          name="location.address.region"
+          size="small"
+          options={regions}
+          // getOptionValue={(option) => option.value}
+          // getOptionLabel={(option) => option.label}
+          // disableCloseOnSelect
+          />
+      ),
     },
     {
       size: 6,
@@ -159,11 +170,11 @@ const BusinessForm = (props) => {
       field: (
         <Autocomplete
           label="Industry"
-          name="category.category"
+          name="category.industry"
           size="small"
-          options={autocompleteData}
-          getOptionValue={(option) => option.value}
-          getOptionLabel={(option) => option.label}
+          options={regions}
+          // getOptionValue={(option) => option.value}
+          // getOptionLabel={(option) => option.label}
           disableCloseOnSelect
           // renderOption={(option, { selected }) => (
           //   <>
@@ -179,7 +190,7 @@ const BusinessForm = (props) => {
       field: (
         <Autocomplete
           label="Category"
-          name="category.industry"
+          name="category.category"
           size="small"
           options={autocompleteData}
           getOptionValue={(option) => option.value}
