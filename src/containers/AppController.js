@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useReducer,
 } from 'react';
 import { useAuth0 } from '../utils/Auth0Provider';
 import { useStitch } from '../utils/StitchProvider';
@@ -130,53 +131,46 @@ export const AppController = ({ children, ...initOptions }) => {
   // USER LOGIC
   //
 
-  const [userMeta, setUserMeta] = useState({});
-  const [isClaiming, setIsClaiming] = useState(false);
-  useEffect(() => {
-    // console.log(stitchUser)
+  const userMetaReducer = (state, action) => {
+    switch (action.type) {
+      case 'findBusinesses':
+        return {
+          ...state,
+          businesses: action.payload,
+        };
+      case 'activeActions':
+        const activeBusiness = action.payload;
+        console.log('actions');
+        return {
+          ...state,
+          ownsActiveBusiness: stitchUser.id === activeBusiness.admin.admin_id,
+          canClaimBusiness: isVerified && !activeBusiness.admin.has_admin,
+          canReport: stitchUser.id !== activeBusiness.admin.admin_id,
+        };
+      default:
+        throw new Error();
+    }
+  };
 
+  const [userMeta, setUserMeta] = useReducer(userMetaReducer, {});
+  const [isClaiming, setIsClaiming] = useState(false);
+
+  useEffect(() => {
     if (!stitchUser) return;
     if (!hasActiveBusiness) return;
-
-    setUserMeta({
-      ...userMeta,
-      isVerified,
-      ownsActiveBusiness: stitchUser?.id === activeBusiness?.admin?.admin_id,
-      canClaimBusiness: isVerified && !activeBusiness?.admin?.has_admin,
-      canReport: stitchUser?.id !== activeBusiness?.admin?.admin_id,
-    });
-    // console.log(stitchUser?.id, activeBusiness?.admin?.admin_id)
-  }, [stitchUser, isVerified, activeBusiness, isClaiming]);
+    if (isClaiming) return;
+    setUserMeta({ type: 'activeActions', payload: activeBusiness });
+  }, [stitchUser, isVerified, hasActiveBusiness, activeBusiness, isClaiming]);
 
   useEffect(() => {
-    if (stitchUser && isVerified) {
-      findUserBusinesses()
-        .then((businesses) => setUserMeta({ ...userMeta, businesses }))
-        .catch(console.error);
+    // console.log(stitchUser.profile.data.verified)
+    if (stitchUser?.profile?.data?.verified && !isClaiming) {
+      findUserBusinesses().then((businesses) => {
+        console.log(businesses);
+        setUserMeta({ type: 'findBusinesses', payload: businesses });
+      });
     }
-  }, [stitchUser, isVerified]);
-  // useEffect(()=> console.log(userMeta), [userMeta])
-
-  // const [ loginTimedOut, setLoginTimedOut ] = useState(false)
-  // const [ loginUnauthorized, setLoginUnauthorized ] = useState(false)
-  
-  // const loginWithPopup = () => {
-  //   auth0LoginWithPopup().catch((error) => {
-  //     switch (error.error) {
-  //       case 'timeout':
-  //         alert('Session expired, please log in again.');
-  //         setLoginTimedOut(true);
-  //         break;
-  //       case 'unauthorized':
-  //         alert(
-  //           'Please check for verification email and follow link before logging in.'
-  //         );
-  //         break;
-  //     }
-  //     console.error('loginWithPopup error');
-  //     console.error(error);
-  //   });
-  // };
+  }, [stitchUser, isClaiming]);
 
   // APP VIEW
   const [sideBarOpen, setSideBarOpen] = useState(false);
@@ -209,23 +203,24 @@ export const AppController = ({ children, ...initOptions }) => {
     });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     if (loginTimedOut) {
       setSnackbarState({
         open: true,
         autoHideduration: 10000,
         severity: 'error',
         message: 'Session expired, please log in again.',
-      })
+      });
     } else if (loginUnauthorized) {
       setSnackbarState({
         open: true,
         autoHideduration: 10000,
         severity: 'error',
-        message: 'Please check for verification email and follow link before logging in.',
-      })
+        message:
+          'Please check for verification email and follow link before logging in.',
+      });
     }
-  },[loginTimedOut,loginUnauthorized])
+  }, [loginTimedOut, loginUnauthorized]);
 
   //
   // ADD BUSINESS FLOW
@@ -335,7 +330,6 @@ export const AppController = ({ children, ...initOptions }) => {
       })
       .catch(console.error);
   };
-
 
   return (
     <AppContext.Provider
