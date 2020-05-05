@@ -130,9 +130,9 @@ export const BusinessCard = (props) => {
           alignItems="flex-start"
           spacing={2}
         >
-          <Grid item xs={2} sm={2}>
+          <Grid item xs={2} sm={2} style={{margin:'auto'}}>
             <Grid container direction="column" alignItems="center">
-              <Grid item>
+              <Grid item >
                 <Avatar aria-label="business" className={classes.avatar}>
                   {title.slice(0, 2)}
                 </Avatar>

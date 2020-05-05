@@ -4,7 +4,13 @@ import { useAppContext } from './AppController';
 import Search from '../components/Search';
 import ProfileIcon from '../components/ProfileIcon';
 import { makeStyles } from '@material-ui/core/styles';
-import { useMediaQuery, Link, AppBar, Toolbar, IconButton } from '@material-ui/core';
+import {
+  useMediaQuery,
+  Link,
+  AppBar,
+  Toolbar,
+  IconButton,
+} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import waoIcon from '../assets/img/wao-icon-amber-darkblue.svg';
 import waoLogoSquare from '../assets/img/wao-rect-amber-darkblue-unpadded.png';
@@ -82,7 +88,7 @@ export default function Navbar(props) {
           <ProfileIcon />
         </Toolbar>
       </AppBar>
-      <Toolbar />
+      {/* <Toolbar /> */}
     </div>
   );
 }
