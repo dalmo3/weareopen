@@ -56,42 +56,73 @@ export const Auth0Provider = ({
   const [loginTimedOut, setLoginTimedOut] = useState(false);
   const [loginUnauthorized, setLoginUnauthorized] = useState(false);
 
-  const loginWithPopup = async (
+  const loginHelper = async (method, params) => {
+    switch (method) {
+      case 'popup':
+        await auth0Client.loginWithPopup(params);
+        break;
+      case 'redirect':
+        await auth0Client.loginWithRedirect(params);
+        break;
+      default:
+        throw new Error(
+          'Invalid login method. Select one of popup or redirect'
+        );
+    }
+  };
+
+  const loginWith = async (
+    method,
     params = {
       prompt: 'login',
       // display: 'touch'
     }
   ) => {
-    try {
-      setLoginTimedOut(false);
-      setLoginUnauthorized(false);
-      console.log(params);
-      await auth0Client.loginWithPopup(params)  ;
-      // await auth0Client.loginWithRedirect(params);
-      const user = await auth0Client.getUser();
-      setUser(user);
-      setIsAuthenticated(true);
-      setLoginTimedOut(false);
-      setIsVerified(user?.email_verified);
-      console.log('auth0 logged in as', user);
-    } catch (error) {
-      switch (error.error) {
-        case 'timeout':
-          // alert('Session expired, please log in again.');
-          setLoginTimedOut(true);
-          console.log(error)
-          error.popup.close();
-          break;
-        case 'unauthorized':
-          // alert(
-          //   'Please check for verification email and follow link before logging in.'
-          // );
-          setLoginUnauthorized(true);
-          break;
-      }
-      // console.error('loginWithPopup error');
-      // console.error(error);
-    } finally {
+    // await loginHelper(method, params);
+    switch (method) {
+      case 'popup':
+        try {
+          setLoginTimedOut(false);
+          setLoginUnauthorized(false);
+          await auth0Client.loginWithPopup(params);
+
+          // await auth0Client.loginWithPopup(params);
+          // await auth0Client.loginWithRedirect(params).then(token => {
+          //   console.log('token', token)
+          // });
+          const user = await auth0Client.getUser();
+          console.log('auth');
+          setUser(user);
+          setIsAuthenticated(true);
+          setLoginTimedOut(false);
+          setIsVerified(user?.email_verified);
+          console.log('auth0 logged in as', user);
+        } catch (error) {
+          switch (error.error) {
+            case 'timeout':
+              // alert('Session expired, please log in again.');
+              setLoginTimedOut(true);
+              console.log(error);
+              error.popup.close();
+              break;
+            case 'unauthorized':
+              // alert(
+              //   'Please check for verification email and follow link before logging in.'
+              // );
+              setLoginUnauthorized(true);
+              break;
+          }
+        }
+        // console.error('loginWithPopup error');
+        // console.error(error);
+        break;
+      case 'redirect':
+        await auth0Client.loginWithRedirect(params);
+        break;
+      default:
+        throw new Error(
+          'Invalid login method. Select one of popup or redirect'
+        );
     }
   };
 
@@ -106,11 +137,16 @@ export const Auth0Provider = ({
     console.log('auth0 logged in as', user);
   };
 
-  const logout = (...p) =>
+  const logout = (...p) => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('expires_at');
+    localStorage.removeItem('scopes');
     auth0Client.logout({
       returnTo: process.env.REACT_APP_AUTH0_CALLBACK_URL,
       ...p,
     });
+  };
 
   return (
     <Auth0Context.Provider
@@ -121,10 +157,11 @@ export const Auth0Provider = ({
         loading,
         loginTimedOut,
         loginUnauthorized,
-        loginWithPopup: () => loginWithPopup(),
         handleRedirectCallback,
+        loginWithPopup: (...p) => loginWith('popup', ...p),
+        loginWithRedirect: (...p) => loginWith('redirect', ...p),
         getIdTokenClaims: (...p) => auth0Client.getIdTokenClaims(...p),
-        loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
+        // loginWithRedirect: (...p) => auth0Client.loginWithRedirect(...p),
         getTokenSilently: (...p) => auth0Client.getTokenSilently(...p),
         getTokenWithPopup: (...p) => auth0Client.getTokenWithPopup(...p),
         logout,

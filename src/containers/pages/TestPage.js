@@ -6,6 +6,7 @@ const TestPage = (props) => {
   const {
     logout,
     loginWithPopup,
+    loginWithRedirect
   } = useAppContext();
   return (
     <Grid container justify="flex-start" spacing={2}>
@@ -16,7 +17,17 @@ const TestPage = (props) => {
           color="secondary"
           onClick={loginWithPopup}
         >
-          Log in
+          Log in (Popup)
+        </Button>
+      </Grid>
+      <Grid item>
+        <Button
+          id={'login'}
+          variant="contained"
+          color="secondary"
+          onClick={loginWithRedirect}
+        >
+          Log in (Redirect)
         </Button>
       </Grid>
       <Grid item>

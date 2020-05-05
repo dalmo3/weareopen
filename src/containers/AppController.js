@@ -32,6 +32,7 @@ export const AppController = ({ children, ...initOptions }) => {
   } = useStitch();
   const {
     loginWithPopup,
+    loginWithRedirect,
     isAuthenticated,
     user: auth0User,
     isVerified,
@@ -311,12 +312,12 @@ export const AppController = ({ children, ...initOptions }) => {
       alert('Please log in');
       return;
     }
-    if (!auth0User.email_verified) {
+    if (!isVerified) {
       alert('Please verify your email');
       return;
     }
     if (!userMeta.ownsActiveBusiness) {
-      alert('Please verify your email');
+      alert("You don't own this business");
       return;
     }
     console.log('inserting', businessData);
@@ -356,6 +357,7 @@ export const AppController = ({ children, ...initOptions }) => {
         loginTimedOut,
         loginUnauthorized,
         loginWithPopup,
+        loginWithRedirect,
         logout: stitchLogout,
         sideBarOpen,
         toggleSidebar,
