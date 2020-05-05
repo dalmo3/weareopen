@@ -24,7 +24,6 @@ const useInnerHeight = () => {
   const [vh, setVh] = useState(window.innerHeight);
   useEffect(() => {
     const handleResize = () => {
-      console.log(window.innerHeight)
       setVh(getInnerHeight)
     }
 
