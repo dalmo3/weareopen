@@ -28,7 +28,9 @@ describe('Auth', () => {
     //log out
     cy.get('[aria-label="account of current user"]').should('exist').click();
     cy.get('.MuiPopover-paper').contains('Log out').click();
-    
+  
+    // cy.clearLocalStorage() // just in case this might be necessary
+
     // logged out?
     cy.get('[aria-label="account of current user"]').should('not.exist');
     cy.contains('Tests').click();

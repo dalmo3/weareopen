@@ -23,14 +23,14 @@ const RouterTests = (props) => (
       component={Link}
       to="business/Onehunga%20Medical%20(2012)%20Ltd"
     >
-      Business owned
+      Business not owned
     </Button>
     <Button
       variant="outlined"
       component={Link}
       to="business/Zirco%20Abrasive%20Products%20Ltd"
     >
-      Business not owned
+      Business owned
     </Button>
   </Typography>
 );

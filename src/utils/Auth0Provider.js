@@ -138,10 +138,10 @@ export const Auth0Provider = ({
   };
 
   const logout = (...p) => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
-    localStorage.removeItem('scopes');
+    // localStorage.removeItem('access_token');
+    // localStorage.removeItem('id_token');
+    // localStorage.removeItem('expires_at');
+    // localStorage.removeItem('scopes');
     auth0Client.logout({
       returnTo: process.env.REACT_APP_AUTH0_CALLBACK_URL,
       ...p,

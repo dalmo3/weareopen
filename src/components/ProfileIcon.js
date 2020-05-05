@@ -50,12 +50,14 @@ const ProfileIcon = (props) => {
 
   const profileIcon = (
     <IconButton
+      id='navbar-profile-icon'
       edge="end"
       aria-label="account of current user"
       aria-controls={menuId}
       aria-haspopup="true"
       onClick={handleProfileMenuOpen}
       color="inherit"
+      data-cy='navbar-profile-icon'
     >
       <AccountCircle />
     </IconButton>
