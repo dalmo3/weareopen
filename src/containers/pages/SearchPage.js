@@ -13,33 +13,29 @@ const SearchPage = (props) => {
 
   const ConditionalIntent = (props) => {
     if (!addIntent) return null;
-    if (nothingFound) {
-      return (
-        <>
-          <Typography>OK, proceed</Typography>
-          <Button variant="contained" color="secondary" onClick={handleAddNew}>
-            Add New Business
-          </Button>
-        </>
-      );
-    } else {
-      return (
-        <Typography>
+    return (
+      <>
+        <Typography paragraph>
           First search for your business and make sure it is not on the site
           already. If you found it, click on it to claim it.
         </Typography>
-      );
-    }
+        {searchStatus === 'Finished' ? (
+          <Button variant="contained" color="secondary" onClick={handleAddNew}>
+            Nope, haven't found it
+          </Button>
+        ) : null}
+      </>
+    );
   };
 
   return (
     // <div >
     <Grid id="search-page" container direction="column" spacing={2}>
-      <Grid item >
+      <Grid item>
         <ConditionalIntent />
       </Grid>
-      <Grid item >
-        {results.length ? <ResultList results={results}/> : searchMessage}
+      <Grid item>
+        {results.length ? <ResultList results={results} /> : searchMessage}
       </Grid>
     </Grid>
     // </div>
