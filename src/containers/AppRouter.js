@@ -9,6 +9,7 @@ import ContactPage from './pages/ContactPage';
 import HelpPage from './pages/HelpPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TestPage from './pages/TestPage';
+import AboutPage from './pages/AboutPage';
 
 const AppRouter = (props) => {
   return (
@@ -16,6 +17,7 @@ const AppRouter = (props) => {
       <AppController path="/">
         <HomePage default />
         <SearchPage path="search" />
+        <AboutPage path="about" />
         <BusinessPage path="business/:businessSlug/*edit" />
         <ProfilePage path="profile" />
         <ContactPage path="contact" />
