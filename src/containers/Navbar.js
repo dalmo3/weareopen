@@ -1,16 +1,13 @@
 import React, { useMemo } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import { useMediaQuery, Link } from '@material-ui/core';
-import waoIcon from '../assets/img/wao-icon-amber-darkblue.svg';
-import waoLogoSquare from '../assets/img/wao-rect-amber-darkblue-unpadded.png';
 import { Link as RouterLink } from '@reach/router';
+import { useAppContext } from './AppController';
 import Search from '../components/Search';
 import ProfileIcon from '../components/ProfileIcon';
-import { useAppContext } from './AppController';
+import { makeStyles } from '@material-ui/core/styles';
+import { useMediaQuery, Link, AppBar, Toolbar, IconButton } from '@material-ui/core';
+import MenuIcon from '@material-ui/icons/Menu';
+import waoIcon from '../assets/img/wao-icon-amber-darkblue.svg';
+import waoLogoSquare from '../assets/img/wao-rect-amber-darkblue-unpadded.png';
 
 const useStyles = makeStyles((theme) => ({
   grow: {

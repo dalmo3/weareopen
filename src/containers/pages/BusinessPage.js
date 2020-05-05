@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Button, Link, Grid } from '@material-ui/core';
 import { navigate, Link as RouterLink } from '@reach/router';
-import { BusinessCard } from '../../components/BusinessCard';
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { useAppContext } from '../AppController';
 import BusinessForm from '../../components/BusinessForm';
-import { act } from 'react-dom/test-utils';
+import { BusinessCard } from '../../components/BusinessCard';
+import { Typography, Button, Link, Grid } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const BusinessPage = (props) => {
   const {

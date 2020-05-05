@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import IconButton from '@material-ui/core/IconButton';
 import { navigate } from '@reach/router';
 import { useAppContext } from '../containers/AppController';
-import { Badge } from '@material-ui/core';
+import { Badge, IconButton, Menu, MenuItem } from '@material-ui/core';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 const ProfileIcon = (props) => {
   const { isAuthenticated, isVerified, logout } = useAppContext();

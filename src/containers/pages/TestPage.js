@@ -1,7 +1,7 @@
 import React from 'react';
-import { Typography, Grid, Button } from '@material-ui/core';
-import { useAppContext } from '../AppController';
 import { Link } from '@reach/router';
+import { useAppContext } from '../AppController';
+import { Typography, Grid, Button } from '@material-ui/core';
 
 const RouterTests = (props) => (
   <Typography>

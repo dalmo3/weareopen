@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import ResultList from '../../components/ResultList';
 import { useAppContext } from '../AppController';
+import ResultList from '../../components/ResultList';
 import { Typography, Button, Grid } from '@material-ui/core';
 
 const SearchPage = (props) => {

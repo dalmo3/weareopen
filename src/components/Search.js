@@ -1,9 +1,9 @@
 import React from 'react';
-import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-import SearchIcon from '@material-ui/icons/Search';
-import { useAppContext } from '../containers/AppController';
 import { navigate } from '@reach/router';
+import { useAppContext } from '../containers/AppController';
+import InputBase from '@material-ui/core/InputBase';
+import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
+import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
   search: {

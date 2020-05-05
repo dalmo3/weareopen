@@ -1,7 +1,7 @@
 import React from 'react';
-import { Typography, Button, Grid } from '@material-ui/core';
 import { useAppContext } from '../AppController';
 import ResultList from '../../components/ResultList';
+import { Typography, Button, Grid } from '@material-ui/core';
 
 const LogInOut = (props) => {
   const { isVerified, handleAddIntent } = useAppContext();

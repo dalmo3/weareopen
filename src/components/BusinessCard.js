@@ -1,14 +1,19 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import {
+  Button,
+  Grid,
+  Box,
+  Chip,
+  CardContent,
+  CardActions,
+  IconButton,
+  Typography,
+  Avatar,
+  Card,
+  Collapse,
+} from '@material-ui/core';
 import { red, green, grey } from '@material-ui/core/colors';
-import Collapse from '@material-ui/core/Collapse';
-import { Button, Grid, Box, Chip } from '@material-ui/core';
 import ShareIcon from '@material-ui/icons/Share';
 import LinkIcon from '@material-ui/icons/Link';
 import PhoneIcon from '@material-ui/icons/Phone';
@@ -172,7 +177,8 @@ export const BusinessCard = (props) => {
           ) : null}
           <Box>
             <Typography variant="body2">
-              <strong>Address:</strong> {street_address + (street_address && suburb && ', ') + suburb}
+              <strong>Address:</strong>{' '}
+              {street_address + (street_address && suburb && ', ') + suburb}
             </Typography>
           </Box>
           <Box>

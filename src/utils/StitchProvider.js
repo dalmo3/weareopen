@@ -14,7 +14,7 @@ const stitchAppClient = Stitch.initializeDefaultAppClient(
   process.env.REACT_APP_STITCH_APP
 );
 
-export const StitchProvider = ({ children, ...initOptions }) => {
+const StitchProvider = ({ children, ...initOptions }) => {
   const {
     getTokenSilently,
     loading,
@@ -126,3 +126,5 @@ export const StitchProvider = ({ children, ...initOptions }) => {
     </StitchContext.Provider>
   );
 };
+
+export default StitchProvider

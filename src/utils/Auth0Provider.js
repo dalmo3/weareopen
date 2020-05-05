@@ -7,7 +7,7 @@ const DEFAULT_REDIRECT_CALLBACK = () =>
 
 export const Auth0Context = React.createContext();
 export const useAuth0 = () => useContext(Auth0Context);
-export const Auth0Provider = ({
+const Auth0Provider = ({
   children,
   onRedirectCallback = DEFAULT_REDIRECT_CALLBACK,
   ...initOptions
@@ -171,3 +171,5 @@ export const Auth0Provider = ({
     </Auth0Context.Provider>
   );
 };
+
+export default Auth0Provider

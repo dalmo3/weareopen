@@ -6,11 +6,11 @@ import React, {
   useCallback,
   useReducer,
 } from 'react';
-import _debounce from 'lodash/debounce';
 import { navigate, useLocation } from '@reach/router';
 import { useAuth0 } from '../utils/Auth0Provider';
 import { useStitch } from '../utils/StitchProvider';
 import AppView from './AppView';
+import _debounce from 'lodash/debounce';
 
 export const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
