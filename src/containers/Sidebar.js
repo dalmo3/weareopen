@@ -23,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
   list: {
     width: 250,
+    paddingTop: theme.spacing(5)
   },
   fullList: {
     width: 'auto',
@@ -82,14 +83,14 @@ const Sidebar = (props) => {
 
   return (
     <Drawer open={sideBarOpen} onClose={toggleSidebar(false)}>
-      <div className={classes.logoArea}>
+      {/* <div className={classes.logoArea}>
         <img
           height="100%"
           width="250px"
           src={waoLogoSquare}
           alt="we are open logo"
         />
-      </div>
+      </div> */}
       {list}
     </Drawer>
   );
