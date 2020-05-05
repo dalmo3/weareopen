@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form } from 'react-final-form';
 import * as Yup from 'yup';
 import {
@@ -19,6 +19,7 @@ import {
 } from 'mui-rff';
 import { useAppContext } from '../containers/AppController';
 import { regions } from '../assets/data/geo';
+import { navigate } from '@reach/router';
 
 const TITLE_CHAR_MAX = 50;
 const TITLE_CHAR_MIN = 3;
@@ -68,7 +69,8 @@ const schema = Yup.object().shape({
   }),
   contact: Yup.object().shape({
     email: Yup.string().ensure().email(MESSAGE_INVALID_EMAIL),
-    website: Yup.string().ensure().url(MESSAGE_INVALID_URL),
+    website: Yup.string().ensure().matches(/(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/
+    ,MESSAGE_INVALID_URL),
     phone: Yup.number().typeError(MESSAGE_INVALID_PHONE),
   }),
 });
@@ -90,13 +92,26 @@ const recursiveMakeRequired = (schema) => {
   }, {});
 };
 
+const addHttp = (url) => {
+  const [ ,protocol, addr] = url.match(/(http[s]?:\/\/)?(.*)/);
+  return (protocol || 'http://') + addr
+}
+
 const BusinessForm = (props) => {
-  const formData =
-    props.businessData || require('../utils/businessObject.json');
+  const initialValues = 
+  props.businessData || require('../utils/businessObject.json');
+  const [ formData, setFormData] = useState(initialValues)
+  
+  const handleReset = () => {
+    // setFormData(initialValues) 
+    navigate('./edit')
+  }
+
   const { submitEdit, activeBusiness } = useAppContext();
 
   const submitForm = (businessData) => {
     businessData.open_state.info_available = true
+    businessData.contact.website = addHttp(businessData.contact.website)
     submitEdit(businessData)
   }
   // const [formData, setFormData] = useState(require('../utils/businessObject.json'))
@@ -169,7 +184,7 @@ const BusinessForm = (props) => {
     },
     {
       size: 12,
-      field: <TextField label="Website" name="contact.website" />,
+      field: <TextField label="Website" name="contact.website" placeholder="https://..."/>,
     },
     {
       size: 6,
@@ -260,12 +275,15 @@ const BusinessForm = (props) => {
     },
   ];
 
+  const subscription = {submitting: true, initialValues: true}
+  // const handleReset = 
   return (
     <Form
       onSubmit={submitForm}
       initialValues={formData}
       validate={validate}
-      subscription={{submitting: true}}
+      subscription={subscription}
+      key={{submitting: true, initialValues: true}}
       render={({ handleSubmit, submitting, pristine, values }) => (
         <form onSubmit={handleSubmit} noValidate>
           <Paper style={{ padding: 16 }}>
@@ -279,7 +297,8 @@ const BusinessForm = (props) => {
                 <Button
                   type="button"
                   variant="contained"
-                  // onClick={reset}
+                  // onClick={e => navigate('')  }
+                  onClick={handleReset}
                   disabled={submitting || pristine}
                 >
                   Reset
