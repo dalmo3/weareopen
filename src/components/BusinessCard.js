@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red, green, grey } from '@material-ui/core/colors';
 import Collapse from '@material-ui/core/Collapse';
-import { Button, Grid } from '@material-ui/core';
+import { Button, Grid, Box } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,13 +20,26 @@ const useStyles = makeStyles((theme) => ({
         ? green[500]
         : red[500]
       : grey[500],
+    [theme.breakpoints.down('xs')]: {
+      width: 30,
+      height: 30,
+      fontSize: '0.75rem',
+    },
   }),
+  avatarBox: {
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(1),
+    },
+  },
   openIcon: (props) => ({
     color: props.info_available
       ? props.open_now
         ? green[500]
         : red[500]
       : grey[300],
+    fontSize: '0.875rem',
+    fontWeight: 'bold',
+    textAlign: 'center',
   }),
   expand: {
     transform: 'rotate(0deg)',
@@ -61,11 +74,7 @@ export const BusinessCard = (props) => {
       open_date,
       open_hours,
     },
-    category: {
-      category,
-      industry,
-      tags
-    },
+    category: { category, industry, tags },
     description: { short, long },
     contact: { email, website, phone },
   } = businessData;
@@ -81,8 +90,8 @@ export const BusinessCard = (props) => {
     setExpanded(!expanded);
   };
 
-  const openStateString = props.info_available
-    ? props.open_now
+  const openStateString = info_available
+    ? open_now
       ? 'Open'
       : 'Closed'
     : 'No info';
@@ -97,7 +106,7 @@ export const BusinessCard = (props) => {
           alignItems="flex-start"
           spacing={2}
         >
-          <Grid item xs={3} sm={2}>
+          <Grid item xs={2} sm={2}>
             <Grid container direction="column" alignItems="center">
               <Grid item>
                 <Avatar aria-label="business" className={classes.avatar}>
@@ -105,19 +114,11 @@ export const BusinessCard = (props) => {
                 </Avatar>
               </Grid>
               <Grid item>
-                <Typography
-                  className={classes.openIcon}
-                  style={{
-                    fontSize: '0.875rem',
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {openStateString}
-                </Typography>
+                <Typography>{openStateString}</Typography>
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={9} sm={10}>
+          <Grid item xs={10} sm={10}>
             <Typography variant="h5" component="h2">
               {title}
             </Typography>
@@ -126,7 +127,32 @@ export const BusinessCard = (props) => {
         </Grid>
       </CardContent>
       <CardContent>
-        <Typography variant="body2" color="textSecondary" component="p">
+        <Grid container direction="row" justify="flex-start"> 
+          <Grid item>
+            <Typography variant="body2">Open Hours: {open_hours}</Typography>
+          </Grid>
+        </Grid>
+      </CardContent>
+      <CardContent>
+        <Box display="flex" flexDirection="column">
+          <Box>
+            <Typography variant="body2">
+              {street_address + (street_address && suburb && ', ') + suburb}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="body2">
+              {city + (city && region && ', ') + region}
+            </Typography>
+          </Box>
+        </Box>
+      </CardContent>
+      <CardContent>
+        <Typography
+          variant="body2"
+          paragraph
+          style={{ wordWrap: 'break-word' }}
+        >
           {short || 'No description provided'}
         </Typography>
         <Grid container>
@@ -162,7 +188,9 @@ export const BusinessCard = (props) => {
       {long ? (
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph></Typography>
+            <Typography paragraph style={{ wordWrap: 'break-word' }}>
+              {long}
+            </Typography>
           </CardContent>
         </Collapse>
       ) : null}

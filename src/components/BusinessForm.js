@@ -95,6 +95,10 @@ const BusinessForm = (props) => {
     props.businessData || require('../utils/businessObject.json');
   const { submitEdit, activeBusiness } = useAppContext();
 
+  const submitForm = (businessData) => {
+    businessData.open_state.info_available = true
+    submitEdit(businessData)
+  }
   // const [formData, setFormData] = useState(require('../utils/businessObject.json'))
 
   // useEffect(()=> {
@@ -108,7 +112,7 @@ const BusinessForm = (props) => {
   // console.log(active);
   // console.log(required);
 
-  const formFields = ({values}) => [
+  const formFields = ({values}) => [  
     {
       size: 12,
       field: <TextField label="Business Name" name="title" />,
@@ -126,7 +130,9 @@ const BusinessForm = (props) => {
     },
     {
       size: 6,
-      field: <TextField label="Open Hours" disabled={!values.open_state.open_now} name="open_state.open_hours" />,
+      field: <TextField label="Open Hours" 
+      // disabled={!values.open_state.open_now} 
+      name="open_state.open_hours" />,
     },
     {
       size: 6,
@@ -256,9 +262,10 @@ const BusinessForm = (props) => {
 
   return (
     <Form
-      onSubmit={submitEdit}
+      onSubmit={submitForm}
       initialValues={formData}
       validate={validate}
+      subscription={{submitting: true}}
       render={({ handleSubmit, submitting, pristine, values }) => (
         <form onSubmit={handleSubmit} noValidate>
           <Paper style={{ padding: 16 }}>
@@ -294,7 +301,7 @@ const BusinessForm = (props) => {
             <Typography>
               <strong>Form field data</strong>
             </Typography>
-            <Debug />
+            {/* <Debug /> */}
           </Paper>
         </form>
       )}
