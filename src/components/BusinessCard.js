@@ -8,11 +8,18 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import { red, green, grey } from '@material-ui/core/colors';
 import Collapse from '@material-ui/core/Collapse';
-import { Button, Grid, Box } from '@material-ui/core';
+import { Button, Grid, Box, Chip } from '@material-ui/core';
+import ShareIcon from '@material-ui/icons/Share';
+import LinkIcon from '@material-ui/icons/Link';
+import PhoneIcon from '@material-ui/icons/Phone';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     // maxWidth: 345,
+  },
+  header: {
+    // backgroundColor: theme.palette.primary.light
+    paddingBottom: theme.spacing(1),
   },
   avatar: (props) => ({
     backgroundColor: props.info_available
@@ -23,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       width: 30,
       height: 30,
-      fontSize: '0.75rem',
+      fontSize: '0.875rem',
     },
   }),
   avatarBox: {
@@ -37,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
         ? green[500]
         : red[500]
       : grey[300],
-    fontSize: '0.875rem',
+    // fontSize: '0.875rem',
     fontWeight: 'bold',
     textAlign: 'center',
   }),
@@ -53,6 +60,18 @@ const useStyles = makeStyles((theme) => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)',
+  },
+  tags: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
+  address: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
+  hours: {
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
   },
 }));
 
@@ -98,7 +117,7 @@ export const BusinessCard = (props) => {
 
   return (
     <Card className={classes.root}>
-      <CardContent>
+      <CardContent className={classes.header}>
         <Grid
           container
           direction="row"
@@ -114,7 +133,9 @@ export const BusinessCard = (props) => {
                 </Avatar>
               </Grid>
               <Grid item>
-                <Typography>{openStateString}</Typography>
+                <Typography variant="body2" style={{ textAlign: 'center' }}>
+                  <strong>{openStateString}</strong>
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -122,22 +143,36 @@ export const BusinessCard = (props) => {
             <Typography variant="h5" component="h2">
               {title}
             </Typography>
-            <Typography>{locationDisplay}</Typography>
+            <Typography>{category}</Typography>
           </Grid>
         </Grid>
       </CardContent>
-      <CardContent>
-        <Grid container direction="row" justify="flex-start"> 
-          <Grid item>
-            <Typography variant="body2">Open Hours: {open_hours}</Typography>
-          </Grid>
+      <CardContent className={classes.tags}>
+        <Grid container direction="row" justify="flex-start" spacing={1}>
+          {[industry].concat(tags).map((tag) => (
+            <Grid item key={tag}>
+              <Chip label={tag} color="secondary"></Chip>
+            </Grid>
+          ))}
         </Grid>
+      </CardContent>
+      <CardContent>
+        <Typography style={{ wordBreak: 'break-word' }}>
+          {short || 'No description provided'}
+        </Typography>
       </CardContent>
       <CardContent>
         <Box display="flex" flexDirection="column">
+          {open_now ? (
+            <Box>
+              <Typography variant="body2">
+                <strong>Open Hours:</strong> {open_hours}
+              </Typography>
+            </Box>
+          ) : null}
           <Box>
             <Typography variant="body2">
-              {street_address + (street_address && suburb && ', ') + suburb}
+              <strong>Address:</strong> {street_address + (street_address && suburb && ', ') + suburb}
             </Typography>
           </Box>
           <Box>
@@ -147,15 +182,8 @@ export const BusinessCard = (props) => {
           </Box>
         </Box>
       </CardContent>
-      <CardContent>
-        <Typography
-          variant="body2"
-          paragraph
-          style={{ wordWrap: 'break-word' }}
-        >
-          {short || 'No description provided'}
-        </Typography>
-        <Grid container>
+      <CardActions disableSpacing>
+        {/* <Grid container>
           {
             <Grid item>
               <IconButton></IconButton>
@@ -163,32 +191,30 @@ export const BusinessCard = (props) => {
             </Grid>
           }
           <Grid item></Grid>
-        </Grid>
-      </CardContent>
-      <CardActions disableSpacing>
-        {/* <IconButton aria-label="share">
+        </Grid> */}
+        <IconButton aria-label="share">
           <ShareIcon />
         </IconButton>
-        <IconButton aria-label="phone">
-          <ShareIcon />
+        <IconButton href={website} aria-label="phone">
+          <LinkIcon />
         </IconButton>
-        <IconButton aria-label="website">
-          <ShareIcon />
-        </IconButton> */}
+        <IconButton href={`tel:${phone}`} aria-label="website">
+          <PhoneIcon />
+        </IconButton>
         {long ? (
           <Button
             className={classes.showMore}
             onClick={handleExpandClick}
             aria-expanded={expanded}
           >
-            {expanded ? 'Show less' : 'Show more'}
+            {expanded ? 'Show less' : 'Full description'}
           </Button>
         ) : null}
       </CardActions>
       {long ? (
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
-            <Typography paragraph style={{ wordWrap: 'break-word' }}>
+            <Typography paragraph style={{ wordBreak: 'break-word' }}>
               {long}
             </Typography>
           </CardContent>

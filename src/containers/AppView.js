@@ -36,9 +36,13 @@ const RouterTests = (props) => (
 );
 
 const useStyles = makeStyles((theme) => ({
-
-
-}))
+  container: {
+    minHeight: '100vh',
+    backgroundColor: grey[50],
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(5),
+  },
+}));
 
 export const AppView = (props) => {
   const classes = useStyles();
@@ -48,13 +52,12 @@ export const AppView = (props) => {
     handleSearchInputChange,
     sideBarOpen,
   } = useAppContext();
-  
 
   return (
     <AppTheme>
       <Container
         id="app"
-        style={{ height: '100vh', backgroundColor: grey[50] }}
+        className={classes.container}
         disableGutters={true}
         maxWidth={false}
       >
@@ -70,7 +73,7 @@ export const AppView = (props) => {
         </Container>
         <Footer id="footer" />
       </Container>
-      <AlertBar/>
+      <AlertBar />
     </AppTheme>
   );
 };

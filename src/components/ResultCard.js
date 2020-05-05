@@ -10,7 +10,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import { Grid } from '@material-ui/core';
 import { useAppContext } from '../containers/AppController';
 
-const useStyles = makeStyles((props) => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     // maxWidth: 345,
   },
@@ -18,13 +18,13 @@ const useStyles = makeStyles((props) => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
-  avatar: {
+  avatar: (props) => ({
     backgroundColor: props.info_available
       ? props.open_now
         ? green[500]
         : red[500]
       : grey[500],
-  },
+  }),
   openIcon: (props) =>
     props.info_available
       ? props.open_now
@@ -39,6 +39,7 @@ const ResultCard = (props) => {
     location: {
       address: { city, region, suburb, street_address },
     },
+    category: { category, industry },
     open_state: { info_available, open_alert_level, open_now },
   } = props.result;
 
@@ -46,13 +47,13 @@ const ResultCard = (props) => {
     ? suburb + (city ? ', ' + city : region ? ', ' + region : '')
     : city || (street_address ? street_address + ', ' + region : region);
 
-  const openStateString = props.info_available
-    ? props.open_now
+  const openStateString = info_available
+    ? open_now
       ? 'Open'
       : 'Closed'
     : 'No info';
 
-  const {openBusinessPage} = useAppContext()
+  const { openBusinessPage } = useAppContext();
 
   const classes = useStyles({ info_available, open_now });
 
@@ -69,7 +70,7 @@ const ResultCard = (props) => {
             </Grid>
             <Grid item>
               <Typography
-                className={classes.openIcon}
+                // className={classes.openIcon}
                 style={{
                   fontSize: '0.875rem',
                   fontWeight: 'bold',
@@ -84,13 +85,24 @@ const ResultCard = (props) => {
           <IconButton
             className={classes.openIcon}
             aria-label="open business page"
-            onClick={(e) => {openBusinessPage(e, props.result)}}
+            onClick={(e) => {
+              openBusinessPage(e, props.result);
+            }}
           >
             <ChevronRightIcon />
           </IconButton>
         }
-        title={title}
-        subheader={locationDisplay}
+        title={
+          <Typography variant="body1" component="h3">
+            {title}
+          </Typography>
+        }
+        subheader={
+          <>
+            <Typography variant="body2">{locationDisplay}</Typography>
+            <Typography variant="body2" color='textPrimary'>{category}</Typography>
+          </>
+        }
       />
     </Card>
   );
