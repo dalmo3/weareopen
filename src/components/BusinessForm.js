@@ -316,12 +316,12 @@ const BusinessForm = (props) => {
               </Grid>
             </Grid>
           </Paper>
-          <Paper>
+          {/* <Paper>
             <Typography>
               <strong>Form field data</strong>
             </Typography>
-            {/* <Debug /> */}
-          </Paper>
+            <Debug />
+          </Paper> */}
         </form>
       )}
     />
