@@ -15,16 +15,17 @@ const Auth0Provider = ({
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [user, setUser] = useState();
-  const [auth0Client, setAuth0] = useState();
+  const [auth0Client, setAuth0Client] = useState();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const initAuth0 = async () => {
+      let auth0FromHook;
       try {
         console.log('initializing auth0client... ');
-        const auth0FromHook = await createAuth0Client(initOptions);
+        auth0FromHook = await createAuth0Client(initOptions);
         console.log('initialized auth0client... ');
-        setAuth0(auth0FromHook);
+        setAuth0Client(auth0FromHook);
 
         if (
           window.location.search.includes('code=') &&
@@ -43,8 +44,10 @@ const Auth0Provider = ({
           setUser(user);
           console.log('auth0entitcated...');
           setIsVerified(user.email_verified);
+        } else {
         }
       } catch (e) {
+        auth0FromHook.logout();
         console.error('error creating auth0 client', e);
       }
       setLoading(false);
@@ -104,13 +107,13 @@ const Auth0Provider = ({
               setLoginTimedOut(true);
               console.log(error);
               error.popup.close();
-              break;
             case 'unauthorized':
               // alert(
               //   'Please check for verification email and follow link before logging in.'
               // );
               setLoginUnauthorized(true);
-              break;
+            default:
+              setTimeout(logout, 6000);
           }
         }
         // console.error('loginWithPopup error');
@@ -172,4 +175,4 @@ const Auth0Provider = ({
   );
 };
 
-export default Auth0Provider
+export default Auth0Provider;
