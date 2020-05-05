@@ -64,6 +64,8 @@ const theme = createMuiTheme({
   },
 });
 
-export const AppTheme = React.memo(({ children }) => (
+const AppTheme = React.memo(({ children }) => (
   <ThemeProvider theme={theme}>{children}</ThemeProvider>
 ));
+
+export default AppTheme

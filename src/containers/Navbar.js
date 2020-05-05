@@ -10,6 +10,7 @@ import waoLogoSquare from '../assets/img/wao-rect-amber-darkblue-unpadded.png';
 import { Link as RouterLink } from '@reach/router';
 import Search from '../components/Search';
 import ProfileIcon from '../components/ProfileIcon';
+import { useAppContext } from './AppController';
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -57,6 +58,7 @@ export default function Navbar(props) {
       );
     }, [sm]);
 
+  const { toggleSidebar } = useAppContext();
   return (
     <div className={classes.grow}>
       <AppBar
@@ -71,7 +73,7 @@ export default function Navbar(props) {
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
-            onClick={props.toggleSidebar(true)}
+            onClick={toggleSidebar(true)}
           >
             <MenuIcon />
           </IconButton>

@@ -6,11 +6,9 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 import { navigate } from '@reach/router';
 import { useAppContext } from './AppController';
-import { Button } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import HelpIcon from '@material-ui/icons/Help';
@@ -39,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 const Sidebar = (props) => {
   const classes = useStyles();
 
-  const { toggleSidebar, loginWithPopup } = useAppContext();
+  const { toggleSidebar, sideBarOpen } = useAppContext();
 
   const list = (
     <div
@@ -77,7 +75,7 @@ const Sidebar = (props) => {
       <Divider />
 
       <List>
-        <ListItem button onClick={e=>navigate('/profile')}>
+        <ListItem button onClick={(e) => navigate('/profile')}>
           <ListItemIcon>
             <AccountCircleIcon />
           </ListItemIcon>
@@ -88,9 +86,14 @@ const Sidebar = (props) => {
   );
 
   return (
-    <Drawer open={props.openState} onClose={props.toggleSidebar(false)}>
+    <Drawer open={sideBarOpen} onClose={toggleSidebar(false)}>
       <div className={classes.logoArea}>
-        <img height="100%" width="250px" src={waoLogoSquare} alt="we are open logo" />
+        <img
+          height="100%"
+          width="250px"
+          src={waoLogoSquare}
+          alt="we are open logo"
+        />
       </div>
       {list}
     </Drawer>

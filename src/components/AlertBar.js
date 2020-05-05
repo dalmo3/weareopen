@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSnackbarContext } from '../containers/AppController';
 import MuiAlert from '@material-ui/lab/Alert';
-import { Snackbar } from '@material-ui/core';
+import Snackbar from '@material-ui/core/Snackbar';
 
 const AlertBar = (props) => {
   const {

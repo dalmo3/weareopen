@@ -67,7 +67,7 @@ const BusinessPage = (props) => {
 
   const ClaimBusiness = (props) =>
     userMeta.canClaimBusiness ? (
-      <Button variant="contained" onClick={handleClaim}>
+      <Button onClick={handleClaim}>
         Claim Business
       </Button>
     ) : userMeta.canReport ? (
@@ -117,21 +117,13 @@ const BusinessPage = (props) => {
 
   return (
     <div id="business-page">
-      <Grid container direction="row">
-        <Grid item>
-          <NotFound />
-        </Grid>
-        <Grid item>
-          <BackToResults />
-          <BackToProfile />
-          <ConditionalCard />
-          <ConditionalForm />
-        </Grid>
-        <Grid item>
-          <ClaimBusiness />
-          <EditBusiness />
-        </Grid>
-      </Grid>
+      <NotFound />
+      <BackToResults />
+      <BackToProfile />
+      <ConditionalCard />
+      <ConditionalForm />
+      <ClaimBusiness />
+      <EditBusiness />
     </div>
   );
 };

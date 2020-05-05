@@ -6,11 +6,11 @@ import React, {
   useCallback,
   useReducer,
 } from 'react';
-import { useAuth0 } from '../utils/Auth0Provider';
-import { useStitch } from '../utils/StitchProvider';
 import _debounce from 'lodash/debounce';
 import { navigate, useLocation } from '@reach/router';
-import { AppView } from './AppView';
+import { useAuth0 } from '../utils/Auth0Provider';
+import { useStitch } from '../utils/StitchProvider';
+import AppView from './AppView';
 
 export const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
@@ -18,7 +18,7 @@ export const useAppContext = () => useContext(AppContext);
 export const SnackbarContext = createContext();
 export const useSnackbarContext = () => useContext(SnackbarContext);
 
-export const AppController = ({ children, ...initOptions }) => {
+const AppController = ({ children, ...initOptions }) => {
   const {
     stitchUser,
     stitchReady,
@@ -374,3 +374,5 @@ export const AppController = ({ children, ...initOptions }) => {
     </AppContext.Provider>
   );
 };
+
+export default AppController

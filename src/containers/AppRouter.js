@@ -4,11 +4,11 @@ import ProfilePage from './pages/ProfilePage';
 import HomePage from './pages/HomePage';
 import BusinessPage from './pages/BusinessPage';
 import SearchPage from './pages/SearchPage';
-import { AppView } from './AppView';
 import TestPage from './pages/TestPage';
 import ContactPage from './pages/ContactPage';
 import PrivacyPage from './pages/PrivacyPage';
-import { AppController } from './AppController';
+import AppController from './AppController';
+import HelpPage from './pages/HelpPage';
 
 export const AppRouter = (props) => {
   return (
@@ -21,6 +21,7 @@ export const AppRouter = (props) => {
         <TestPage path="tests" />
         <PrivacyPage path="privacy-policy" />
         <ContactPage path="contact" />
+        <HelpPage path="help" />
       </AppController>
     </Router>
   );
