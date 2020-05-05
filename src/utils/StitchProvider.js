@@ -36,12 +36,12 @@ const StitchProvider = ({ children, ...initOptions }) => {
   const stitchLogout = async (e) => {
     if (isAuthenticated) {
       console.log('loggin out out Stitch ...');
-      await stitchAppClient.auth.removeUser();
-      console.log('loggin out of Auth0 ...');
-      logout();
+      await stitchAppClient.auth?.removeUser();
     } else {
       console.log('not logged in');
     }
+    console.log('loggin out of Auth0 ...');
+    logout();
   };
 
   // INITIALIZE DB
@@ -103,9 +103,8 @@ const StitchProvider = ({ children, ...initOptions }) => {
       { returnNewDocument: true, upsert: true }
     );
 
-  const findUserBusinesses = () => 
-    remoteMongoCollection.find({"admin.admin_id": stitchUser.id}).toArray()
-  
+  const findUserBusinesses = () =>
+    remoteMongoCollection.find({ 'admin.admin_id': stitchUser.id }).toArray();
 
   return (
     <StitchContext.Provider
@@ -127,4 +126,4 @@ const StitchProvider = ({ children, ...initOptions }) => {
   );
 };
 
-export default StitchProvider
+export default StitchProvider;
