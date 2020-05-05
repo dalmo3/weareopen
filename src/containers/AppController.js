@@ -95,7 +95,7 @@ const AppController = ({ children, ...initOptions }) => {
 
   // opening from results, no need for api call
   const openBusinessPage = (e, businessData) => {
-    updateActiveBusiness(businessData);
+    setActiveBusiness(businessData);
     console.log(location);
     navigate(`/business/${businessData.title}`, {
       state: { referrer: location.pathname },
@@ -114,7 +114,7 @@ const AppController = ({ children, ...initOptions }) => {
   // if db is ready make the call
   const findOne = (title) =>
     findBusinessByTitle(title).then((doc) => {
-      updateActiveBusiness(doc || {});
+      setActiveBusiness(doc || {});
       setFetchTitle('');
       setIsFetching(false);
       // console.log('got1', doc);
@@ -134,7 +134,7 @@ const AppController = ({ children, ...initOptions }) => {
 
   const userMetaReducer = (state, action) => {
     switch (action.type) {
-      case 'findBusinesses':
+      case 'updateBusinesses':
         return {
           ...state,
           businesses: action.payload,
@@ -144,9 +144,9 @@ const AppController = ({ children, ...initOptions }) => {
         console.log('actions');
         return {
           ...state,
-          ownsActiveBusiness: stitchUser.id === activeBusiness.admin.admin_id,
-          canClaimBusiness: isVerified && !activeBusiness.admin.has_admin,
-          canReport: stitchUser.id !== activeBusiness.admin.admin_id,
+          ownsActiveBusiness: hasActiveBusiness && stitchUser.id === activeBusiness.admin?.admin_id,
+          canClaimBusiness: hasActiveBusiness && isVerified && !activeBusiness.admin?.has_admin,
+          canReport: hasActiveBusiness && stitchUser.id !== activeBusiness.admin?.admin_id,
         };
       default:
         throw new Error();
@@ -168,7 +168,7 @@ const AppController = ({ children, ...initOptions }) => {
     if (stitchUser?.profile?.data?.verified && !isClaiming) {
       findUserBusinesses().then((businesses) => {
         console.log(businesses);
-        setUserMeta({ type: 'findBusinesses', payload: businesses });
+        setUserMeta({ type: 'updateBusinesses', payload: businesses });
       });
     }
   }, [stitchUser, isClaiming]);
@@ -255,19 +255,24 @@ const AppController = ({ children, ...initOptions }) => {
     resetSearchState();
   };
 
+  const replaceBusinessInArray = (business, array) => array.map((result) =>
+  JSON.stringify(result._id.id) === JSON.stringify(business._id.id)
+    ? business
+    : result
+)
+
   const updateActiveBusiness = (business) => {
     setActiveBusiness(business);
     console.log('updating', business);
     console.log('results', results);
     if (business._id && results.length) {
-      const updatedResults = results.map((result) =>
-        JSON.stringify(result._id.id) === JSON.stringify(business._id.id)
-          ? business
-          : result
-      );
+      const updatedResults = replaceBusinessInArray(business,results)
       console.log('updresults', updatedResults);
       setResults(updatedResults);
     }
+    const updatedUserBusinesses = replaceBusinessInArray(business, userMeta.businesses) || [business];
+
+    setUserMeta({type: 'updateBusinesses', payload: updatedUserBusinesses})
   };
 
   const handleClaim = async (e) => {
@@ -327,7 +332,7 @@ const AppController = ({ children, ...initOptions }) => {
         console.log('inserted', updated);
         updateActiveBusiness(updated);
         setIsEditing(false);
-        navigate(`/business/${updated.title}`);
+        navigate(`/business/${updated.title}`,{ replace: true });
       })
       .catch(console.error);
   };

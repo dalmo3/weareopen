@@ -43,12 +43,12 @@ const BusinessPage = (props) => {
     notFound ? <Typography>This business does not exist</Typography> : null;
 
   const ConditionalCard = (props) =>
-    hasActiveBusiness && !isEditing ? (
+    hasActiveBusiness && !isEditing && !isFetching? (
       <BusinessCard businessData={activeBusiness} />
     ) : null;
 
   const BackToResults = (props) =>
-    results.length && !isEditing ? (
+  referrer === '/search' && results.length && !isEditing ? (
       <Button onClick={(e) => navigate(`/search`)}>
         <ArrowBackIcon />
         Back to Results
@@ -83,14 +83,14 @@ const BusinessPage = (props) => {
 
   const EditBusiness = (props) => {
     return userMeta.ownsActiveBusiness && !isEditing ? (
-      <Button onClick={handleEditLocal}>EditBusiness</Button>
+      <Button onClick={handleEditLocal}>Edit Business</Button>
     ) : null;
   };
   const [editIntent, setEditIntent] = useState(props.edit === 'edit');
   const [isEditing, setIsEditing] = useState(false);
   const [isPreview, setIsPreview] = useState(false);
   const handleEditLocal = (e) => {
-    props.navigate('edit');
+    props.navigate('edit', {replace: true});
     setIsEditing(true);
   };
 
