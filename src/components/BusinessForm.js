@@ -25,7 +25,9 @@ const TITLE_CHAR_MAX = 50;
 const TITLE_CHAR_MIN = 3;
 const SHORT_DESCRIPTION_CHAR_MAX = 240;
 const LONG_DESCRIPTION_CHAR_MAX = 1000;
+// eslint-disable-next-line
 const MESSAGE_STRING_TOO_LONG = 'Too long, maximum ${max} characters';
+// eslint-disable-next-line
 const MESSAGE_STRING_TOO_SHORT = 'Too short, minimum ${min} characters';
 const MESSAGE_INVALID_EMAIL = 'Invalid email';
 const MESSAGE_INVALID_URL = 'Invalid url';
@@ -52,6 +54,7 @@ const schema = Yup.object().shape({
     }),
   }),
   category: Yup.object().shape({
+    // eslint-disable-next-line
     tags: Yup.array().max(3, 'Max ${max} tags'),
     category: Yup.string().ensure().required(SELECTION_REQUIRED),
     industry: Yup.string().ensure().required(SELECTION_REQUIRED),
@@ -72,7 +75,7 @@ const schema = Yup.object().shape({
     website: Yup.string()
       .ensure()
       .matches(
-        /^$|(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/,
+        /^$|(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/,
         MESSAGE_INVALID_URL
       ),
     phone: Yup.number().typeError(MESSAGE_INVALID_PHONE),

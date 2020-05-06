@@ -14,6 +14,7 @@ import {
 import waoLogoSquareLg from '../../assets/img/wao-rect-outline-amber-darkblue-1200.png';
 import waoLogoSquareMd from '../../assets/img/wao-rect-outline-amber-darkblue-600.png';
 import SearchHome from '../../components/SearchHome';
+import RollingText from '../../components/RollingText';
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -51,11 +52,14 @@ const HomePage = (props) => {
     <div id="homepage">
       {/* <Paper className={classes.container}> */}
       <Grid container direction="column" alignItems="center" spacing={4}>
-        <Grid item style={{ width: '80%' }}>
+        <Grid item style={{ width: '60%' }}>
           <Logo />
         </Grid>
         <Grid item>
-          <Typography variant="h6" style={{ textAlign: 'center' }}>
+          <RollingText/>
+        </Grid>
+        <Grid item>
+          <Typography variant="h6" style={{ textAlign: 'center', fontWeight: 'bold' }}>
             Search for your favourite businesses and how they're operating.
             <br/>
             List your business and let your clients spread the message!

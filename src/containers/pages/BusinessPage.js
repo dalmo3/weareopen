@@ -96,7 +96,7 @@ const BusinessPage = (props) => {
 
   useEffect(() => {
     setEditIntent(props.edit === 'edit');
-  });
+  },[props.edit]);
 
   const [canEdit, setCanEdit] = useState(false);
   useEffect(() => {
