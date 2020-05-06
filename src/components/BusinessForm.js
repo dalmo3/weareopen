@@ -36,7 +36,7 @@ const yupStringMax = (max) =>
   Yup.string().ensure().trim().max(max, MESSAGE_STRING_TOO_LONG);
 
 const yupStringMin = (min) =>
-  Yup.string().ensure().trim().min(min, MESSAGE_STRING_TOO_LONG);
+  Yup.string().ensure().trim().min(min, MESSAGE_STRING_TOO_SHORT);
 
 const schema = Yup.object().shape({
   title: yupStringMax(TITLE_CHAR_MAX)
@@ -72,7 +72,7 @@ const schema = Yup.object().shape({
     website: Yup.string()
       .ensure()
       .matches(
-        /(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/,
+        /^$|(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/,
         MESSAGE_INVALID_URL
       ),
     phone: Yup.number().typeError(MESSAGE_INVALID_PHONE),
@@ -97,6 +97,7 @@ const recursiveMakeRequired = (schema) => {
 };
 
 const addHttp = (url) => {
+  if (!url) return '';
   const [, protocol, addr] = url.match(/(http[s]?:\/\/)?(.*)/);
   return (protocol || 'http://') + addr;
 };
