@@ -144,9 +144,14 @@ const AppController = ({ children, ...initOptions }) => {
         console.log('actions');
         return {
           ...state,
-          ownsActiveBusiness: hasActiveBusiness && stitchUser.id === activeBusiness.admin?.admin_id,
-          canClaimBusiness: hasActiveBusiness && isVerified && !activeBusiness.admin?.has_admin,
-          canReport: hasActiveBusiness && stitchUser.id !== activeBusiness.admin?.admin_id,
+          ownsActiveBusiness:
+            hasActiveBusiness &&
+            stitchUser.id === activeBusiness.admin?.admin_id,
+          canClaimBusiness:
+            hasActiveBusiness && isVerified && !activeBusiness.admin?.has_admin,
+          canReport:
+            hasActiveBusiness &&
+            stitchUser.id !== activeBusiness.admin?.admin_id,
         };
       default:
         throw new Error();
@@ -224,14 +229,13 @@ const AppController = ({ children, ...initOptions }) => {
   }, [loginTimedOut, loginUnauthorized]);
 
   const displaySnackbar = (severity, message) => {
-
     setSnackbarState({
       open: true,
       autoHideduration: 10000,
       severity,
-      message
+      message,
     });
-  }
+  };
   //
   // ADD BUSINESS FLOW
   //
@@ -264,24 +268,38 @@ const AppController = ({ children, ...initOptions }) => {
     resetSearchState();
   };
 
-  const replaceBusinessInArray = (business, array) => array.map((result) =>
-  JSON.stringify(result._id.id) === JSON.stringify(business._id.id)
-    ? business
-    : result
-)
+  const replaceBusinessInArray = (business, array) =>
+    array.map((result) =>
+      JSON.stringify(result._id.id) === JSON.stringify(business._id.id)
+        ? business
+        : result
+    );
+
+  const replaceOrAddBusinessInArray = (business, array) => {
+    const removed = array.filter(
+      (biz) => JSON.stringify(biz._id.id) !== JSON.stringify(business._id.id)
+    );
+
+    return [business, ...removed];
+  };
 
   const updateActiveBusiness = (business) => {
     setActiveBusiness(business);
     console.log('updating', business);
     console.log('results', results);
-    if (business._id && results.length) {
-      const updatedResults = replaceBusinessInArray(business,results)
-      console.log('updresults', updatedResults);
-      setResults(updatedResults);
-    }
-    const updatedUserBusinesses = replaceBusinessInArray(business, userMeta.businesses) || [business];
+    if (business._id) {
+      if (results.length) {
+        const updatedResults = replaceBusinessInArray(business, results);
+        console.log('updresults', updatedResults);
+        setResults(updatedResults);
+      }
+      const updatedUserBusinesses = replaceOrAddBusinessInArray(
+        business,
+        userMeta.businesses
+      );
 
-    setUserMeta({type: 'updateBusinesses', payload: updatedUserBusinesses})
+      setUserMeta({ type: 'updateBusinesses', payload: updatedUserBusinesses });
+    }
   };
 
   const handleClaim = async (e) => {
@@ -341,7 +359,7 @@ const AppController = ({ children, ...initOptions }) => {
         console.log('inserted', updated);
         updateActiveBusiness(updated);
         setIsEditing(false);
-        navigate(`/business/${updated.title}`,{ replace: true });
+        navigate(`/business/${updated.title}`, { replace: true });
       })
       .catch(console.error);
   };
@@ -375,7 +393,7 @@ const AppController = ({ children, ...initOptions }) => {
         logout: stitchLogout,
         sideBarOpen,
         toggleSidebar,
-        displaySnackbar
+        displaySnackbar,
       }}
     >
       <SnackbarContext.Provider
@@ -390,4 +408,4 @@ const AppController = ({ children, ...initOptions }) => {
   );
 };
 
-export default AppController
+export default AppController;
