@@ -6,14 +6,15 @@
   },
   "contact": {
     "email": "",
-    "website": ""
+    "website": "",
+    "phone": ""
   },
   "location": {
     "address": {
       "street_address": "",
       "city": "",
       "suburb": "",
-      "region": ""
+      "region": "All New Zealand"
     },
     "coordinates": {
       "lon": 0.0,
@@ -21,8 +22,8 @@
     }
   },
   "category": {
-    "industry": "",
-    "category": "",
+    "industry": "Other",
+    "category": "Other",
     "tags": []
   },
   "open_state": {

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { navigate } from '@reach/router';
+import { useAppContext } from '../containers/AppController';
 import { Form } from 'react-final-form';
 import * as Yup from 'yup';
 import {
@@ -17,9 +19,9 @@ import {
   Debug,
   Checkboxes,
 } from 'mui-rff';
-import { useAppContext } from '../containers/AppController';
-import { regions } from '../assets/data/geo';
-import { navigate } from '@reach/router';
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { regions, categories, industries } from '../assets/data/formValues';
+import templateValues from '../utils/businessObject.json'
 
 const TITLE_CHAR_MAX = 50;
 const TITLE_CHAR_MIN = 3;
@@ -106,8 +108,12 @@ const addHttp = (url) => {
 };
 
 const BusinessForm = (props) => {
-  const initialValues =
-    props.businessData || require('../utils/businessObject.json');
+  const initialValues = {
+    ...templateValues,
+    ...props.businessData
+  }
+    // props.businessData || require('../utils/businessObject.json');
+
   const [formData, setFormData] = useState(initialValues);
 
   const handleReset = () => {
@@ -134,6 +140,10 @@ const BusinessForm = (props) => {
   // console.log(schema);
   // console.log(active);
   // console.log(required);
+
+  const filterOptions = createFilterOptions({
+    limit: 100
+  })
 
   const formFields = ({ values }) => [
     {
@@ -187,6 +197,7 @@ const BusinessForm = (props) => {
           size="small"
           options={regions}
           required={required.location.address.region}
+          autoHighlight
           // getOptionValue={(option) => option.value}
           // getOptionLabel={(option) => option.label}
           // disableCloseOnSelect
@@ -218,11 +229,14 @@ const BusinessForm = (props) => {
           label="Industry"
           name="category.industry"
           size="small"
-          options={regions}
+          options={industries}
           required={required.category.industry}
-          // getOptionValue={(option) => option.value}
-          // getOptionLabel={(option) => option.label}
-          disableCloseOnSelect
+          // getOptionValue={(option) => option}
+          // getOptionLabel={(option) => option}
+          // disableCloseOnSelect
+          filterOptions={filterOptions}
+          freeSolo
+          autoHighlight
           // renderOption={(option, { selected }) => (
           //   <>
           //     <MuiCheckbox style={{ marginRight: 8 }} checked={selected} />
@@ -239,11 +253,14 @@ const BusinessForm = (props) => {
           label="Category"
           name="category.category"
           size="small"
-          options={autocompleteData}
+          options={categories}
           required={required.category.category}
-          getOptionValue={(option) => option.value}
-          getOptionLabel={(option) => option.label}
-          disableCloseOnSelect
+          // getOptionValue={(option) => option.value}
+          // getOptionLabel={(option) => option.label}
+          // disableCloseOnSelect
+          filterOptions={filterOptions}
+          freeSolo
+          autoHighlight
           // renderOption={(option, { selected }) => (
           //   <>
           //     <MuiCheckbox style={{ marginRight: 8 }} checked={selected} />
@@ -260,11 +277,13 @@ const BusinessForm = (props) => {
           label="Additional Categories"
           name="category.tags"
           size="small"
-          options={autocompleteData}
-          getOptionValue={(option) => option.value}
-          getOptionLabel={(option) => option.label}
+          options={categories}
+          freeSolo
+          // getOptionValue={(option) => option.value}
+          // getOptionLabel={(option) => option.label}
           disableCloseOnSelect
           multiple
+          autoHighlight
           renderOption={(option, { selected }) => (
             <>
               <MuiCheckbox style={{ marginRight: 8 }} checked={selected} />

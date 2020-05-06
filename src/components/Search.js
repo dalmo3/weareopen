@@ -59,7 +59,7 @@ const Search = (props) => {
       <InputBase
         autoFocus={true}
         fullWidth={true}
-        placeholder="try... indian restaurant wellington"
+        placeholder="Search..."
         classes={{
           root: classes.inputRoot,
           input: classes.inputInput,

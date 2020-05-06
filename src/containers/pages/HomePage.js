@@ -56,12 +56,15 @@ const HomePage = (props) => {
           <Logo />
         </Grid>
         <Grid item>
-          <RollingText/>
+          <Typography  style={{ textAlign: 'center'}}>
+            Search for your favourite businesses and how they're operating.
+          </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="h6" style={{ textAlign: 'center', fontWeight: 'bold' }}>
-            Search for your favourite businesses and how they're operating.
-            <br/>
+          <RollingText/>
+        </Grid>
+        <Grid item >
+          <Typography  style={{ textAlign: 'center'}}>
             List your business and let your clients spread the message!
           </Typography>
         </Grid>
