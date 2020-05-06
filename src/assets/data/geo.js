@@ -17,4 +17,5 @@ export const regions = [
   'Wellington',
   'West Coast',
   'Other',
+  '',
 ];

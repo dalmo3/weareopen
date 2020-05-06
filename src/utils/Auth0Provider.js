@@ -107,13 +107,17 @@ const Auth0Provider = ({
               setLoginTimedOut(true);
               console.log(error);
               error.popup.close();
+              setTimeout(logout, 15000);
+              break;
             case 'unauthorized':
               // alert(
               //   'Please check for verification email and follow link before logging in.'
               // );
               setLoginUnauthorized(true);
+              setTimeout(logout, 15000);
+              break;
             default:
-              setTimeout(logout, 6000);
+              break;
           }
         }
         // console.error('loginWithPopup error');

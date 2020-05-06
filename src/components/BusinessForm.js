@@ -69,8 +69,12 @@ const schema = Yup.object().shape({
   }),
   contact: Yup.object().shape({
     email: Yup.string().ensure().email(MESSAGE_INVALID_EMAIL),
-    website: Yup.string().ensure().matches(/(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/
-    ,MESSAGE_INVALID_URL),
+    website: Yup.string()
+      .ensure()
+      .matches(
+        /(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/,
+        MESSAGE_INVALID_URL
+      ),
     phone: Yup.number().typeError(MESSAGE_INVALID_PHONE),
   }),
 });
@@ -93,27 +97,27 @@ const recursiveMakeRequired = (schema) => {
 };
 
 const addHttp = (url) => {
-  const [ ,protocol, addr] = url.match(/(http[s]?:\/\/)?(.*)/);
-  return (protocol || 'http://') + addr
-}
+  const [, protocol, addr] = url.match(/(http[s]?:\/\/)?(.*)/);
+  return (protocol || 'http://') + addr;
+};
 
 const BusinessForm = (props) => {
-  const initialValues = 
-  props.businessData || require('../utils/businessObject.json');
-  const [ formData, setFormData] = useState(initialValues)
-  
-  const handleReset = () => {
-    // setFormData(initialValues) 
-    navigate('./edit')
-  }
+  const initialValues =
+    props.businessData || require('../utils/businessObject.json');
+  const [formData, setFormData] = useState(initialValues);
 
-  const { submitEdit, activeBusiness } = useAppContext();
+  const handleReset = () => {
+    // setFormData(initialValues)
+    navigate('./edit');
+  };
+
+  const { submitEdit, activeBusiness, displaySnackbar } = useAppContext();
 
   const submitForm = (businessData) => {
-    businessData.open_state.info_available = true
-    businessData.contact.website = addHttp(businessData.contact.website)
-    submitEdit(businessData)
-  }
+    businessData.open_state.info_available = true;
+    businessData.contact.website = addHttp(businessData.contact.website);
+    submitEdit(businessData);
+  };
   // const [formData, setFormData] = useState(require('../utils/businessObject.json'))
 
   // useEffect(()=> {
@@ -127,7 +131,7 @@ const BusinessForm = (props) => {
   // console.log(active);
   // console.log(required);
 
-  const formFields = ({values}) => [  
+  const formFields = ({ values }) => [
     {
       size: 12,
       field: <TextField label="Business Name" name="title" />,
@@ -139,15 +143,22 @@ const BusinessForm = (props) => {
           // label="Open during the current alert level?"
           name="open_state.open_now"
           required={required.open_state.open_now}
-          data={{ label: 'Open during the current alert level?', value: 'open' }}
+          data={{
+            label: 'Open during the current alert level?',
+            value: 'open',
+          }}
         />
       ),
     },
     {
       size: 6,
-      field: <TextField label="Open Hours" 
-      // disabled={!values.open_state.open_now} 
-      name="open_state.open_hours" />,
+      field: (
+        <TextField
+          label="Open Hours"
+          // disabled={!values.open_state.open_now}
+          name="open_state.open_hours"
+        />
+      ),
     },
     {
       size: 6,
@@ -156,7 +167,11 @@ const BusinessForm = (props) => {
     {
       size: 6,
       field: (
-        <TextField label="City" name="location.address.city" required={required.location.address.city} />
+        <TextField
+          label="City"
+          name="location.address.city"
+          required={required.location.address.city}
+        />
       ),
     },
     {
@@ -167,7 +182,7 @@ const BusinessForm = (props) => {
           name="location.address.region"
           size="small"
           options={regions}
-          required={required.location.address.region} 
+          required={required.location.address.region}
           // getOptionValue={(option) => option.value}
           // getOptionLabel={(option) => option.label}
           // disableCloseOnSelect
@@ -184,7 +199,13 @@ const BusinessForm = (props) => {
     },
     {
       size: 12,
-      field: <TextField label="Website" name="contact.website" placeholder="https://..."/>,
+      field: (
+        <TextField
+          label="Website"
+          name="contact.website"
+          placeholder="https://..."
+        />
+      ),
     },
     {
       size: 6,
@@ -194,7 +215,7 @@ const BusinessForm = (props) => {
           name="category.industry"
           size="small"
           options={regions}
-          required={required.category.industry} 
+          required={required.category.industry}
           // getOptionValue={(option) => option.value}
           // getOptionLabel={(option) => option.label}
           disableCloseOnSelect
@@ -215,7 +236,7 @@ const BusinessForm = (props) => {
           name="category.category"
           size="small"
           options={autocompleteData}
-          required={required.category.category} 
+          required={required.category.category}
           getOptionValue={(option) => option.value}
           getOptionLabel={(option) => option.label}
           disableCloseOnSelect
@@ -275,20 +296,38 @@ const BusinessForm = (props) => {
     },
   ];
 
-  const subscription = {submitting: true, initialValues: true}
-  // const handleReset = 
+  const subscription = {
+    submitting: true,
+    initialValues: false,
+    // invalid: true // this makes form really slow
+  };
+  // const handleReset =
+  // console.log('rerendered')
   return (
     <Form
       onSubmit={submitForm}
       initialValues={formData}
       validate={validate}
       subscription={subscription}
-      key={{submitting: true, initialValues: true}}
-      render={({ handleSubmit, submitting, pristine, values }) => (
-        <form onSubmit={handleSubmit} noValidate>
+      key={{ submitting: true, initialValues: true }}
+      render={({
+        handleSubmit,
+        submitting,
+        pristine,
+        values,
+        form,
+        invalid,
+      }) => (
+        <form
+          onSubmit={(e) => {
+            // if (invalid) alert('Please fill the required fields') //TODO
+            handleSubmit(e);
+          }}
+          noValidate
+        >
           <Paper style={{ padding: 16 }}>
             <Grid container alignItems="flex-start" spacing={2}>
-              {formFields({values}).map((item, i) => (
+              {formFields({ values }).map((item, i) => (
                 <Grid item xs={item.size} key={i}>
                   {item.field}
                 </Grid>
@@ -298,7 +337,8 @@ const BusinessForm = (props) => {
                   type="button"
                   variant="contained"
                   // onClick={e => navigate('')  }
-                  onClick={handleReset}
+                  // onClick={handleReset}
+                  onClick={form.reset}
                   disabled={submitting || pristine}
                 >
                   Reset

@@ -223,6 +223,15 @@ const AppController = ({ children, ...initOptions }) => {
     }
   }, [loginTimedOut, loginUnauthorized]);
 
+  const displaySnackbar = (severity, message) => {
+
+    setSnackbarState({
+      open: true,
+      autoHideduration: 10000,
+      severity,
+      message
+    });
+  }
   //
   // ADD BUSINESS FLOW
   //
@@ -366,6 +375,7 @@ const AppController = ({ children, ...initOptions }) => {
         logout: stitchLogout,
         sideBarOpen,
         toggleSidebar,
+        displaySnackbar
       }}
     >
       <SnackbarContext.Provider
