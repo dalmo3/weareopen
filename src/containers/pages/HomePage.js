@@ -56,7 +56,7 @@ const HomePage = (props) => {
           <Logo />
         </Grid>
         <Grid item>
-          <Typography  style={{ textAlign: 'center'}}>
+          <Typography  style={{ textAlign: 'center', color: 'white'}}>
             Search for your favourite businesses and how they're operating.
           </Typography>
         </Grid>
@@ -64,7 +64,7 @@ const HomePage = (props) => {
           <RollingText/>
         </Grid>
         <Grid item >
-          <Typography  style={{ textAlign: 'center'}}>
+          <Typography  style={{ textAlign: 'center', color: 'white'}}>
             List your business and let your clients spread the message!
           </Typography>
         </Grid>
@@ -79,6 +79,21 @@ const HomePage = (props) => {
           </Button>
         </Grid>
       </Grid>
+      {/* <Container
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        margin: 0,
+        padding: 0,
+        height: '100vh',
+        zIndex:0,
+        widht: '100vw',
+        backgroundColor: "#363a50"
+      }}
+      >
+
+      </Container> */}
       {/* </Paper> */}
     </div>
   );

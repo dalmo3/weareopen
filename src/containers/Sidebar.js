@@ -43,7 +43,7 @@ const Sidebar = (props) => {
       onKeyDown={toggleSidebar(false)}
     >
       <List>
-        <ListItem button onClick={(e) => navigate('/home')}>
+        <ListItem button onClick={(e) => navigate('/')}>
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>

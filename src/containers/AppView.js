@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import CookieConsent from 'react-cookie-consent';
-import { Link as RouterLink } from '@reach/router';
+import { Link as RouterLink, useLocation } from '@reach/router';
 import AppTheme from './AppTheme';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 import AlertBar from '../components/AlertBar';
-import { Link, Container, Typography, Button } from '@material-ui/core';
+import {
+  Link,
+  Container,
+  Typography,
+  Button,
+  useTheme,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 
 const useStyles = makeStyles((theme) => ({
   container: {
-    // minHeight: props => vh,
-    backgroundColor: grey[50],
-
     paddingTop: theme.spacing(3),
     paddingBottom: theme.spacing(5),
   },
@@ -37,12 +40,13 @@ const useInnerHeight = () => {
 };
 
 const AppView = (props) => {
+  const vh = useInnerHeight();
+  const loc = useLocation();
+  const theme = useTheme();
   const classes = useStyles();
 
-  const vh = useInnerHeight();
-
   return (
-    <AppTheme>
+    <>
       <Container
         id="app"
         className={classes.container}
@@ -50,6 +54,8 @@ const AppView = (props) => {
         maxWidth={false}
         style={{
           minHeight: vh,
+          backgroundColor:
+            loc.pathname === '/' ? theme.palette.primary.dark : grey[50],
         }}
       >
         <Navbar id="nav" />
@@ -62,8 +68,8 @@ const AppView = (props) => {
       </Container>
       <AlertBar />
       <CookieConsent
-      buttonComponent={Button}
-       buttonClasses="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary" 
+        buttonComponent={Button}
+        buttonClasses="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary"
       >
         <Typography variant="body2" color="inherit">
           {`This website uses cookies to allow for access to the database and
@@ -73,8 +79,8 @@ const AppView = (props) => {
           </Link>
         </Typography>
       </CookieConsent>
-    </AppTheme>
+    </>
   );
 };
 
-export default AppView;
+export default (props) => <AppTheme><AppView {...props}/></AppTheme>;

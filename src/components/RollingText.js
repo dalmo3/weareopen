@@ -7,6 +7,7 @@ const useStyles = makeStyles((theme) => ({
   rollingItalic: {
     fontWeight: 200,
     fontStyle: 'italic',
+    color: 'white',
     [theme.breakpoints.down('xs')]: {
       fontSize: '1.5rem',
     },
@@ -14,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
   rollingBold: {
     textDecoration: 'underline',
     fontWeight: '700',
+    // color: theme.palette.secondary.main,
+    color: 'white',
     [theme.breakpoints.down('xs')]: {
       fontSize: '1.5rem',
     },
@@ -44,7 +47,11 @@ const RollingText = () => {
           <Grid item>
             <TextLoop delay={700} mask={true} fade={false} interval={2300}>
               {homeCategories.map((entry) => (
-                <Typography variant="h3" key={entry} className={classes.rollingBold}>
+                <Typography
+                  variant="h3"
+                  key={entry}
+                  className={classes.rollingBold}
+                >
                   {entry}
                 </Typography>
               ))}
@@ -54,11 +61,15 @@ const RollingText = () => {
             <Typography variant="h3" className={classes.rollingItalic}>
               in
             </Typography>
-          </Grid> 
+          </Grid>
           <Grid item>
             <TextLoop delay={1000} mask={true} fade={false}>
               {homeLocations.map((entry) => (
-                <Typography variant="h3" key={entry} className={classes.rollingItalic}>
+                <Typography
+                  variant="h3"
+                  key={entry}
+                  className={classes.rollingItalic}
+                >
                   {entry}
                 </Typography>
               ))}

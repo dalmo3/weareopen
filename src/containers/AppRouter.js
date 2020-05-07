@@ -11,6 +11,7 @@ import PrivacyPage from './pages/PrivacyPage';
 import TestPage from './pages/TestPage';
 import AboutPage from './pages/AboutPage';
 import ReactGA from 'react-ga';
+import NotFoundPage from './pages/NotFoundPage';
 
 if (process.env.REACT_APP_GA_CODE){
   ReactGA.initialize(process.env.REACT_APP_GA_CODE);
@@ -23,7 +24,7 @@ const AppRouter = (props) => {
   return (
     <Router primary={false}>
       <AppController path="/">
-        <HomePage default />
+        <HomePage path="/" />
         <SearchPage path="search" />
         <AboutPage path="about" />
         <BusinessPage path="business/:businessSlug/*edit" />
@@ -32,6 +33,7 @@ const AppRouter = (props) => {
         <HelpPage path="help" />
         <PrivacyPage path="privacy-policy" />
         <TestPage path="tests" />
+        <NotFoundPage default />
       </AppController>
     </Router>
   );
