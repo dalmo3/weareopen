@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import CookieConsent from 'react-cookie-consent';
+import { Link as RouterLink } from '@reach/router';
 import AppTheme from './AppTheme';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 import AlertBar from '../components/AlertBar';
-import Container from '@material-ui/core/Container';
+import { Link, Container, Typography, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { grey } from '@material-ui/core/colors';
 
@@ -19,25 +21,25 @@ const useStyles = makeStyles((theme) => ({
   offset: theme.mixins.toolbar,
 }));
 
-const getInnerHeight = () => window.innerHeight
+const getInnerHeight = () => window.innerHeight;
 const useInnerHeight = () => {
   const [vh, setVh] = useState(window.innerHeight);
   useEffect(() => {
     const handleResize = () => {
-      setVh(getInnerHeight)
-    }
+      setVh(getInnerHeight);
+    };
 
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  return vh
-}
+  return vh;
+};
 
 const AppView = (props) => {
   const classes = useStyles();
 
-  const vh = useInnerHeight()
+  const vh = useInnerHeight();
 
   return (
     <AppTheme>
@@ -59,6 +61,18 @@ const AppView = (props) => {
         <Footer id="footer" />
       </Container>
       <AlertBar />
+      <CookieConsent
+      ButtonComponent={Button}
+       buttonClasses="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary" 
+      >
+        <Typography variant="body2" color="inherit">
+          {`This website uses cookies to allow for access to the database and
+          analytics. `}
+          <Link component={RouterLink} to="/privacy-policy" color="inherit">
+            Privacy policy.
+          </Link>
+        </Typography>
+      </CookieConsent>
     </AppTheme>
   );
 };

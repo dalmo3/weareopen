@@ -130,9 +130,9 @@ export const BusinessCard = (props) => {
           alignItems="flex-start"
           spacing={2}
         >
-          <Grid item xs={2} sm={2} style={{margin:'auto'}}>
+          <Grid item xs={2} sm={2} style={{ margin: 'auto' }}>
             <Grid container direction="column" alignItems="center">
-              <Grid item >
+              <Grid item>
                 <Avatar aria-label="business" className={classes.avatar}>
                   {title.slice(0, 2)}
                 </Avatar>
@@ -198,15 +198,24 @@ export const BusinessCard = (props) => {
           }
           <Grid item></Grid>
         </Grid> */}
-        <IconButton aria-label="share">
+        {/* <IconButton aria-label="share">
           <ShareIcon />
-        </IconButton>
-        <IconButton href={website} aria-label="phone">
+        </IconButton> */}
+        {website? 
+        <IconButton
+        href={website}
+        rel="nofollow"
+        target="_blank"
+        aria-label="phone"
+        >
           <LinkIcon />
         </IconButton>
+        : null}
+        {phone?
         <IconButton href={`tel:${phone}`} aria-label="website">
           <PhoneIcon />
         </IconButton>
+        :null}
         {long ? (
           <Button
             className={classes.showMore}

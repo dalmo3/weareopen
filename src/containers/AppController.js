@@ -64,7 +64,7 @@ const AppController = ({ children, ...initOptions }) => {
       setSearchStatus('Searching');
       stitchSearch(debouncedQuery)
         .then((arr) => {
-          console.log('results', arr);
+          // console.log('results', arr);
           setResults(arr);
           setSearchStatus('Finished');
         })
@@ -96,7 +96,7 @@ const AppController = ({ children, ...initOptions }) => {
   // opening from results, no need for api call
   const openBusinessPage = (e, businessData) => {
     setActiveBusiness(businessData);
-    console.log(location);
+    // console.log(location);
     navigate(`/business/${businessData.title}`, {
       state: { referrer: location.pathname },
     });
@@ -141,7 +141,7 @@ const AppController = ({ children, ...initOptions }) => {
         };
       case 'activeActions':
         const activeBusiness = action.payload;
-        console.log('actions');
+        // console.log('actions');
         return {
           ...state,
           ownsActiveBusiness:
@@ -172,7 +172,7 @@ const AppController = ({ children, ...initOptions }) => {
     // console.log(stitchUser.profile.data.verified)
     if (stitchUser?.profile?.data?.verified && !isClaiming) {
       findUserBusinesses().then((businesses) => {
-        console.log(businesses);
+        // console.log(businesses);
         setUserMeta({ type: 'updateBusinesses', payload: businesses });
       });
     }
@@ -254,7 +254,7 @@ const AppController = ({ children, ...initOptions }) => {
 
   const handleAddNew = (e) => {
     const emptyBusiness = require('../utils/businessObject.json');
-    console.log('empty', emptyBusiness);
+    // console.log('empty', emptyBusiness);
     const newBusiness = {
       ...emptyBusiness,
       title: debouncedQuery,
@@ -285,12 +285,12 @@ const AppController = ({ children, ...initOptions }) => {
 
   const updateActiveBusiness = (business) => {
     setActiveBusiness(business);
-    console.log('updating', business);
-    console.log('results', results);
+    // console.log('updating', business);
+    // console.log('results', results);
     if (business._id) {
       if (results.length) {
         const updatedResults = replaceBusinessInArray(business, results);
-        console.log('updresults', updatedResults);
+        // console.log('updresults', updatedResults);
         setResults(updatedResults);
       }
       const updatedUserBusinesses = replaceOrAddBusinessInArray(
@@ -304,26 +304,26 @@ const AppController = ({ children, ...initOptions }) => {
 
   const handleClaim = async (e) => {
     setIsClaiming(true);
-    console.log('trying to claim property ', activeBusiness.title);
+    // console.log('trying to claim property ', activeBusiness.title);
     if (!isAuthenticated) {
-      console.log('Please log in');
+      // console.log('Please log in');
       return;
     }
-    console.log('authenticated into Auth0', auth0User);
+    // console.log('authenticated into Auth0', auth0User);
     if (!auth0User.email_verified) {
-      console.log('Please verify your email');
+      // console.log('Please verify your email');
       return;
     }
     if (!stitchUser) {
-      console.log('Failed to authenticate to Stitch');
+      // console.log('Failed to authenticate to Stitch');
       return;
     }
-    console.log('authenticated into Stitch', stitchUser);
+    // console.log('authenticated into Stitch', stitchUser);
     // if (!dbReady) return;
-    console.log('db is ready');
+    // console.log('db is ready');
     stitchClaim(activeBusiness._id)
       .then(({ accepted, doc }) => {
-        console.log('claim accepted?', accepted, doc);
+        // console.log('claim accepted?', accepted, doc);
         updateActiveBusiness(doc);
       })
       .catch((err) => console.error(err))
@@ -336,27 +336,27 @@ const AppController = ({ children, ...initOptions }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const handleEdit = (e) => {
-    console.log('trying to edit', activeBusiness);
+    // console.log('trying to edit', activeBusiness);
   };
 
   const submitEdit = (businessData) => {
     if (!isAuthenticated) {
-      alert('Please log in');
+      displaySnackbar('error','Please log in');
       return;
     }
     if (!isVerified) {
-      alert('Please verify your email');
+      displaySnackbar('error','Please verify your email');
       return;
     }
     if (!userMeta.ownsActiveBusiness) {
-      alert("You don't own this business");
+      displaySnackbar('error',"You don't own this business");
       return;
     }
-    console.log('inserting', businessData);
+    // console.log('inserting', businessData);
     insertOne(businessData)
       // findOneAndUpdate(businessData)
       .then((updated) => {
-        console.log('inserted', updated);
+        // console.log('inserted', updated);
         updateActiveBusiness(updated);
         setIsEditing(false);
         navigate(`/business/${updated.title}`, { replace: true });

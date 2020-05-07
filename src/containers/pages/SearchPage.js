@@ -9,7 +9,7 @@ const SearchPage = (props) => {
   const nothingFound = searchStatus === 'Finished' && !results.length;
   const searchMessage = nothingFound ? 'Nothing found' : searchStatus;
 
-  console.log('addIntent', addIntent);
+  // console.log('addIntent', addIntent);
 
   const ConditionalIntent = (props) => {
     if (!addIntent) return null;

@@ -22,9 +22,9 @@ const Auth0Provider = ({
     const initAuth0 = async () => {
       let auth0FromHook;
       try {
-        console.log('initializing auth0client... ');
+        // console.log('initializing auth0client... ');
         auth0FromHook = await createAuth0Client(initOptions);
-        console.log('initialized auth0client... ');
+        // console.log('initialized auth0client... ');
         setAuth0Client(auth0FromHook);
 
         if (
@@ -42,7 +42,7 @@ const Auth0Provider = ({
         if (isAuthenticated) {
           const user = await auth0FromHook.getUser();
           setUser(user);
-          console.log('auth0entitcated...');
+          // console.log('auth0entitcated...');
           setIsVerified(user.email_verified);
         } else {
         }
@@ -94,18 +94,18 @@ const Auth0Provider = ({
           //   console.log('token', token)
           // });
           const user = await auth0Client.getUser();
-          console.log('auth');
+          // console.log('auth');
           setUser(user);
           setIsAuthenticated(true);
           setLoginTimedOut(false);
           setIsVerified(user?.email_verified);
-          console.log('auth0 logged in as', user);
+          // console.log('auth0 logged in as', user);
         } catch (error) {
           switch (error.error) {
             case 'timeout':
               // alert('Session expired, please log in again.');
               setLoginTimedOut(true);
-              console.log(error);
+              console.error(error);
               error.popup.close();
               setTimeout(logout, 15000);
               break;
@@ -141,7 +141,7 @@ const Auth0Provider = ({
     setUser(user);
     setIsVerified(user?.email_verified);
     setLoading(false);
-    console.log('auth0 logged in as', user);
+    // console.log('auth0 logged in as', user);
   };
 
   const logout = (...p) => {

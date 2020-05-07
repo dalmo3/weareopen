@@ -35,12 +35,12 @@ const StitchProvider = ({ children, ...initOptions }) => {
 
   const stitchLogout = async (e) => {
     if (isAuthenticated) {
-      console.log('loggin out out Stitch ...');
+      // console.log('loggin out out Stitch ...');
       await stitchAppClient.auth?.removeUser();
     } else {
-      console.log('not logged in');
+      // console.log('not logged in');
     }
-    console.log('loggin out of Auth0 ...');
+    // console.log('loggin out of Auth0 ...');
     logout();
   };
 
@@ -60,7 +60,7 @@ const StitchProvider = ({ children, ...initOptions }) => {
       stitchAppClient.auth
         .loginWithCredential(credentials)
         .then((user) => {
-          console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
+          // console.log(`logged in as ${user.loggedInProviderType} ${user.id}`);
           // console.log(user);
           setStitchUser(user);
           setRemoteMongoCollection(
