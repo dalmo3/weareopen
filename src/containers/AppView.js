@@ -62,7 +62,7 @@ const AppView = (props) => {
       </Container>
       <AlertBar />
       <CookieConsent
-      ButtonComponent={Button}
+      buttonComponent={Button}
        buttonClasses="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedSecondary" 
       >
         <Typography variant="body2" color="inherit">

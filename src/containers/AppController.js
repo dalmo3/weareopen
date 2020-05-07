@@ -6,7 +6,10 @@ import React, {
   useCallback,
   useReducer,
 } from 'react';
-import { navigate, useLocation } from '@reach/router';
+import {
+  navigate,
+  useLocation,
+} from '@reach/router';
 import { useAuth0 } from '../utils/Auth0Provider';
 import { useStitch } from '../utils/StitchProvider';
 import AppView from './AppView';
@@ -18,7 +21,7 @@ export const useAppContext = () => useContext(AppContext);
 export const SnackbarContext = createContext();
 export const useSnackbarContext = () => useContext(SnackbarContext);
 
-const AppController = ({ children, ...initOptions }) => {
+const AppController = ({ children, ...props }) => {
   const {
     stitchUser,
     stitchReady,
@@ -341,15 +344,15 @@ const AppController = ({ children, ...initOptions }) => {
 
   const submitEdit = (businessData) => {
     if (!isAuthenticated) {
-      displaySnackbar('error','Please log in');
+      displaySnackbar('error', 'Please log in');
       return;
     }
     if (!isVerified) {
-      displaySnackbar('error','Please verify your email');
+      displaySnackbar('error', 'Please verify your email');
       return;
     }
     if (!userMeta.ownsActiveBusiness) {
-      displaySnackbar('error',"You don't own this business");
+      displaySnackbar('error', "You don't own this business");
       return;
     }
     // console.log('inserting', businessData);
@@ -402,7 +405,9 @@ const AppController = ({ children, ...initOptions }) => {
           handleSnackbarClose,
         }}
       >
-        <AppView>{children}</AppView>
+        {/* <LocationProvider history={history}> */}
+          <AppView>{children}</AppView>
+        {/* </LocationProvider> */}
       </SnackbarContext.Provider>
     </AppContext.Provider>
   );

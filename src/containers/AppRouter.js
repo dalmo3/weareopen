@@ -1,5 +1,5 @@
 import React from 'react';
-import { Router } from '@reach/router';
+import { Router, createHistory, LocationProvider, globalHistory } from '@reach/router';
 import AppController from './AppController';
 import HomePage from './pages/HomePage';
 import SearchPage from './pages/SearchPage';
@@ -10,6 +10,14 @@ import HelpPage from './pages/HelpPage';
 import PrivacyPage from './pages/PrivacyPage';
 import TestPage from './pages/TestPage';
 import AboutPage from './pages/AboutPage';
+import ReactGA from 'react-ga';
+
+if (process.env.REACT_APP_GA_CODE){
+  ReactGA.initialize(process.env.REACT_APP_GA_CODE);
+  globalHistory.listen((window) => {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+  });
+}
 
 const AppRouter = (props) => {
   return (
@@ -29,4 +37,4 @@ const AppRouter = (props) => {
   );
 };
 
-export default AppRouter
+export default AppRouter;
