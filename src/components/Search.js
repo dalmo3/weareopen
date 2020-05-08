@@ -57,7 +57,7 @@ const Search = (props) => {
         <SearchIcon />
       </div>
       <InputBase
-        autoFocus={true}
+        autoFocus={true}a
         fullWidth={true}
         placeholder="Search..."
         classes={{
@@ -67,7 +67,7 @@ const Search = (props) => {
         inputProps={{ 'aria-label': 'search' }}
         defaultValue={''}
         onChange={handleSearchInputChange}
-        onClick={(e) => navigate('/search')}
+        // onClick={(e) => navigate('/search')}
       />
     </div>
   );

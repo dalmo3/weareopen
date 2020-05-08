@@ -75,7 +75,9 @@ const AppController = ({ children, ...props }) => {
           setSearchStatus('Error');
         })
         .finally(() => {
-          navigate('/search');
+          if (props.location.pathname !== "/search") {
+            navigate('/search')
+          }
         });
     } else {
       setSearchStatus('');
