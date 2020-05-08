@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Search = (props) => {
   const classes = useStyles();
-  const { handleSearchInputChange } = useAppContext();
+  const { handleSearchInputChange, results } = useAppContext();
 
   return (
     <div className={classes.search}>
@@ -67,7 +67,7 @@ const Search = (props) => {
         inputProps={{ 'aria-label': 'search' }}
         defaultValue={''}
         onChange={handleSearchInputChange}
-        // onClick={(e) => navigate('/search')}
+        onClick={(e) => results.length && navigate('/search')}
       />
     </div>
   );
