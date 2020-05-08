@@ -21,7 +21,7 @@ import {
 } from 'mui-rff';
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { regions, categories, industries } from '../assets/data/formValues';
-import templateValues from '../utils/businessObject.json'
+import templateValues from '../utils/businessObject.json';
 
 const TITLE_CHAR_MAX = 50;
 const TITLE_CHAR_MIN = 3;
@@ -49,7 +49,7 @@ const schema = Yup.object().shape({
   location: Yup.object().shape({
     address: Yup.object().shape({
       suburb: Yup.string().trim(),
-      city: yupStringMin(3).required(),
+      city: yupStringMin(3),
       region: Yup.string().trim().required(),
       postcode: Yup.number().min(1000).lessThan(10000),
       street_address: Yup.string().trim(),
@@ -77,10 +77,13 @@ const schema = Yup.object().shape({
     website: Yup.string()
       .ensure()
       .matches(
-        /^$|(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/,
-        MESSAGE_INVALID_URL
+        /(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?/,
+        { excludeEmptyString: true, message: MESSAGE_INVALID_URL }
       ),
-    phone: Yup.number().typeError(MESSAGE_INVALID_PHONE),
+    phone: Yup.string()
+      .ensure()
+      .matches(/^[+]?[0-9 .()-]*$/, { excludeEmptyString: true, message: MESSAGE_INVALID_PHONE })
+      .notRequired(),
   }),
 });
 
@@ -110,9 +113,9 @@ const addHttp = (url) => {
 const BusinessForm = (props) => {
   const initialValues = {
     ...templateValues,
-    ...props.businessData
-  }
-    // props.businessData || require('../utils/businessObject.json');
+    ...props.businessData,
+  };
+  // props.businessData || require('../utils/businessObject.json');
 
   const [formData, setFormData] = useState(initialValues);
 
@@ -142,8 +145,8 @@ const BusinessForm = (props) => {
   // console.log(required);
 
   const filterOptions = createFilterOptions({
-    limit: 100
-  })
+    limit: 100,
+  });
 
   const formFields = ({ values }) => [
     {
@@ -206,7 +209,7 @@ const BusinessForm = (props) => {
     },
     {
       size: 6,
-      field: <TextField label="Phone" name="contact.phone" />,
+      field: <TextField label="Phone" name="contact.phone" placeholder="" />,
     },
     {
       size: 12,

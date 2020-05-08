@@ -355,6 +355,7 @@ const AppController = ({ children, ...props }) => {
       displaySnackbar('error', "You don't own this business");
       return;
     }
+    businessData.open_state.open_text = businessData.open_state.open_now.toString();
     // console.log('inserting', businessData);
     insertOne(businessData)
       // findOneAndUpdate(businessData)

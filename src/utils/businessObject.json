@@ -7,7 +7,7 @@
   "contact": {
     "email": "",
     "website": "",
-    "phone": ""
+    "phone": null
   },
   "location": {
     "address": {
@@ -29,10 +29,10 @@
   "open_state": {
     "info_available": false,
     "open_now": false,
+    "open_text": "false",
     "open_date": "",
     "open_alert_level": 0,
-    "open_hours": "",
-    "tags": []
+    "open_hours": ""
   },
   "admin": {
     "admin_id": "",
