@@ -7,6 +7,7 @@ This repository is the source code of the website [weareopen.co.nz](https://wear
 This is a fully front-end app, leveraging Auth0 API for user authentication and MongoDB Stitch for the database.
 
 - React
+- @reach/router
 - Material-UI
 - MongoDB Stitch
 - Auth0
