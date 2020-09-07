@@ -12,7 +12,3 @@ This is a fully front-end app, leveraging Auth0 API for user authentication and 
 - Auth0
 - Cypress
 - MUI-RFF
-
-# Licence
-
-Copyright Dalmo Mendonça 2020
